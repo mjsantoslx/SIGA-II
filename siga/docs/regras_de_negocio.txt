@@ -550,3 +550,24 @@ utilizavam outro config.php;
 entregavam pacotes sem a configuração esperada.
 
 
+27. Dirigentes e email associativo
+
+Foi definido que:
+
+Todos os dirigentes (associados enquadrados na secção "Chefia") possuem um
+endereço de email associativo, para além do endereço de email pessoal.
+
+27.1 Implementacao
+
+Foi acrescentado o tipo de contacto "Email Associativo" a tipos_contacto,
+distinto do tipo "Email" (pessoal) ja existente. Um associado pode ter
+ambos os contactos em simultaneo, geridos na pagina de gestao de contactos.
+
+â ï¸ EM ABERTO: ainda por decidir explicitamente se o email associativo:
+- e apenas mais um tipo de contacto disponivel (sem validacao), ou
+- passa a ser obrigatorio para associados da seccao "Chefia", com validacao
+  nessa mudanca de seccao, ou
+- deve ser gerado automaticamente pela aplicacao a partir do nome (e com
+  que formato/dominio).
+Enquanto nao for decidido, a aplicacao apenas disponibiliza o novo tipo de
+contacto, sem qualquer validacao ou geracao automatica.

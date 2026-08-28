@@ -409,7 +409,8 @@ INSERT INTO tipos_contacto (Designacao)
 VALUES
     ('Telemóvel'),
     ('Telefone'),
-    ('Email');
+    ('Email'),
+    ('Email Associativo');
 
 -- Companhia de âmbito nacional, protegida da alteração estrutural.
 INSERT INTO companhias (Designacao, ambito_global, Activo)
