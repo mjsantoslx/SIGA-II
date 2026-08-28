@@ -24,10 +24,30 @@ class Contacto extends Model
              FROM contactos c
              INNER JOIN tipos_contacto tc ON tc.Id = c.IdTipoContacto
              WHERE c.IdPessoa = :idPessoa
-             ORDER BY tc.Designacao"
+             ORDER BY tc.Designacao, c.Id"
         );
         $stmt->execute(['idPessoa' => $idPessoa]);
         return $stmt->fetchAll();
+    }
+
+    /**
+     * Confirma que um contacto pertence de facto à pessoa indicada, antes de
+     * permitir editá-lo ou removê-lo (evita que alguém altere o Id na URL e
+     * mexa no contacto de outra pessoa).
+     */
+    public function pertenceAPessoa(int $idContacto, int $idPessoa): bool
+    {
+        $stmt = $this->bd->prepare("SELECT 1 FROM contactos WHERE Id = :id AND IdPessoa = :idPessoa");
+        $stmt->execute(['id' => $idContacto, 'idPessoa' => $idPessoa]);
+        return (bool) $stmt->fetchColumn();
+    }
+
+    public function actualizarValor(int $idContacto, int $idTipoContacto, string $valor): bool
+    {
+        return $this->actualizar('contactos', [
+            'IdTipoContacto' => $idTipoContacto,
+            'Valor'          => $valor,
+        ], 'Id', $idContacto);
     }
 
     public function removerDaPessoa(int $idPessoa): bool

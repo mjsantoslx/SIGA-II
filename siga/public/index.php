@@ -7,6 +7,7 @@ require_once __DIR__ . '/../app/autoload.php';
 use App\Controllers\AssociadosController;
 use App\Controllers\AuthController;
 use App\Controllers\CompanhiasController;
+use App\Controllers\ContactosController;
 use App\Controllers\DashboardController;
 use App\Controllers\MoradasController;
 use App\Core\Router;
@@ -48,6 +49,12 @@ $router->post('/associados/{id}/reativar', [AssociadosController::class, 'reativ
 $router->get('/associados/{id}/morada/editar', [MoradasController::class, 'editarPessoa']);
 $router->post('/associados/{id}/morada/corrigir', [MoradasController::class, 'corrigirPessoa']);
 $router->post('/associados/{id}/morada/substituir', [MoradasController::class, 'substituirPessoa']);
+
+// Gestão de contactos do associado (morada + contactos generalizados)
+$router->get('/associados/{id}/contactos', [ContactosController::class, 'gerir']);
+$router->post('/associados/{id}/contactos/adicionar', [ContactosController::class, 'adicionar']);
+$router->post('/associados/{id}/contactos/{idContacto}/editar', [ContactosController::class, 'editar']);
+$router->post('/associados/{id}/contactos/{idContacto}/remover', [ContactosController::class, 'remover']);
 
 // Companhias
 $router->get('/companhias', [CompanhiasController::class, 'index']);

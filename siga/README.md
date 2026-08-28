@@ -105,6 +105,11 @@ siga/
     número de porta), afectando todos os que a partilham;
   - **Substituir**: cria uma morada nova e fecha a ligação anterior,
     preservando o histórico (`DataInicio`/`DataFim`).
+- **Gestão de contactos do associado** (`/associados/{id}/contactos`) —
+  página única que reúne a morada (com as mesmas operações de corrigir/
+  substituir acima) e os contactos generalizados (telemóvel, telefone,
+  email, ...): listar, adicionar, editar e remover, com verificação de que
+  o contacto pertence de facto ao associado antes de qualquer alteração.
 - **Companhias** (`/companhias`) — listagem e detalhe com a morada actual,
   incluindo a Chefia Nacional. A criação/edição dos dados base das
   companhias fica para a página de administração (próxima versão).
