@@ -114,6 +114,12 @@ siga/
   incluindo a Chefia Nacional. A criação/edição dos dados base das
   companhias fica para a página de administração (próxima versão).
 
+- **Email associativo dos dirigentes** (regra 27) — associados na secção
+  "Chefia" têm de ter um contacto "Email Associativo", para além do email
+  pessoal: obrigatório ao registar directamente na Chefia, exigido (já
+  existente) ao mudar de secção para a Chefia via edição, e protegido
+  contra remoção acidental enquanto o associado lá permanecer.
+
 ### Nota sobre o número de documento (Cartão de Cidadão)
 
 O número é sempre tratado como texto (nunca convertido para inteiro), mas o

@@ -44,6 +44,31 @@ window.siga = {
 
     iniciar() {
         document.querySelectorAll('.campo-data').forEach((campo) => this.aplicarMascaraData(campo));
+
+        const selectSecao = document.getElementById('IdSecao');
+        if (selectSecao) {
+            this.actualizarObrigatoriedadeEmailAssociativo(selectSecao);
+        }
+    },
+
+    /**
+     * Regra 27: o email associativo é obrigatório para associados na secção
+     * "Chefia" (dirigentes). Torna o campo obrigatório e destaca a ajuda
+     * quando essa secção é seleccionada.
+     */
+    actualizarObrigatoriedadeEmailAssociativo(selectSecao) {
+        const campoEmail = document.getElementById('EmailAssociativo');
+        const ajuda = document.getElementById('ajudaEmailAssociativo');
+        if (!campoEmail) return;
+
+        const opcaoSeleccionada = selectSecao.options[selectSecao.selectedIndex];
+        const eChefia = opcaoSeleccionada && opcaoSeleccionada.dataset.designacao === 'Chefia';
+
+        campoEmail.required = eChefia;
+        if (ajuda) {
+            ajuda.style.color = eChefia ? 'var(--fogueira)' : '';
+            ajuda.style.fontWeight = eChefia ? '600' : '';
+        }
     },
 };
 

@@ -146,10 +146,19 @@ class Associado extends Model
                 $moradaModelo->associarPessoa($idPessoa, $idMorada, $dados['DataInscricao']);
             }
 
-            // 3. Contactos (telemóvel / telefone / email)
-            foreach (['Telemovel' => 1, 'Telefone' => 2, 'Email' => 3] as $campo => $idTipo) {
+            // 3. Contactos (telemóvel / telefone / email / email associativo)
+            $tiposContactoCampo = [
+                'Telemovel'        => 'Telemóvel',
+                'Telefone'         => 'Telefone',
+                'Email'            => 'Email',
+                'EmailAssociativo' => 'Email Associativo',
+            ];
+            foreach ($tiposContactoCampo as $campo => $designacaoTipo) {
                 if (!empty($dados[$campo])) {
-                    $contactoModelo->criar($idPessoa, $idTipo, $dados[$campo]);
+                    $idTipo = $contactoModelo->idTipoPorDesignacao($designacaoTipo);
+                    if ($idTipo) {
+                        $contactoModelo->criar($idPessoa, $idTipo, $dados[$campo]);
+                    }
                 }
             }
 
@@ -211,7 +220,10 @@ class Associado extends Model
                         $eeModelo->criar($idAssociado, $idPessoaEE, (int) $idTipoRelEE, $dados['DataInscricao']);
                     }
                     if (!empty($dados['EncarregadosContacto'][$i])) {
-                        $contactoModelo->criar($idPessoaEE, 1, $dados['EncarregadosContacto'][$i]);
+                        $idTipoTelemovel = $contactoModelo->idTipoPorDesignacao('Telemóvel');
+                        if ($idTipoTelemovel) {
+                            $contactoModelo->criar($idPessoaEE, $idTipoTelemovel, $dados['EncarregadosContacto'][$i]);
+                        }
                     }
                 }
             }

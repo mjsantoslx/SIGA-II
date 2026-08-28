@@ -147,6 +147,11 @@
                 <label for="Email">Email</label>
                 <input type="email" id="Email" name="Email" value="<?= htmlspecialchars($a['Email'] ?? '') ?>">
             </div>
+            <div class="campo">
+                <label for="EmailAssociativo">Email associativo</label>
+                <input type="email" id="EmailAssociativo" name="EmailAssociativo" value="<?= htmlspecialchars($a['EmailAssociativo'] ?? '') ?>">
+                <small id="ajudaEmailAssociativo">Obrigatório para dirigentes (secção "Chefia").</small>
+            </div>
         </div>
     </fieldset>
 
@@ -155,10 +160,10 @@
         <div class="grelha-formulario">
             <div class="campo">
                 <label for="IdSecao">Secção</label>
-                <select id="IdSecao" name="IdSecao">
+                <select id="IdSecao" name="IdSecao" onchange="siga.actualizarObrigatoriedadeEmailAssociativo(this)">
                     <option value="">Seleccionar…</option>
                     <?php foreach ($secoes as $s): ?>
-                        <option value="<?= (int) $s['Id'] ?>" <?= (string) ($a['IdSecao'] ?? '') === (string) $s['Id'] ? 'selected' : '' ?>>
+                        <option value="<?= (int) $s['Id'] ?>" data-designacao="<?= htmlspecialchars($s['Designacao']) ?>" <?= (string) ($a['IdSecao'] ?? '') === (string) $s['Id'] ? 'selected' : '' ?>>
                             <?= htmlspecialchars($s['Designacao']) ?>
                         </option>
                     <?php endforeach; ?>

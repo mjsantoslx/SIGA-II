@@ -563,7 +563,7 @@ Foi acrescentado o tipo de contacto "Email Associativo" a tipos_contacto,
 distinto do tipo "Email" (pessoal) ja existente. Um associado pode ter
 ambos os contactos em simultaneo, geridos na pagina de gestao de contactos.
 
-â ï¸ EM ABERTO: ainda por decidir explicitamente se o email associativo:
+⚠️ EM ABERTO: ainda por decidir explicitamente se o email associativo:
 - e apenas mais um tipo de contacto disponivel (sem validacao), ou
 - passa a ser obrigatorio para associados da seccao "Chefia", com validacao
   nessa mudanca de seccao, ou
@@ -571,3 +571,22 @@ ambos os contactos em simultaneo, geridos na pagina de gestao de contactos.
   que formato/dominio).
 Enquanto nao for decidido, a aplicacao apenas disponibiliza o novo tipo de
 contacto, sem qualquer validacao ou geracao automatica.
+
+27.2 Decisao (fechada)
+
+Ficou decidido: o email associativo e OBRIGATORIO para associados na
+seccao "Chefia", com validacao. Nao e gerado automaticamente.
+
+Aplicado em:
+- Registo de um novo associado directamente na seccao "Chefia": o campo
+  fica obrigatorio no formulario e a submissao e bloqueada sem ele.
+- Mudanca de seccao para "Chefia" a partir da edicao de um associado
+  existente: exige que ja exista um contacto "Email Associativo" (gerido
+  em "Gerir contactos"); caso contrario a mudanca de seccao e bloqueada.
+- Remocao de contactos: nao e possivel remover o "Email Associativo"
+  enquanto o associado estiver na seccao "Chefia".
+
+Nao ficou coberto (fica para decisao futura, caso necessario): associados
+que ja estivessem na seccao "Chefia" antes desta regra e que nao tenham
+ainda um "Email Associativo" registado nao sao bloqueados retroactivamente
+— nao ha, para ja, um relatorio que liste essas excepcoes.

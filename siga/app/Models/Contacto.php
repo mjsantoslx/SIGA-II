@@ -42,6 +42,30 @@ class Contacto extends Model
         return (bool) $stmt->fetchColumn();
     }
 
+    public function idTipoPorDesignacao(string $designacao): ?int
+    {
+        $stmt = $this->bd->prepare("SELECT Id FROM tipos_contacto WHERE Designacao = :d LIMIT 1");
+        $stmt->execute(['d' => $designacao]);
+        $registo = $stmt->fetch();
+        return $registo ? (int) $registo['Id'] : null;
+    }
+
+    /**
+     * Confirma se uma pessoa já tem um contacto activo de um determinado tipo
+     * (pela designação, ex.: "Email Associativo").
+     */
+    public function temTipo(int $idPessoa, string $designacao): bool
+    {
+        $stmt = $this->bd->prepare(
+            "SELECT 1 FROM contactos c
+             INNER JOIN tipos_contacto tc ON tc.Id = c.IdTipoContacto
+             WHERE c.IdPessoa = :idPessoa AND tc.Designacao = :designacao
+             LIMIT 1"
+        );
+        $stmt->execute(['idPessoa' => $idPessoa, 'designacao' => $designacao]);
+        return (bool) $stmt->fetchColumn();
+    }
+
     public function actualizarValor(int $idContacto, int $idTipoContacto, string $valor): bool
     {
         return $this->actualizar('contactos', [

@@ -60,6 +60,12 @@ class AssociadosController extends Controller
         $dados = $_POST;
         $erros = $this->validarDadosAssociado($dados);
 
+        // Regra 27: email associativo obrigatório para a secção "Chefia".
+        if ((new Secao())->ehChefia(!empty($dados['IdSecao']) ? (int) $dados['IdSecao'] : null)
+            && trim($dados['EmailAssociativo'] ?? '') === '') {
+            $erros[] = 'O email associativo é obrigatório para associados na secção "Chefia".';
+        }
+
         if ($erros) {
             Sessao::guardarMensagem('erro', implode(' ', $erros));
             $this->vista('associados/form', [
@@ -167,6 +173,15 @@ class AssociadosController extends Controller
         // Na edição não se altera a data de inscrição — só validamos a de nascimento.
         $dados['DataInscricao'] = Data::paraApresentacao($associadoExistente['DataInscricao']);
         $erros = $this->validarDadosAssociado($dados, validarInscricao: false);
+
+        // Regra 27: ao mudar para a secção "Chefia", o associado já tem de ter
+        // um contacto "Email Associativo" registado (gerido em "Gerir contactos").
+        if (!empty($dados['IdSecao']) && (new Secao())->ehChefia((int) $dados['IdSecao'])) {
+            $temEmailAssociativo = (new Contacto())->temTipo((int) $associadoExistente['IdPessoa'], 'Email Associativo');
+            if (!$temEmailAssociativo) {
+                $erros[] = 'Para atribuir a secção "Chefia" é necessário que o associado já tenha um contacto "Email Associativo" — adicione-o primeiro em "Gerir contactos".';
+            }
+        }
 
         if ($erros) {
             Sessao::guardarMensagem('erro', implode(' ', $erros));
