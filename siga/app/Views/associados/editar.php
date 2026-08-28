@@ -105,7 +105,7 @@
                         <option value="<?= (int) $s['Id'] ?>" <?= isset($secaoActual['IdSecao']) && (int) $secaoActual['IdSecao'] === (int) $s['Id'] ? 'selected' : '' ?>><?= htmlspecialchars($s['Designacao']) ?></option>
                     <?php endforeach; ?>
                 </select>
-                <small>Seleccionar uma secção diferente encerra a atribuição actual e regista a nova, com histórico. Para "Chefia", o associado já tem de ter um contacto "Email Associativo" (em "Gerir contactos").</small>
+                <small>Só é permitido avançar para a secção seguinte na sequência: Colónia → Alcateia → Tribo Júnior → Tribo Sénior → Clã → Chefia. Para "Chefia", o associado já tem de ter um contacto "Email Associativo" (em "Gerir contactos").</small>
             </div>
             <div class="campo">
                 <label for="IdCompanhia">Companhia actual</label>

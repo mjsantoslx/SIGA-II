@@ -114,6 +114,11 @@ siga/
   incluindo a Chefia Nacional. A criação/edição dos dados base das
   companhias fica para a página de administração (próxima versão).
 
+- **Progressão obrigatória entre secções** (regra 28) — ao mudar a secção
+  de um associado já existente, só é permitido avançar para a secção
+  imediatamente a seguir na sequência: Colónia → Alcateia → Tribo Júnior →
+  Tribo Sénior → Clã → Chefia. Não se aplica ao registo inicial (a primeira
+  secção pode ser qualquer uma, ex.: um dirigente adulto).
 - **Email associativo dos dirigentes** (regra 27) — associados na secção
   "Chefia" têm de ter um contacto "Email Associativo", para além do email
   pessoal: obrigatório ao registar directamente na Chefia, exigido (já

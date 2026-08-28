@@ -174,9 +174,25 @@ class AssociadosController extends Controller
         $dados['DataInscricao'] = Data::paraApresentacao($associadoExistente['DataInscricao']);
         $erros = $this->validarDadosAssociado($dados, validarInscricao: false);
 
+        $secaoModelo = new Secao();
+
+        // Progressão obrigatória entre secções: só se pode avançar para a
+        // secção imediatamente a seguir na sequência combinada.
+        if (!empty($dados['IdSecao'])) {
+            $secaoActualAssociado = $associadoModelo->secaoActual($idAssociado);
+            $idSecaoAtual = $secaoActualAssociado['IdSecao'] ?? null;
+            if (!$secaoModelo->transicaoPermitida($idSecaoAtual ? (int) $idSecaoAtual : null, (int) $dados['IdSecao'])) {
+                $designacaoAtual = $idSecaoAtual ? $secaoModelo->designacaoPorId((int) $idSecaoAtual) : null;
+                $proxima = $designacaoAtual ? $secaoModelo->proximaDaSequencia($designacaoAtual) : null;
+                $erros[] = $proxima
+                    ? "A mudança de secção só pode avançar para a secção seguinte na sequência — a partir de \"{$designacaoAtual}\", a única secção permitida é \"{$proxima}\"."
+                    : 'Esta mudança de secção não é permitida pela sequência de progressão definida (Colónia → Alcateia → Tribo Júnior → Tribo Sénior → Clã → Chefia).';
+            }
+        }
+
         // Regra 27: ao mudar para a secção "Chefia", o associado já tem de ter
         // um contacto "Email Associativo" registado (gerido em "Gerir contactos").
-        if (!empty($dados['IdSecao']) && (new Secao())->ehChefia((int) $dados['IdSecao'])) {
+        if (!empty($dados['IdSecao']) && $secaoModelo->ehChefia((int) $dados['IdSecao'])) {
             $temEmailAssociativo = (new Contacto())->temTipo((int) $associadoExistente['IdPessoa'], 'Email Associativo');
             if (!$temEmailAssociativo) {
                 $erros[] = 'Para atribuir a secção "Chefia" é necessário que o associado já tenha um contacto "Email Associativo" — adicione-o primeiro em "Gerir contactos".';

@@ -590,3 +590,33 @@ Nao ficou coberto (fica para decisao futura, caso necessario): associados
 que ja estivessem na seccao "Chefia" antes desta regra e que nao tenham
 ainda um "Email Associativo" registado nao sao bloqueados retroactivamente
 — nao ha, para ja, um relatorio que liste essas excepcoes.
+28. Progressao obrigatoria entre seccoes
+
+Foi definido que a mudanca de seccao de um associado segue sempre uma
+sequencia fixa, sem saltos e sem retrocesso:
+
+Colonia -> Alcateia -> Tribo Junior -> Tribo Senior -> Cla -> Chefia
+
+28.1 Aplicacao
+
+A regra aplica-se apenas a MUDANCAS de seccao de um associado ja
+existente (ecra de edicao) - so e permitido avancar para a seccao
+imediatamente a seguir na sequencia acima. Qualquer outra transicao
+(saltar seccoes, ou regressar a uma seccao anterior) e bloqueada com
+uma mensagem de erro.
+
+NAO se aplica ao registo inicial de um novo associado: a primeira
+seccao atribuida (na criacao) pode ser qualquer uma - por exemplo, um
+dirigente adulto pode entrar directamente na seccao "Chefia" sem alguma
+vez ter passado pelas seccoes mais novas. Isto foi assumido por analogia
+com a forma como a regra foi comunicada ("mudancas de seccao"), e deve
+ser confirmado explicitamente se nao for a leitura correcta.
+
+Seccoes fora desta sequencia (caso venham a ser criadas no futuro via
+administracao) nao ficam sujeitas a esta regra.
+
+⚠️ EM ABERTO: nao existe, para ja, nenhuma forma de corrigir uma
+atribuicao de seccao feita por engano (ex.: atribuida a seccao errada por
+lapso) directamente pela aplicacao - so seria possivel corrigir directamente
+na base de dados. Fica para a pagina de administracao
+decidir se deve existir uma excepcao/override para correccoes deste tipo.
