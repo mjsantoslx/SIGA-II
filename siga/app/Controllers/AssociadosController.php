@@ -175,18 +175,16 @@ class AssociadosController extends Controller
         $erros = $this->validarDadosAssociado($dados, validarInscricao: false);
 
         $secaoModelo = new Secao();
+        $secaoActualAssociado = $associadoModelo->secaoActual($idAssociado);
+        $idSecaoAtual = $secaoActualAssociado['IdSecao'] ?? null;
+        $correcaoManual = !empty($dados['CorrecaoSecao']);
 
-        // Progressão obrigatória entre secções: só se pode avançar para a
-        // secção imediatamente a seguir na sequência combinada.
-        if (!empty($dados['IdSecao'])) {
-            $secaoActualAssociado = $associadoModelo->secaoActual($idAssociado);
-            $idSecaoAtual = $secaoActualAssociado['IdSecao'] ?? null;
+        // Em uso normal só se pode avançar (ou saltar para a frente) na
+        // sequência de secções, nunca recuar. Um recuo só é permitido através
+        // da correcção explícita, assinalada pelo utilizador.
+        if (!empty($dados['IdSecao']) && !$correcaoManual) {
             if (!$secaoModelo->transicaoPermitida($idSecaoAtual ? (int) $idSecaoAtual : null, (int) $dados['IdSecao'])) {
-                $designacaoAtual = $idSecaoAtual ? $secaoModelo->designacaoPorId((int) $idSecaoAtual) : null;
-                $proxima = $designacaoAtual ? $secaoModelo->proximaDaSequencia($designacaoAtual) : null;
-                $erros[] = $proxima
-                    ? "A mudança de secção só pode avançar para a secção seguinte na sequência — a partir de \"{$designacaoAtual}\", a única secção permitida é \"{$proxima}\"."
-                    : 'Esta mudança de secção não é permitida pela sequência de progressão definida (Colónia → Alcateia → Tribo Júnior → Tribo Sénior → Clã → Chefia).';
+                $erros[] = 'Esta mudança de secção representaria um recuo, o que não é permitido em uso normal. Se for mesmo necessário (correcção de um erro), assinale a opção "Isto é uma correcção" no formulário.';
             }
         }
 
@@ -211,6 +209,24 @@ class AssociadosController extends Controller
             $hoje = Data::hojeBd();
             if (!empty($dados['IdSecao'])) {
                 $associadoModelo->atribuirSecao($idAssociado, (int) $dados['IdSecao'], $hoje);
+
+                // Correcções ficam sempre registadas no histórico de eventos,
+                // já que contornam a regra normal de progressão.
+                if ($correcaoManual) {
+                    $designacaoAnterior = $idSecaoAtual ? $secaoModelo->designacaoPorId((int) $idSecaoAtual) : null;
+                    $designacaoNova = $secaoModelo->designacaoPorId((int) $dados['IdSecao']);
+                    $motivo = trim($dados['MotivoCorrecaoSecao'] ?? '');
+                    $observacoes = sprintf(
+                        'Correcção manual de secção: %s → %s.%s',
+                        $designacaoAnterior ?? '(sem secção anterior)',
+                        $designacaoNova ?? '(desconhecida)',
+                        $motivo !== '' ? ' Motivo: ' . $motivo : ''
+                    );
+                    $idTipoEventoCorrecao = (new EventoAssociado())->idTipoEventoPorDesignacao('Correcção de secção');
+                    if ($idTipoEventoCorrecao) {
+                        (new EventoAssociado())->registar($idAssociado, $idTipoEventoCorrecao, $hoje, $observacoes);
+                    }
+                }
             }
             if (!empty($dados['IdCompanhia'])) {
                 $associadoModelo->atribuirCompanhia($idAssociado, (int) $dados['IdCompanhia'], $hoje);

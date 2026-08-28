@@ -105,7 +105,15 @@
                         <option value="<?= (int) $s['Id'] ?>" <?= isset($secaoActual['IdSecao']) && (int) $secaoActual['IdSecao'] === (int) $s['Id'] ? 'selected' : '' ?>><?= htmlspecialchars($s['Designacao']) ?></option>
                     <?php endforeach; ?>
                 </select>
-                <small>Só é permitido avançar para a secção seguinte na sequência: Colónia → Alcateia → Tribo Júnior → Tribo Sénior → Clã → Chefia. Para "Chefia", o associado já tem de ter um contacto "Email Associativo" (em "Gerir contactos").</small>
+                <small>Em uso normal só é possível avançar (ou saltar para a frente) na sequência Colónia → Alcateia → Tribo Júnior → Tribo Sénior → Clã → Chefia — nunca recuar. Para "Chefia", o associado já tem de ter um contacto "Email Associativo" (em "Gerir contactos").</small>
+            </div>
+            <div class="campo campo-largo">
+                <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 600;">
+                    <input type="checkbox" name="CorrecaoSecao" value="1" style="width: auto;">
+                    Isto é uma correcção (a mudança de secção pode representar um recuo)
+                </label>
+                <small>Só assinale isto para corrigir um erro. A correcção fica sempre registada no histórico de eventos do associado.</small>
+                <input type="text" name="MotivoCorrecaoSecao" placeholder="Motivo da correcção (opcional, mas recomendado)" style="margin-top: 0.4rem;">
             </div>
             <div class="campo">
                 <label for="IdCompanhia">Companhia actual</label>

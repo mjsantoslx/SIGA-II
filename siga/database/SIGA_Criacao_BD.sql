@@ -637,6 +637,7 @@ VALUES
 INSERT INTO tipos_evento (Designacao) VALUES ('Admissão');
 INSERT INTO tipos_evento (Designacao) VALUES ('Desactivação');
 INSERT INTO tipos_evento (Designacao) VALUES ('Reactivação');
+INSERT INTO tipos_evento (Designacao) VALUES ('Correcção de secção');
 
 
 
