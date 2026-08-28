@@ -16,7 +16,7 @@ class Database
     public static function ligacao(): PDO
     {
         if (self::$instancia === null) {
-            $config = require __DIR__ . '/../Config/config.php';
+            $config = require __DIR__ . '/../../config/config.php';
             $db     = $config['db'];
 
             $dsn = sprintf(

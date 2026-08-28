@@ -23,12 +23,13 @@
 
             <div class="campo">
                 <label for="DataNascimento">Data de nascimento *</label>
-                <input type="date" id="DataNascimento" name="DataNascimento" required value="<?= htmlspecialchars($a['DataNascimento'] ?? '') ?>">
+                <input type="text" id="DataNascimento" name="DataNascimento" class="campo-data" placeholder="dd/mm/aaaa" maxlength="10" inputmode="numeric" required value="<?= htmlspecialchars($a['DataNascimento'] ?? '') ?>">
             </div>
 
             <div class="campo">
                 <label for="DataInscricao">Data de inscrição *</label>
-                <input type="date" id="DataInscricao" name="DataInscricao" required value="<?= htmlspecialchars($a['DataInscricao'] ?? date('Y-m-d')) ?>">
+                <input type="text" id="DataInscricao" name="DataInscricao" class="campo-data" placeholder="dd/mm/aaaa" maxlength="10" inputmode="numeric" required value="<?= htmlspecialchars($a['DataInscricao'] ?? \App\Core\Data::hojePt()) ?>">
+                <small>Sugerida a data de hoje; pode ser alterada para uma data anterior, mas nunca posterior a hoje.</small>
             </div>
 
             <div class="campo">

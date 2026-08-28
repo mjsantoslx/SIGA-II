@@ -3,6 +3,8 @@
 namespace App\Controllers;
 
 use App\Core\Controller;
+use App\Core\Data;
+use App\Core\Documentos;
 use App\Core\Sessao;
 use App\Models\Associado;
 use App\Models\Companhia;
@@ -45,7 +47,7 @@ class AssociadosController extends Controller
         $this->vista('associados/form', [
             'titulo'      => 'Novo associado',
             'modo'        => 'criar',
-            'associado'   => null,
+            'associado'   => ['DataInscricao' => Data::hojePt()],
             ...$this->dadosListasFormulario(),
         ]);
     }
@@ -70,12 +72,17 @@ class AssociadosController extends Controller
         }
 
         try {
+            // A partir daqui $dados['DataNascimento'] e ['DataInscricao'] já
+            // estão convertidas para aaaa-mm-dd por validarDadosAssociado().
             $idAssociado = (new Associado())->criarCompleto($dados);
             Sessao::guardarMensagem('sucesso', 'Associado registado com sucesso.');
             $this->redirecionar('/associados/' . $idAssociado);
         } catch (\Throwable $e) {
             error_log('[SIGA] Erro ao criar associado: ' . $e->getMessage());
             Sessao::guardarMensagem('erro', 'Não foi possível guardar o associado. Verifique os dados introduzidos (por exemplo, número de associado ou documento duplicado) e tente novamente.');
+            // Repor as datas em dd/mm/aaaa para o utilizador ver o formulário como o preencheu.
+            $dados['DataNascimento'] = Data::paraApresentacao($dados['DataNascimento'] ?? null);
+            $dados['DataInscricao']  = Data::paraApresentacao($dados['DataInscricao'] ?? null);
             $this->vista('associados/form', [
                 'titulo'    => 'Novo associado',
                 'modo'      => 'criar',
@@ -111,6 +118,7 @@ class AssociadosController extends Controller
             'fichaSaude'  => (new FichaSaude())->porAssociado($idAssociado),
             'consentimento' => (new Consentimento())->maisRecenteDoAssociado($idAssociado),
             'eventos'     => (new EventoAssociado())->listarDoAssociado($idAssociado),
+            'hojePt'      => Data::hojePt(),
         ]);
     }
 
@@ -127,6 +135,9 @@ class AssociadosController extends Controller
             $this->redirecionar('/associados');
             return;
         }
+
+        // Apresentar as datas ao utilizador sempre em dd/mm/aaaa.
+        $associado['DataNascimento'] = Data::paraApresentacao($associado['DataNascimento']);
 
         $this->vista('associados/editar', [
             'titulo'          => 'Editar — ' . $associado['Nome'],
@@ -153,7 +164,9 @@ class AssociadosController extends Controller
         }
 
         $dados = $_POST;
-        $erros = $this->validarDadosAssociado($dados);
+        // Na edição não se altera a data de inscrição — só validamos a de nascimento.
+        $dados['DataInscricao'] = Data::paraApresentacao($associadoExistente['DataInscricao']);
+        $erros = $this->validarDadosAssociado($dados, validarInscricao: false);
 
         if ($erros) {
             Sessao::guardarMensagem('erro', implode(' ', $erros));
@@ -164,7 +177,7 @@ class AssociadosController extends Controller
         try {
             $associadoModelo->actualizarDadosBase($idAssociado, (int) $associadoExistente['IdPessoa'], $dados);
 
-            $hoje = date('Y-m-d');
+            $hoje = Data::hojeBd();
             if (!empty($dados['IdSecao'])) {
                 $associadoModelo->atribuirSecao($idAssociado, (int) $dados['IdSecao'], $hoje);
             }
@@ -181,45 +194,105 @@ class AssociadosController extends Controller
         }
     }
 
+    /**
+     * A desactivação é, em si mesma, consequência de um evento (regra 9.2):
+     * regista sempre um evento "Desactivação", com a data indicada pelo utilizador
+     * (sugerida como hoje, nunca posterior a hoje).
+     */
     public function desativar(string $id): void
     {
         $this->exigirAutenticacao();
         $this->validarCsrf();
 
         $idAssociado = (int) $id;
-        (new Associado())->desactivar($idAssociado);
+        $dataBd = $this->validarDataEvento($_POST['DataEvento'] ?? '');
+
+        if ($dataBd === null) {
+            Sessao::guardarMensagem('erro', 'Indique uma data de desactivação válida (não pode ser posterior a hoje).');
+            $this->redirecionar('/associados/' . $idAssociado);
+            return;
+        }
+
+        $observacoes = trim($_POST['Observacoes'] ?? '') ?: null;
+
+        (new Associado())->desactivar($idAssociado, $dataBd, $observacoes);
         Sessao::guardarMensagem('sucesso', 'Associado desactivado.');
         $this->redirecionar('/associados/' . $idAssociado);
     }
 
+    /**
+     * A reactivação (regra 10.2) restaura o estado activo, preserva o histórico
+     * e NÃO associa automaticamente a nenhuma companhia — isso fica disponível
+     * como uma acção separada, através da edição do associado.
+     */
     public function reativar(string $id): void
     {
         $this->exigirAutenticacao();
         $this->validarCsrf();
 
         $idAssociado = (int) $id;
-        (new Associado())->reactivar($idAssociado);
+        $dataBd = $this->validarDataEvento($_POST['DataEvento'] ?? '');
+
+        if ($dataBd === null) {
+            Sessao::guardarMensagem('erro', 'Indique uma data de reactivação válida (não pode ser posterior a hoje).');
+            $this->redirecionar('/associados/' . $idAssociado);
+            return;
+        }
+
+        $observacoes = trim($_POST['Observacoes'] ?? '') ?: null;
+
+        (new Associado())->reactivar($idAssociado, $dataBd, $observacoes);
         Sessao::guardarMensagem('sucesso', 'Associado reactivado.');
         $this->redirecionar('/associados/' . $idAssociado);
     }
 
     /**
-     * Validações mínimas de negócio, alinhadas com as restrições da base de dados
-     * (ex.: NominativoOutro obrigatório quando Genero = 'O').
+     * Converte e valida uma data de evento vinda do formulário (dd/mm/aaaa):
+     * tem de ser uma data válida e não pode ser posterior a hoje (regra 8.4).
      */
-    private function validarDadosAssociado(array $dados): array
+    private function validarDataEvento(string $dataPt): ?string
+    {
+        $dataBd = Data::paraBd($dataPt);
+        if ($dataBd === null || Data::eFutura($dataBd)) {
+            return null;
+        }
+        return $dataBd;
+    }
+
+    /**
+     * Valida e, em caso de sucesso, converte no próprio array $dados as datas
+     * de dd/mm/aaaa para aaaa-mm-dd (o formato usado a partir daqui pelos modelos).
+     */
+    private function validarDadosAssociado(array &$dados, bool $validarInscricao = true): array
     {
         $erros = [];
 
         if (empty(trim($dados['Nome'] ?? ''))) {
             $erros[] = 'O nome é obrigatório.';
         }
-        if (empty($dados['DataNascimento'] ?? '')) {
-            $erros[] = 'A data de nascimento é obrigatória.';
+
+        // --- Data de nascimento: obrigatória, válida, nunca futura (regra 8.4). ---
+        $nascimentoBd = Data::paraBd($dados['DataNascimento'] ?? '');
+        if ($nascimentoBd === null) {
+            $erros[] = 'A data de nascimento é obrigatória e deve estar em formato dd/mm/aaaa.';
+        } elseif (Data::eFutura($nascimentoBd)) {
+            $erros[] = 'A data de nascimento não pode ser futura.';
+        } else {
+            $dados['DataNascimento'] = $nascimentoBd;
         }
-        if (empty($dados['DataInscricao'] ?? '')) {
-            $erros[] = 'A data de inscrição é obrigatória.';
+
+        // --- Data de inscrição: obrigatória, válida, pode ser passada, nunca futura. ---
+        if ($validarInscricao) {
+            $inscricaoBd = Data::paraBd($dados['DataInscricao'] ?? '');
+            if ($inscricaoBd === null) {
+                $erros[] = 'A data de inscrição é obrigatória e deve estar em formato dd/mm/aaaa.';
+            } elseif (Data::eFutura($inscricaoBd)) {
+                $erros[] = 'A data de inscrição não pode ser posterior a hoje.';
+            } else {
+                $dados['DataInscricao'] = $inscricaoBd;
+            }
         }
+
         if (!in_array($dados['Genero'] ?? '', ['M', 'F', 'O'], true)) {
             $erros[] = 'O género é obrigatório.';
         }
@@ -228,6 +301,15 @@ class AssociadosController extends Controller
         }
         if (!empty($dados['NumeroCartaoUtente']) && !preg_match('/^\d{9}$/', $dados['NumeroCartaoUtente'])) {
             $erros[] = 'O número de utente de saúde deve ter exactamente 9 dígitos.';
+        }
+
+        // Regra 6: nunca perder zeros à esquerda; preenche automaticamente
+        // assim que a largura for confirmada em config/config.php.
+        if (!empty($dados['NumeroDocumentoIdentificacao'])) {
+            $dados['NumeroDocumentoIdentificacao'] = Documentos::preencherComZeros(
+                $dados['NumeroDocumentoIdentificacao'],
+                $this->config['documentos']['largura_cc'] ?? null
+            );
         }
 
         return $erros;

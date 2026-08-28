@@ -19,10 +19,11 @@ PSR-4 (`App\` → `app/`) — corra `composer install` e troque o `require` em
 
 ```
 siga/
+├── config/
+│   └── config.php                # configuração (BD, sessão, nome da app, documentos)
 ├── app/
-│   ├── Config/config.php        # configuração (BD, sessão, nome da app)
-│   ├── Core/                    # Router, Controller e Model base, BD, Sessão
-│   ├── Controllers/              # AuthController, DashboardController, AssociadosController
+│   ├── Core/                    # Router, Controller e Model base, BD, Sessão, Data, Documentos
+│   ├── Controllers/              # Auth, Dashboard, Associados, Moradas, Companhias
 │   ├── Models/                   # Um modelo por entidade da base de dados
 │   ├── Views/                    # Vistas PHP, organizadas por controlador
 │   └── autoload.php
@@ -61,7 +62,7 @@ siga/
    SIGA_DB_USER=siga_app
    SIGA_DB_PASS=escolha_uma_password_forte
    ```
-   Ou edite directamente `app/Config/config.php` (menos recomendado em produção).
+   Ou edite directamente `config/config.php` (menos recomendado em produção).
 
 4. **Utilizador inicial** — o script já cria o utilizador `Administrador`
    com a palavra-passe **`admin@ueo2026`**. Altere-a assim que possível
@@ -78,7 +79,7 @@ siga/
 5. **Apontar o servidor web para `public/`** (ver secção 5) e aceder a
    `/login` com o utilizador `Administrador` e a palavra-passe definida.
 
-## 4. Módulos incluídos nesta primeira versão
+## 4. Módulos incluídos até à v01.02
 
 - **Autenticação** (`/login`), com sessões seguras (cookie `HttpOnly`,
   `SameSite=Lax`) e protecção CSRF em todos os formulários.
@@ -86,28 +87,58 @@ siga/
   distribuição por secção.
 - **Gestão de Associados** (`/associados`) — módulo central:
   - Listagem com pesquisa por nome/número e filtros por secção e estado;
-  - Formulário de registo completo, que cria numa única transacção: pessoa,
-    morada, contactos, associado, secção, companhia, encarregados de
-    educação, contactos de emergência, ficha de saúde e consentimentos RGPD,
-    além do evento de "Admissão";
+  - Formulário de registo completo, com **datas em dd/mm/aaaa** (máscara
+    automática e validação de datas não-futuras), que cria numa única
+    transacção: pessoa, morada, contactos, associado, secção, companhia,
+    encarregados de educação, contactos de emergência, ficha de saúde e
+    consentimentos RGPD, além do evento de "Admissão" (com a data de
+    inscrição escolhida, nunca a data do sistema);
   - Ficha de detalhe com todos os dados relacionados;
   - Edição dos dados base, com histórico automático ao mudar de secção ou
-    companhia (a atribuição anterior é fechada com `DataFim`, mantendo o
-    registo histórico já previsto no seu modelo de dados);
-  - Desactivação/reactivação (soft-delete, preservando o histórico).
+    companhia;
+  - **Desactivação/reactivação com registo automático de evento**
+    ("Desactivação"/"Reactivação"), com data e observações indicadas pelo
+    utilizador — a reactivação nunca associa automaticamente a nenhuma
+    companhia (regra 10.2).
+- **Gestão de morada** (associados e companhias) — duas operações distintas:
+  - **Corrigir**: altera os dados da morada existente (ex.: corrigir um
+    número de porta), afectando todos os que a partilham;
+  - **Substituir**: cria uma morada nova e fecha a ligação anterior,
+    preservando o histórico (`DataInicio`/`DataFim`).
+- **Companhias** (`/companhias`) — listagem e detalhe com a morada actual,
+  incluindo a Chefia Nacional. A criação/edição dos dados base das
+  companhias fica para a página de administração (próxima versão).
+
+### Nota sobre o número de documento (Cartão de Cidadão)
+
+O número é sempre tratado como texto (nunca convertido para inteiro), mas o
+preenchimento automático com zeros à esquerda está **inactivo** até a
+largura exacta ser confirmada — ver `config/config.php` → `documentos.largura_cc`.
+Assim que souber o valor correcto, basta preenchê-lo aí; não é necessária
+nenhuma alteração de código.
 
 ## 5. Próximos passos sugeridos
 
 Este é um esqueleto funcional e extensível. Áreas naturais para continuar:
 
-- Ecrãs de backoffice para gerir as tabelas de referência (nacionalidades,
-  confissões religiosas, tipos de contacto/relação/evento, secções, companhias);
+- **Página de administração** (backoffice) para gerir tabelas de referência
+  (nacionalidades, confissões religiosas, tipos de contacto/relação/evento,
+  secções) e os dados base das companhias (criação/edição/inactivação);
 - Gestão de utilizadores (`utilizadores`, `utilizadores_companhias`,
   `utilizadores_associados`) e permissões por companhia;
 - Histórico de alterações à ficha de saúde (a tabela `fichas_saude_historico`
-  já existe no seu modelo, mas ainda não está a ser escrita pela aplicação);
+  já existe no modelo, mas ainda não está a ser escrita pela aplicação);
+- Confirmar a largura do número do Cartão de Cidadão e activar o
+  preenchimento automático com zeros (`config/config.php` → `documentos.largura_cc`);
 - Exportações (ex.: listas de associados por secção, em CSV/PDF);
 - Testes automatizados.
+
+## 6. Regras de negócio
+
+O ficheiro [`docs/regras_de_negocio.txt`](docs/regras_de_negocio.txt) é a
+especificação funcional fixa do SIGA. Qualquer versão nova deve ser
+confrontada com este documento antes de ser gerada — nenhuma decisão já
+fechada aí pode ser alterada ou esquecida sem uma decisão explícita.
 
 ### Exemplo de VirtualHost Apache
 

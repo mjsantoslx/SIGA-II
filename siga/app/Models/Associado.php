@@ -216,20 +216,16 @@ class Associado extends Model
                 }
             }
 
-            // 8. Contactos de emergência
+            // 8. Contactos de emergência — estrutura própria, não depende de "pessoas" (regra 17.1).
             if (!empty($dados['EmergenciaNome'])) {
                 foreach ($dados['EmergenciaNome'] as $i => $nomeCE) {
                     $nomeCE = trim($nomeCE);
                     if ($nomeCE === '') {
                         continue;
                     }
-                    $idPessoaCE  = $pessoaModelo->criar($nomeCE);
                     $idTipoRelCE = $dados['EmergenciaRelacao'][$i] ?? null;
-                    if (!empty($dados['EmergenciaContacto'][$i])) {
-                        $contactoModelo->criar($idPessoaCE, 1, $dados['EmergenciaContacto'][$i]);
-                    }
                     if ($idTipoRelCE) {
-                        $ceModelo->criar($idAssociado, $idPessoaCE, (int) $idTipoRelCE);
+                        $ceModelo->criar($idAssociado, $nomeCE, $dados['EmergenciaContacto'][$i] ?? null, (int) $idTipoRelCE);
                     }
                 }
             }
@@ -334,14 +330,44 @@ class Associado extends Model
         $stmt->execute(['a' => $idAssociado, 'c' => $idCompanhia, 'd' => $dataInicio]);
     }
 
-    public function desactivar(int $idAssociado): bool
+    /**
+     * A desactivação de um associado é, em si mesma, consequência de um evento
+     * (regra 9.2 das regras de negócio): nunca muda apenas o estado sem deixar
+     * rasto no histórico de eventos.
+     */
+    public function desactivar(int $idAssociado, string $dataEvento, ?string $observacoes = null): bool
     {
-        return $this->actualizar('associados', ['Activo' => 0], 'Id', $idAssociado);
+        return $this->mudarEstadoComEvento($idAssociado, 0, 'Desactivação', $dataEvento, $observacoes);
     }
 
-    public function reactivar(int $idAssociado): bool
+    /**
+     * A reactivação (regra 10.2) restaura o estado activo e preserva o histórico
+     * anterior; não associa automaticamente nenhuma companhia.
+     */
+    public function reactivar(int $idAssociado, string $dataEvento, ?string $observacoes = null): bool
     {
-        return $this->actualizar('associados', ['Activo' => 1], 'Id', $idAssociado);
+        return $this->mudarEstadoComEvento($idAssociado, 1, 'Reactivação', $dataEvento, $observacoes);
+    }
+
+    private function mudarEstadoComEvento(int $idAssociado, int $novoActivo, string $designacaoEvento, string $dataEvento, ?string $observacoes): bool
+    {
+        $eventoModelo = new EventoAssociado();
+
+        $this->bd->beginTransaction();
+        try {
+            $this->actualizar('associados', ['Activo' => $novoActivo], 'Id', $idAssociado);
+
+            $idTipoEvento = $eventoModelo->idTipoEventoPorDesignacao($designacaoEvento);
+            if ($idTipoEvento) {
+                $eventoModelo->registar($idAssociado, $idTipoEvento, $dataEvento, $observacoes);
+            }
+
+            $this->bd->commit();
+            return true;
+        } catch (\Throwable $e) {
+            $this->bd->rollBack();
+            throw $e;
+        }
     }
 
     public function contarPorEstado(): array

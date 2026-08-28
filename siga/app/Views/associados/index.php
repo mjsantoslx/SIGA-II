@@ -51,7 +51,7 @@
                     <td><?= htmlspecialchars($associado['NumeroAssociado'] ?? '—') ?></td>
                     <td><?= htmlspecialchars($associado['SecaoActual'] ?? '—') ?></td>
                     <td><?= htmlspecialchars($associado['CompanhiaActual'] ?? '—') ?></td>
-                    <td><?= htmlspecialchars(date('d-m-Y', strtotime($associado['DataNascimento']))) ?></td>
+                    <td><?= htmlspecialchars(\App\Core\Data::paraApresentacao($associado['DataNascimento'])) ?></td>
                     <td>
                         <span class="etiqueta etiqueta-<?= $associado['Activo'] ? 'ativo' : 'inativo' ?>">
                             <?= $associado['Activo'] ? 'Activo' : 'Inactivo' ?>

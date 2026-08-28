@@ -24,4 +24,28 @@ window.siga = {
 
         contentor.appendChild(novaLinha);
     },
+
+    /**
+     * Máscara de datas dd/mm/aaaa: o utilizador escreve só algarismos e as
+     * barras são inseridas automaticamente (regra 8.3 das regras de negócio).
+     */
+    aplicarMascaraData(campo) {
+        campo.addEventListener('input', () => {
+            let digitos = campo.value.replace(/\D/g, '').slice(0, 8);
+            let resultado = digitos;
+            if (digitos.length > 4) {
+                resultado = `${digitos.slice(0, 2)}/${digitos.slice(2, 4)}/${digitos.slice(4)}`;
+            } else if (digitos.length > 2) {
+                resultado = `${digitos.slice(0, 2)}/${digitos.slice(2)}`;
+            }
+            campo.value = resultado;
+        });
+    },
+
+    iniciar() {
+        document.querySelectorAll('.campo-data').forEach((campo) => this.aplicarMascaraData(campo));
+    },
 };
+
+document.addEventListener('DOMContentLoaded', () => window.siga.iniciar());
+

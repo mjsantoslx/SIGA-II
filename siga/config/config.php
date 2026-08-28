@@ -27,4 +27,17 @@ return [
         'nome'                => 'SIGA_SESSAO',
         'tempo_vida_minutos'  => 120,
     ],
+
+    'documentos' => [
+        // Regra 6: o número do Cartão de Cidadão / documento de identificação
+        // deve ser tratado sempre como texto e, quando necessário, completado
+        // à esquerda com zeros até este número de algarismos.
+        // ⚠️ POR CONFIRMAR: ainda não foi validada a largura exacta usada na
+        // versão anterior do SIGA. Enquanto for `null`, a aplicação NÃO aplica
+        // qualquer padding automático (o número é guardado exactamente como
+        // foi introduzido). Assim que confirmado, defina aqui o valor (ex.: 8)
+        // — App\Core\Documentos::preencherComZeros() passa a usá-lo em toda a
+        // aplicação sem mais nenhuma alteração de código necessária.
+        'largura_cc' => null,
+    ],
 ];

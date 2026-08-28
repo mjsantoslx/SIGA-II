@@ -1,0 +1,552 @@
+1. Princípio fundamental
+
+A partir deste momento:
+
+Nenhuma decisão funcional já fechada pode ser alterada ou esquecida numa nova versão sem uma decisão explícita.
+
+Antes de gerar qualquer versão futura, a implementação deverá ser confrontada com esta especificação.
+
+2. Base de dados
+2.1 Motor de base de dados
+
+O projecto continua em:
+
+MySQL / MariaDB
+
+A eventual migração para:
+
+PostgreSQL;
+Microsoft SQL Server;
+
+foi considerada, mas não faz parte do desenvolvimento actual.
+
+2.2 Charset e collation
+
+A escolha definida é:
+
+utf8mb4
+utf8mb4_uca1400_as_ci
+
+2.3 Instalação limpa
+
+Devido às alterações estruturais profundas da V14:
+
+a instalação parte de uma base de dados nova;
+existe um único script de criação;
+não devem existir scripts de migração intermédios no pacote de instalação.
+
+O pacote deve conter:
+
+Código da aplicação
++
+Script único de criação da BD
++
+Dados iniciais
+3. Modelo pessoas
+
+Foi adoptado o conceito de Pessoa como entidade base.
+
+Os dados pessoais que podem ser comuns a diferentes entidades devem estar centralizados em:
+
+pessoas
+
+O associado deixa, portanto, de concentrar directamente todos os dados pessoais.
+
+A relação é conceptualmente:
+
+pessoas
+   │
+   └── associados
+4. Associados
+
+A tabela de associados deve conter os dados específicos da condição de associado.
+
+4.1 Dados pessoais relevantes
+
+Foram definidos, entre outros:
+
+nome;
+nome do pai;
+nome da mãe;
+género;
+nacionalidade;
+estado civil;
+confissão religiosa;
+tipo de documento de identificação;
+número do documento;
+número de utente.
+5. Género
+
+Os géneros definidos são exactamente:
+
+M — Masculino
+F — Feminino
+O — Outro
+5.1 Nominativo
+
+Para:
+
+Masculino;
+Feminino;
+
+o nominativo segue a regra definida pela aplicação.
+
+Para:
+
+Outro
+
+o nominativo é introduzido manualmente.
+
+Esta decisão está fechada.
+
+6. Cartão de Cidadão / documento de identificação
+
+Esta é uma regra já definida há bastante tempo.
+
+Regra funcional
+
+O número deve:
+
+ser tratado como texto;
+não ser tratado como número inteiro;
+preservar zeros à esquerda;
+ser apresentado com o número de algarismos definido;
+quando necessário, ser completado automaticamente à esquerda com 0.
+
+Exemplo conceptual:
+
+123456
+
+pode tornar-se:
+
+00123456
+
+consoante o comprimento definido para o documento.
+
+Regra crítica
+
+Nunca permitir que a conversão para um tipo numérico elimine zeros à esquerda.
+
+⚠️ Ainda preciso de recuperar do código/modelo a largura exacta que tínhamos efectivamente implementado para o Cartão de Cidadão, em vez de voltar a inventar um número. Esta será verificada directamente na versão-base antes de qualquer novo pacote.
+
+7. Número de Utente
+
+Foi explicitamente definido:
+
+CHAR(9)
+
+O número de utente:
+
+tem sempre 9 algarismos;
+deve ser armazenado como texto;
+não deve perder zeros iniciais.
+8. Datas
+
+Esta é uma decisão transversal a toda a aplicação.
+
+8.1 Apresentação e introdução
+
+Para o utilizador:
+
+dd/mm/aaaa
+
+Formato europeu.
+
+Aplica-se, nomeadamente, a:
+
+Data de Nascimento;
+Data de Inscrição;
+Data de Eventos;
+restantes datas apresentadas nos formulários.
+8.2 Armazenamento na base de dados
+
+Na base de dados:
+
+aaaa-mm-dd
+
+ou seja:
+
+YYYY-MM-DD
+
+A aplicação é responsável pela conversão entre:
+
+dd/mm/aaaa
+
+e:
+
+YYYY-MM-DD
+8.3 Máscara de introdução
+
+A introdução deve permitir que o utilizador escreva apenas os algarismos.
+
+Exemplo:
+
+01011969
+
+deve ser apresentado automaticamente como:
+
+01/01/1969
+
+As barras devem ser inseridas automaticamente.
+
+8.4 Datas futuras
+Data de nascimento
+
+Não pode ser futura.
+
+Data de inscrição
+deve ser sugerida a data actual;
+pode ser alterada para uma data anterior;
+não pode ser posterior à data actual.
+Eventos
+deve ser sugerida a data actual;
+pode ser alterada para uma data anterior;
+não pode ser posterior à data actual.
+9. Eventos
+
+Os eventos constituem uma parte fundamental do histórico do associado.
+
+9.1 Regra de preservação
+
+Os eventos nunca são eliminados.
+
+Devem ser mantidos mesmo que o associado:
+
+seja desactivado;
+seja posteriormente reactivado.
+9.2 Eventos e estado do associado
+
+Foi estabelecido que:
+
+A desactivação de um associado é, em si mesma, consequência de um evento.
+
+Portanto, o histórico de eventos deve permitir compreender a evolução da situação do associado.
+
+9.3 Evento de Admissão
+
+A inscrição de um novo associado gera automaticamente um evento:
+
+Admissão
+
+A data do evento:
+
+deve corresponder à data de inscrição seleccionada;
+não deve ser simplesmente assumida como a data/hora do sistema.
+9.4 Tipos de evento
+
+Existe uma tabela de:
+
+tipos_evento
+
+Os tipos são geridos através do backoffice.
+
+Na criação inicial da base de dados, ficou definido que deve existir pelo menos:
+
+Admissão
+10. Inactivação e reactivação de associados
+10.1 Inactivação
+
+Um associado pode ser inactivado.
+
+Essa operação:
+
+não elimina o associado;
+não elimina os seus eventos;
+preserva o histórico.
+10.2 Reactivação
+
+Um associado inactivo pode ser reactivado.
+
+A reactivação:
+
+deve restaurar o associado ao estado activo;
+não deve apagar o histórico anterior;
+não deve obrigar automaticamente à associação a uma companhia.
+
+Ficou explicitamente decidido que:
+
+após a reactivação, será possível associar ou não o associado a uma companhia, conforme necessário.
+
+11. Moradas
+
+As moradas são uma entidade independente.
+
+Existe uma tabela própria:
+
+moradas
+
+e tabelas de ligação.
+
+11.1 Moradas partilhadas
+
+Uma morada pode ser partilhada.
+
+Isto é especialmente relevante para associados.
+
+Exemplo:
+
+Família
+ ├── Associado A
+ ├── Associado B
+ └── Associado C
+          │
+          └── mesma morada
+11.2 Correcção de uma morada existente
+
+Se houver um erro, por exemplo:
+
+Av. Marcos Portugal, Nº 53
+
+quando deveria ser:
+
+Av. Marcos Portugal, Nº 53A
+
+deve ser possível corrigir a morada existente.
+
+Essa alteração afecta todos os que partilham essa morada.
+
+11.3 Substituição de morada
+
+Também deve ser possível:
+
+criar uma nova morada;
+substituir a ligação à morada anterior.
+
+Esta opção é diferente de corrigir a morada.
+
+11.4 Histórico de moradas
+
+Existe interesse em manter o histórico, especialmente para:
+
+companhias;
+Chefia Nacional;
+associados.
+
+As ligações devem permitir determinar períodos de vigência.
+
+Conceptualmente:
+
+DataInicio
+DataFim
+
+A morada actual é a ligação activa.
+
+11.5 Chefia Nacional
+
+A Chefia Nacional também pode mudar de morada.
+
+Portanto, não pode existir qualquer tratamento especial que impeça a gestão histórica da sua morada.
+
+12. Companhias
+
+As companhias podem:
+
+ser criadas;
+ter uma morada inicial provisória;
+mudar posteriormente de morada.
+
+Embora seja pouco frequente, uma morada de companhia pode ser partilhada com:
+
+outra companhia;
+um associado.
+
+O modelo deve suportar essa possibilidade.
+
+13. Secções
+
+Os associados podem estar relacionados com secções.
+
+associados_seccoes
+
+quando o modelo definido utiliza:
+
+associados_secoes
+
+A nomenclatura da base de dados e do código deve ser única e consistente.
+
+14. Encarregados de Educação
+
+Foi decidido que o encarregado de educação é uma entidade própria.
+
+14.1 Não deve conter
+
+Não existe necessidade de guardar, especificamente nesta entidade:
+
+data de nascimento;
+número de identificação;
+tipo de documento;
+NIF.
+14.2 Deve relacionar-se com
+
+Como já existem entidades próprias, o encarregado pode utilizar:
+
+contactos;
+moradas.
+14.3 Relação com o associado
+
+Um associado pode mudar de encarregado de educação.
+
+Portanto, deve existir:
+
+tabela de encarregados de educação
++
+tabela de ligação
+
+A relação deve permitir histórico.
+
+15. Parentescos / tipos de relação
+
+Foi criada a necessidade de uma tabela de relações/parentescos.
+
+Deve suportar, entre outros:
+
+Pai;
+Mãe;
+Avô;
+Avó;
+outros graus de parentesco;
+Cônjuge.
+
+O Cônjuge foi explicitamente acrescentado devido às necessidades dos contactos de emergência.
+
+16. Contactos
+
+Foi tomada a decisão de generalizar a tabela de contactos.
+
+A gestão de contactos não deve ser duplicada desnecessariamente por diferentes entidades.
+
+17. Contactos de emergência
+
+Um associado pode ter:
+
+1 ou mais contactos de emergência
+
+A estrutura deve permitir:
+
+nome;
+contacto;
+relação/parentesco.
+17.1 Decisão estrutural
+
+Foi discutida uma solução mais complexa baseada na ligação directa a entidades existentes.
+
+Para já, foi aceite uma estrutura própria para contactos de emergência porque um contacto pode ser, por exemplo:
+
+pai;
+mãe;
+amigo;
+outra pessoa sem registo no SIGA.
+
+Portanto:
+
+Um contacto de emergência não pode obrigatoriamente depender da existência de outra pessoa registada no sistema.
+
+18. Estados civis
+
+Existe uma tabela de referência para:
+
+estados_civis
+
+Deve ser preenchida na criação inicial da base de dados.
+
+19. Confissões religiosas
+
+Existe uma tabela de referência para:
+
+confissoes_religiosas
+
+Deve ser criada e preenchida com os valores iniciais definidos.
+
+20. Tipos de documento de identificação
+
+Existe uma tabela de referência para:
+
+tipos_documento_identificacao
+
+Deve fazer parte dos dados iniciais.
+
+21. Nacionalidades
+
+Existe a tabela:
+
+nacionalidades
+
+Ela não pode ser entregue vazia numa instalação nova.
+
+O script de criação deve incluir a lista internacional de nacionalidades definida anteriormente.
+
+A necessidade inicial era:
+
+uma lista internacional de nacionalidades, não simplesmente uma lista de países.
+
+22. Dados iniciais da instalação
+
+Uma instalação limpa deve criar e preencher, conforme aplicável:
+
+nacionalidades;
+estados civis;
+confissões religiosas;
+tipos de documento de identificação;
+tipos de contacto;
+tipos de relação;
+secções;
+Chefia Nacional;
+tipo de evento Admissão;
+utilizador inicial Administrador.
+
+⚠️ A lista exacta e os valores devem ser conferidos contra o script/modelo que tínhamos fechado, e não recriados arbitrariamente.
+
+23. Utilizadores
+
+A tabela:
+
+utilizadores
+
+é obrigatória.
+
+A aplicação possui autenticação e não pode ser entregue um modelo de base de dados que omita esta tabela.
+
+Também existem relações relacionadas com:
+
+utilizadores e companhias;
+utilizadores e associados.
+
+Estas estruturas devem ser preservadas enquanto forem utilizadas pelo código.
+
+24. Consentimentos
+
+A estrutura relacionada com:
+
+consentimentos
+
+faz parte do modelo funcional e não pode desaparecer acidentalmente numa nova versão.
+
+25. Ficha de saúde
+
+Existem estruturas relacionadas com:
+
+fichas_saude
+
+e:
+
+fichas_saude_historico
+
+Estas devem ser mantidas enquanto fizerem parte das funcionalidades da aplicação.
+
+O novo modelo não pode ser considerado completo apenas porque cria as tabelas novas; deve também preservar as funcionalidades existentes que continuam activas.
+
+26. Configuração
+
+O ficheiro:
+
+config/config.php
+
+é o ficheiro de configuração que deve ser utilizado.
+
+Esta regra foi explicitamente estabelecida depois de termos tido problemas repetidos com versões que:
+
+não copiavam o ficheiro;
+utilizavam outro config.php;
+entregavam pacotes sem a configuração esperada.
+
+

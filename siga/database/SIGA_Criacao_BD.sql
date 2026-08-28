@@ -313,20 +313,21 @@ CREATE TABLE associados_encarregados_educacao (
 -- Uma pessoa pode ser contacto de emergência de vários associados.
 -- ============================================================================
 
+-- Regra 17.1: um contacto de emergência não depende obrigatoriamente de um
+-- registo próprio em "pessoas" (pode ser um amigo, vizinho, etc. sem
+-- qualquer outra relação com o SIGA). Por isso guarda o Nome e o Contacto
+-- directamente, em vez de uma FK obrigatória para pessoas.
 CREATE TABLE associados_contactos_emergencia (
     Id INT NOT NULL AUTO_INCREMENT,
     IdAssociado INT NOT NULL,
-    IdPessoa INT NOT NULL,
+    Nome VARCHAR(150) NOT NULL,
+    Contacto VARCHAR(50) NULL,
     IdTipoRelacao INT NOT NULL,
     Activo TINYINT(1) NOT NULL DEFAULT 1,
     PRIMARY KEY (Id),
-    UNIQUE KEY uk_ace_associado_pessoa (IdAssociado, IdPessoa),
-    KEY ix_ace_pessoa (IdPessoa),
     KEY ix_ace_relacao (IdTipoRelacao),
     CONSTRAINT fk_ace_associado
         FOREIGN KEY (IdAssociado) REFERENCES associados(Id),
-    CONSTRAINT fk_ace_pessoa
-        FOREIGN KEY (IdPessoa) REFERENCES pessoas(Id),
     CONSTRAINT fk_ace_relacao
         FOREIGN KEY (IdTipoRelacao) REFERENCES tipos_relacao(Id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
@@ -633,6 +634,8 @@ VALUES
 
 -- Tipo base obrigatório para a criação de associados. Os restantes são geridos no backoffice.
 INSERT INTO tipos_evento (Designacao) VALUES ('Admissão');
+INSERT INTO tipos_evento (Designacao) VALUES ('Desactivação');
+INSERT INTO tipos_evento (Designacao) VALUES ('Reactivação');
 
 
 

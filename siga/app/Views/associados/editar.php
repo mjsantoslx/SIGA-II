@@ -19,7 +19,7 @@
             </div>
             <div class="campo">
                 <label for="DataNascimento">Data de nascimento *</label>
-                <input type="date" id="DataNascimento" name="DataNascimento" required value="<?= htmlspecialchars($a['DataNascimento']) ?>">
+                <input type="text" id="DataNascimento" name="DataNascimento" class="campo-data" placeholder="dd/mm/aaaa" maxlength="10" inputmode="numeric" required value="<?= htmlspecialchars($a['DataNascimento']) ?>">
             </div>
             <div class="campo">
                 <label for="Genero">Género *</label>

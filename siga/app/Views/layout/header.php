@@ -22,6 +22,7 @@
     <nav class="cabecalho-nav">
         <a href="/">Painel</a>
         <a href="/associados">Associados</a>
+        <a href="/companhias">Companhias</a>
     </nav>
     <div class="cabecalho-utilizador">
         <span><?= htmlspecialchars($utilizadorAutenticado['Nome']) ?></span>

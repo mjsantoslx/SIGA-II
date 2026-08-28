@@ -208,6 +208,23 @@ legend { font-family: 'Fraunces', serif; color: var(--verde-escoteiro); font-wei
 
 .acoes-rapidas { display: flex; gap: 0.8rem; flex-wrap: wrap; }
 
+.formulario-morada { display: flex; flex-direction: column; gap: 0.7rem; margin-top: 0.8rem; }
+.formulario-morada .campo label { font-size: 0.8rem; font-weight: 600; }
+.formulario-morada button { align-self: flex-start; margin-top: 0.3rem; }
+
+/* ---------- Acção de desactivação/reactivação ---------- */
+
+.cartao-accao {
+    background: var(--papel); border: 1px solid var(--borda); border-radius: var(--raio);
+    padding: 1rem 1.4rem; margin-bottom: 1.5rem;
+}
+.cartao-accao summary { cursor: pointer; list-style: none; display: inline-block; }
+.cartao-accao summary::-webkit-details-marker { display: none; }
+.formulario-accao { display: flex; gap: 1rem; align-items: flex-end; flex-wrap: wrap; margin-top: 1rem; }
+.formulario-accao .campo { min-width: 160px; }
+.formulario-accao .campo-largo { flex: 1; min-width: 220px; }
+.formulario-accao .ajuda-fieldset { flex-basis: 100%; margin: 0; }
+
 /* ---------- Detalhe do associado ---------- */
 
 .grelha-detalhe { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }

@@ -13,7 +13,7 @@ abstract class Controller
 
     public function __construct()
     {
-        $this->config = require __DIR__ . '/../Config/config.php';
+        $this->config = require __DIR__ . '/../../config/config.php';
     }
 
     /**

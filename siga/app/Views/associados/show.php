@@ -11,27 +11,52 @@
     </div>
     <div class="acoes-rapidas">
         <a href="/associados/<?= (int) $associado['Id'] ?>/editar" class="botao botao-secundario">Editar</a>
-        <?php if ($associado['Activo']): ?>
-            <form action="/associados/<?= (int) $associado['Id'] ?>/desativar" method="post" onsubmit="return confirm('Confirma a desactivação deste associado?');">
-                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
-                <button type="submit" class="botao botao-perigo">Desactivar</button>
-            </form>
-        <?php else: ?>
-            <form action="/associados/<?= (int) $associado['Id'] ?>/reativar" method="post">
-                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
-                <button type="submit" class="botao botao-primario">Reactivar</button>
-            </form>
-        <?php endif; ?>
+        <a href="/associados/<?= (int) $associado['Id'] ?>/morada/editar" class="botao botao-secundario">Gerir morada</a>
     </div>
 </div>
+
+<?php if ($associado['Activo']): ?>
+    <details class="cartao-accao">
+        <summary class="botao botao-perigo">Desactivar associado</summary>
+        <form action="/associados/<?= (int) $associado['Id'] ?>/desativar" method="post" class="formulario-accao" onsubmit="return confirm('Confirma a desactivação deste associado?');">
+            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
+            <div class="campo">
+                <label for="DataEventoDesactivacao">Data de desactivação *</label>
+                <input type="text" id="DataEventoDesactivacao" name="DataEvento" class="campo-data" placeholder="dd/mm/aaaa" maxlength="10" inputmode="numeric" required value="<?= htmlspecialchars($hojePt) ?>">
+            </div>
+            <div class="campo campo-largo">
+                <label for="ObservacoesDesactivacao">Observações (opcional)</label>
+                <input type="text" id="ObservacoesDesactivacao" name="Observacoes" placeholder="Motivo da desactivação">
+            </div>
+            <button type="submit" class="botao botao-perigo">Confirmar desactivação</button>
+        </form>
+    </details>
+<?php else: ?>
+    <details class="cartao-accao" open>
+        <summary class="botao botao-primario">Reactivar associado</summary>
+        <form action="/associados/<?= (int) $associado['Id'] ?>/reativar" method="post" class="formulario-accao">
+            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
+            <div class="campo">
+                <label for="DataEventoReactivacao">Data de reactivação *</label>
+                <input type="text" id="DataEventoReactivacao" name="DataEvento" class="campo-data" placeholder="dd/mm/aaaa" maxlength="10" inputmode="numeric" required value="<?= htmlspecialchars($hojePt) ?>">
+            </div>
+            <div class="campo campo-largo">
+                <label for="ObservacoesReactivacao">Observações (opcional)</label>
+                <input type="text" id="ObservacoesReactivacao" name="Observacoes" placeholder="Motivo da reactivação">
+            </div>
+            <p class="ajuda-fieldset">A reactivação não associa automaticamente nenhuma companhia — se necessário, faça-o depois em "Editar".</p>
+            <button type="submit" class="botao botao-primario">Confirmar reactivação</button>
+        </form>
+    </details>
+<?php endif; ?>
 
 <div class="grelha-detalhe">
     <section class="cartao-seccao">
         <h2>Identificação</h2>
         <dl class="lista-definicao">
-            <dt>Data de nascimento</dt><dd><?= htmlspecialchars(date('d-m-Y', strtotime($associado['DataNascimento']))) ?></dd>
+            <dt>Data de nascimento</dt><dd><?= htmlspecialchars(\App\Core\Data::paraApresentacao($associado['DataNascimento'])) ?></dd>
             <dt>Género</dt><dd><?= htmlspecialchars(['M' => 'Masculino', 'F' => 'Feminino', 'O' => $associado['NominativoOutro'] ?? 'Outro'][$associado['Genero']] ?? '—') ?></dd>
-            <dt>Data de inscrição</dt><dd><?= htmlspecialchars(date('d-m-Y', strtotime($associado['DataInscricao']))) ?></dd>
+            <dt>Data de inscrição</dt><dd><?= htmlspecialchars(\App\Core\Data::paraApresentacao($associado['DataInscricao'])) ?></dd>
             <dt>Nome do pai</dt><dd><?= htmlspecialchars($associado['NomePai'] ?? '—') ?></dd>
             <dt>Nome da mãe</dt><dd><?= htmlspecialchars($associado['NomeMae'] ?? '—') ?></dd>
             <dt>Documento</dt><dd><?= htmlspecialchars($associado['NumeroDocumentoIdentificacao'] ?? '—') ?></dd>
@@ -124,7 +149,7 @@
         <?php if ($eventos): ?>
             <ul class="lista-simples">
                 <?php foreach ($eventos as $ev): ?>
-                    <li><?= htmlspecialchars(date('d-m-Y', strtotime($ev['DataEvento']))) ?> — <?= htmlspecialchars($ev['TipoEvento']) ?><?= $ev['Observacoes'] ? ' (' . htmlspecialchars($ev['Observacoes']) . ')' : '' ?></li>
+                    <li><?= htmlspecialchars(\App\Core\Data::paraApresentacao($ev['DataEvento'])) ?> — <?= htmlspecialchars($ev['TipoEvento']) ?><?= $ev['Observacoes'] ? ' (' . htmlspecialchars($ev['Observacoes']) . ')' : '' ?></li>
                 <?php endforeach; ?>
             </ul>
         <?php else: ?>
