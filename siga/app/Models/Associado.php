@@ -207,6 +207,9 @@ class Associado extends Model
                 'NomeMae'                          => $dados['NomeMae'] ?: null,
                 'DataInscricao'                    => $dados['DataInscricao'],
                 'Activo'                           => 1,
+                'Formador'                         => !empty($dados['Formador']) ? 1 : 0,
+                'InsigniaMadeira'                  => !empty($dados['InsigniaMadeira']) ? 1 : 0,
+                'DataInsigniaMadeira'              => !empty($dados['InsigniaMadeira']) ? $dados['DataInsigniaMadeira'] : null,
             ]);
 
             // 5. Secção inicial
@@ -342,6 +345,9 @@ class Associado extends Model
                 'NominativoOutro'                  => $dados['Genero'] === 'O' ? $dados['NominativoOutro'] : null,
                 'NomePai'                          => $dados['NomePai'] ?: null,
                 'NomeMae'                          => $dados['NomeMae'] ?: null,
+                'Formador'                         => !empty($dados['Formador']) ? 1 : 0,
+                'InsigniaMadeira'                  => !empty($dados['InsigniaMadeira']) ? 1 : 0,
+                'DataInsigniaMadeira'              => !empty($dados['InsigniaMadeira']) ? $dados['DataInsigniaMadeira'] : null,
             ], 'Id', $idAssociado);
 
             $this->bd->commit();

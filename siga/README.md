@@ -130,17 +130,16 @@ siga/
 - **Companhia local, Chefia Nacional e órgãos** (regra 29) — um dirigente
   pode estar simultaneamente numa companhia local e na Chefia Nacional, ou
   numa companhia local e num ou mais órgãos, ou só num ou mais órgãos.
-  Nova tabela `orgaos` (vazia por preencher — ver nota abaixo) e ligação
+  Nova tabela `orgaos`, já preenchida (Mesa do Indaba, Conselho Fiscal,
+  Conselho Jurisdicional, Academia de Formação — regra 30), e ligação
   `associados_orgaos` com pertença múltipla e simultânea. Disponível tanto
   no registo como na edição do associado.
-
-### Nota sobre a lista de órgãos
-
-A tabela `orgaos` fica **vazia** no script de instalação — ainda não foi
-indicada a lista real. Para a preencher, insira directamente em
-`database/SIGA_Criacao_BD.sql` (secção "ÓRGÃOS") ou por SQL após a
-instalação; os órgãos ficam disponíveis automaticamente nos formulários
-de associados assim que existirem.
+- **Chefia Nacional restrita a dirigentes** (regra 31) — só um associado
+  na secção "Chefia" pode pertencer à Chefia Nacional; validado no registo
+  e na edição. Não se aplica (para já) aos órgãos.
+- **Formador e insígnia de madeira** (regra 32) — um dirigente pode ser
+  formador e/ou ter insígnia de madeira; quando tem insígnia, a data de
+  atribuição é obrigatória (dd/mm/aaaa, nunca futura).
 
 ### Nota sobre o número de documento (Cartão de Cidadão)
 

@@ -62,10 +62,17 @@ class AssociadosController extends Controller
         $dados = $_POST;
         $erros = $this->validarDadosAssociado($dados);
 
+        $ehChefia = (new Secao())->ehChefia(!empty($dados['IdSecao']) ? (int) $dados['IdSecao'] : null);
+
         // Regra 27: email associativo obrigatório para a secção "Chefia".
-        if ((new Secao())->ehChefia(!empty($dados['IdSecao']) ? (int) $dados['IdSecao'] : null)
-            && trim($dados['EmailAssociativo'] ?? '') === '') {
+        if ($ehChefia && trim($dados['EmailAssociativo'] ?? '') === '') {
             $erros[] = 'O email associativo é obrigatório para associados na secção "Chefia".';
+        }
+
+        // Regra 29: só um dirigente (associado na secção "Chefia") pode
+        // pertencer à Chefia Nacional.
+        if (!empty($dados['ChefiaNacional']) && !$ehChefia) {
+            $erros[] = 'Só um dirigente (associado na secção "Chefia") pode pertencer à Chefia Nacional.';
         }
 
         if ($erros) {
@@ -91,6 +98,9 @@ class AssociadosController extends Controller
             // Repor as datas em dd/mm/aaaa para o utilizador ver o formulário como o preencheu.
             $dados['DataNascimento'] = Data::paraApresentacao($dados['DataNascimento'] ?? null);
             $dados['DataInscricao']  = Data::paraApresentacao($dados['DataInscricao'] ?? null);
+            if (!empty($dados['InsigniaMadeira'])) {
+                $dados['DataInsigniaMadeira'] = Data::paraApresentacao($dados['DataInsigniaMadeira'] ?? null);
+            }
             $this->vista('associados/form', [
                 'titulo'    => 'Novo associado',
                 'modo'      => 'criar',
@@ -148,6 +158,9 @@ class AssociadosController extends Controller
 
         // Apresentar as datas ao utilizador sempre em dd/mm/aaaa.
         $associado['DataNascimento'] = Data::paraApresentacao($associado['DataNascimento']);
+        if (!empty($associado['DataInsigniaMadeira'])) {
+            $associado['DataInsigniaMadeira'] = Data::paraApresentacao($associado['DataInsigniaMadeira']);
+        }
 
         $this->vista('associados/editar', [
             'titulo'          => 'Editar — ' . $associado['Nome'],
@@ -200,6 +213,16 @@ class AssociadosController extends Controller
             $temEmailAssociativo = (new Contacto())->temTipo((int) $associadoExistente['IdPessoa'], 'Email Associativo');
             if (!$temEmailAssociativo) {
                 $erros[] = 'Para atribuir a secção "Chefia" é necessário que o associado já tenha um contacto "Email Associativo" — adicione-o primeiro em "Gerir contactos".';
+            }
+        }
+
+        // Regra 29: só um dirigente (associado na secção "Chefia") pode
+        // pertencer à Chefia Nacional — considera a secção efectiva após
+        // esta gravação (a nova, se estiver a mudar, ou a actual).
+        if (!empty($dados['ChefiaNacional'])) {
+            $idSecaoEfectiva = !empty($dados['IdSecao']) ? (int) $dados['IdSecao'] : ($idSecaoAtual ? (int) $idSecaoAtual : null);
+            if (!$secaoModelo->ehChefia($idSecaoEfectiva)) {
+                $erros[] = 'Só um dirigente (associado na secção "Chefia") pode pertencer à Chefia Nacional.';
             }
         }
 
@@ -368,6 +391,19 @@ class AssociadosController extends Controller
         }
         if (!empty($dados['NumeroCartaoUtente']) && !preg_match('/^\d{9}$/', $dados['NumeroCartaoUtente'])) {
             $erros[] = 'O número de utente de saúde deve ter exactamente 9 dígitos.';
+        }
+
+        // Insígnia de madeira: se marcada, a data de atribuição é obrigatória,
+        // válida e não pode ser futura.
+        if (!empty($dados['InsigniaMadeira'])) {
+            $dataInsigniaBd = Data::paraBd($dados['DataInsigniaMadeira'] ?? '');
+            if ($dataInsigniaBd === null) {
+                $erros[] = 'A data de atribuição da insígnia de madeira é obrigatória (dd/mm/aaaa) quando esta é assinalada.';
+            } elseif (Data::eFutura($dataInsigniaBd)) {
+                $erros[] = 'A data de atribuição da insígnia de madeira não pode ser futura.';
+            } else {
+                $dados['DataInsigniaMadeira'] = $dataInsigniaBd;
+            }
         }
 
         // Regra 6: nunca perder zeros à esquerda; preenche automaticamente

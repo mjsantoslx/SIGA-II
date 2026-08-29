@@ -49,6 +49,11 @@ window.siga = {
         if (selectSecao) {
             this.actualizarObrigatoriedadeEmailAssociativo(selectSecao);
         }
+
+        const checkboxInsignia = document.getElementById('InsigniaMadeira');
+        if (checkboxInsignia) {
+            this.actualizarObrigatoriedadeDataInsignia(checkboxInsignia);
+        }
     },
 
     /**
@@ -68,6 +73,22 @@ window.siga = {
         if (ajuda) {
             ajuda.style.color = eChefia ? 'var(--fogueira)' : '';
             ajuda.style.fontWeight = eChefia ? '600' : '';
+        }
+    },
+
+    /**
+     * Mostra/exige a data de atribuição apenas quando "Tem insígnia de
+     * madeira" está marcado.
+     */
+    actualizarObrigatoriedadeDataInsignia(checkbox) {
+        const grupo = document.getElementById('grupo-data-insignia');
+        const campoData = document.getElementById('DataInsigniaMadeira');
+        if (!grupo || !campoData) return;
+
+        grupo.style.display = checkbox.checked ? 'block' : 'none';
+        campoData.required = checkbox.checked;
+        if (!checkbox.checked) {
+            campoData.value = '';
         }
     },
 };

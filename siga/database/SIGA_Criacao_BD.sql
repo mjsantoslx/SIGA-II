@@ -205,6 +205,11 @@ CREATE TABLE associados (
     NomeMae VARCHAR(150) NULL,
     DataInscricao DATE NOT NULL,
     Activo TINYINT(1) NOT NULL DEFAULT 1,
+    -- Aplicável a dirigentes: podem ser formadores e/ou ter insígnia de
+    -- madeira (com data de atribuição, quando a tiverem).
+    Formador TINYINT(1) NOT NULL DEFAULT 0,
+    InsigniaMadeira TINYINT(1) NOT NULL DEFAULT 0,
+    DataInsigniaMadeira DATE NULL,
     PRIMARY KEY (Id),
     UNIQUE KEY uk_associados_pessoa (IdPessoa),
     UNIQUE KEY uk_associados_numero (NumeroAssociado),
@@ -364,10 +369,12 @@ CREATE TABLE associados_orgaos (
         FOREIGN KEY (IdOrgao) REFERENCES orgaos(Id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
 
--- ⚠️ POR CONFIRMAR: a lista de órgãos ainda não foi indicada — a tabela
--- fica deliberadamente vazia (sem dados inventados) até haver essa lista.
--- Exemplo do que costuma existir neste tipo de associação (NÃO inserido):
--- Direção Nacional, Conselho Fiscal, Assembleia-Geral, Conselho de Ética...
+INSERT INTO orgaos (Designacao)
+VALUES
+    ('Mesa do Indaba'),
+    ('Conselho Fiscal'),
+    ('Conselho Jurisdicional'),
+    ('Academia de Formação');
 
 -- ============================================================================
 -- EVENTOS DOS ASSOCIADOS

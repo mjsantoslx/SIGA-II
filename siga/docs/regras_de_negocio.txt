@@ -674,3 +674,40 @@ Nacional e a orgaos deve ficar reservada apenas a associados na seccao
 "Chefia" (dirigentes) ou se pode ser atribuida a qualquer associado. Por
 enquanto a aplicacao NAO impede que sejam atribuidos a um associado fora
 da seccao "Chefia".
+30. Lista de orgaos (fechada)
+
+A lista de orgaos foi fornecida e esta semeada no script de instalacao:
+- Mesa do Indaba
+- Conselho Fiscal
+- Conselho Jurisdicional
+- Academia de Formacao
+
+31. Chefia Nacional restrita a dirigentes (fechada)
+
+Confirmado explicitamente: SO um dirigente (associado na seccao "Chefia")
+pode pertencer a Chefia Nacional. A aplicacao valida isto tanto no registo
+como na edicao, considerando a seccao efectiva do associado (a nova, se
+estiver a ser alterada nesta mesma operacao, ou a actual).
+
+NAO ficou confirmado se esta mesma restricao se aplica aos orgaos (regra
+29) - o utilizador respondeu especificamente sobre a Chefia Nacional. Por
+enquanto os orgaos continuam sem essa restricao.
+
+32. Formador e insignia de madeira
+
+Foi definido que um dirigente pode ser formador (sim/nao) e pode ter
+insignia de madeira (sim/nao); quando tem insignia de madeira, a data de
+atribuicao e obrigatoria.
+
+32.1 Implementacao
+
+Acrescentadas colunas Formador, InsigniaMadeira e DataInsigniaMadeira
+directamente a tabela associados (nao a uma tabela separada, por analogia
+com outros atributos opcionais ja existentes nesta tabela, ex.:
+NominativoOutro). A data segue as mesmas regras gerais de datas do
+sistema (dd/mm/aaaa na interface, aaaa-mm-dd na BD, nunca futura).
+
+⚠️ EM ABERTO: nao ficou explicitamente decidido se estes campos devem
+ficar reservados apenas a dirigentes (seccao "Chefia") ou disponiveis a
+qualquer associado. Por enquanto a aplicacao mostra-os no formulario de
+qualquer associado, sem essa restricao.

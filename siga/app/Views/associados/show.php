@@ -61,6 +61,15 @@
             <dt>Nome da mãe</dt><dd><?= htmlspecialchars($associado['NomeMae'] ?? '—') ?></dd>
             <dt>Documento</dt><dd><?= htmlspecialchars($associado['NumeroDocumentoIdentificacao'] ?? '—') ?></dd>
             <dt>Nº utente saúde</dt><dd><?= htmlspecialchars($associado['NumeroCartaoUtente'] ?? '—') ?></dd>
+            <dt>Formador</dt><dd><?= $associado['Formador'] ? 'Sim' : 'Não' ?></dd>
+            <dt>Insígnia de madeira</dt>
+            <dd>
+                <?php if ($associado['InsigniaMadeira']): ?>
+                    Sim (desde <?= htmlspecialchars(\App\Core\Data::paraApresentacao($associado['DataInsigniaMadeira'])) ?>)
+                <?php else: ?>
+                    Não
+                <?php endif; ?>
+            </dd>
         </dl>
     </section>
 
