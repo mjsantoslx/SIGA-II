@@ -716,28 +716,39 @@ seccao "Chefia"). A aplicacao valida isto tanto no registo como na
 edicao, considerando a seccao efectiva do associado (a nova, se estiver
 a ser alterada nesta mesma operacao, ou a actual) - mesmo padrao usado
 para a restricao da Chefia Nacional (regra 31).
-33. Alteracao a regra 2.3 — passa a existir script de migracao (fechada)
+33. Alteracao a regra 2.3 — passa a existir script de migracao (fechada, corrigida)
 
 A regra 2.3 dizia explicitamente que nao deveriam existir scripts de
-migracao intermedios no pacote de instalacao. Foi agora pedida
-explicitamente uma alteracao a essa decisao: o pacote passa a incluir
-DOIS ficheiros SQL:
+migracao intermedios no pacote de instalacao. Foi pedida uma alteracao a
+essa decisao, com a seguinte clarificacao explicita do que "intermedios"
+queria dizer:
 
-- SIGA_Criacao_BD.sql — criacao completa de raiz (mantem-se, sempre
-  actualizado com o schema mais recente);
-- SIGA_Migracao_v_anterior.sql — migra uma base de dados existente,
-  criada a partir do schema original (anterior a todas as alteracoes
-  deste projecto), para o schema actual.
+O problema NAO e ter um script de migracao. O problema seria acumular no
+mesmo pacote a cadeia toda de migracoes historicas (ex.: v01.01->v01.02,
+v01.02->v01.03, v01.03->v01.04, ...) em vez de trazer so o passo mais
+recente.
 
-⚠️ EM ABERTO: assumiu-se que "a versao anterior" e o schema original tal
-como fornecido no inicio do projecto, e nao uma versao intermedia
-especifica (ex.: v01.09). Isto precisa de confirmacao explicita.
+Politica correcta (fechada): cada pacote/versao inclui SEMPRE dois
+ficheiros SQL:
 
-⚠️ EM ABERTO: o script de migracao cobre, para ja, apenas as alteracoes
-estruturais ja feitas ate a v01.10 (tipos de evento novos, tipo de
-contacto "Email Associativo", reestruturacao de
-associados_contactos_emergencia, tabelas orgaos/associados_orgaos e seed,
-colunas Formador/InsigniaMadeira/DataInsigniaMadeira). Versoes futuras
-com alteracoes de schema devem acrescentar os passos correspondentes a
-este mesmo ficheiro (ou criar um novo, a decidir), mantendo sempre
-SIGA_Criacao_BD.sql como a fonte de verdade do schema completo.
+- SIGA_Criacao_BD.sql — criacao completa de raiz, sempre actualizado com
+  o schema mais recente (fonte de verdade do schema completo);
+- Um UNICO script de migracao, que cobre apenas o passo da versao
+  imediatamente anterior para a versao actual (ex.: no pacote da v01.13,
+  deve estar "SIGA_Migracao_v01.12_para_v01.13.sql" - nao a historia
+  toda desde a v01.01).
+
+Excepcao unica e ja tratada: como as versoes v01.00 a v01.11 nao tinham
+migracoes individuais por versao (o schema so foi divergindo do original
+ao longo do desenvolvimento, sem cada passo ter sido documentado em SQL
+separado), foi criado um unico script,
+"SIGA_Migracao_original_para_v01.12.sql", que cobre esse salto historico
+completo, desde o schema original (anterior a qualquer versao do SIGA)
+ate a v01.12. A partir da v01.12 (inclusive), a politica normal aplica-se:
+cada nova versao com alteracoes de schema traz apenas a migracao do seu
+proprio passo imediatamente anterior.
+
+⚠️ EM ABERTO: assumiu-se que a base de dados de quem for correr o script
+"original_para_v01.12" esta exactamente no schema original, sem nenhuma
+das alteracoes entretanto feitas. Isto precisa de confirmacao explicita
+antes de ser corrido em producao.

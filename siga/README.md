@@ -43,13 +43,21 @@ O projecto inclui **dois** scripts SQL, para dois cenários diferentes:
 
 - **`database/SIGA_Criacao_BD.sql`** — criação completa de raiz. Use este
   se está a instalar o SIGA pela primeira vez (base de dados nova).
-- **`database/SIGA_Migracao_v_anterior.sql`** — migra uma base de dados já
-  existente (criada a partir do schema original, anterior às alterações
-  deste projecto) para o schema actual, preservando os dados existentes.
-  Use este **em vez do** script de criação se já tem uma instalação do
-  SIGA com dados reais. **Faça sempre uma cópia de segurança antes de
-  correr este script** — as instruções e avisos estão no cabeçalho do
-  próprio ficheiro.
+- **`database/SIGA_Migracao_original_para_v01.12.sql`** — migra uma base
+  de dados criada a partir do schema **original** (anterior a qualquer
+  versão deste projecto) para o schema actual, preservando os dados
+  existentes. Use este **em vez do** script de criação se já tem uma
+  instalação do SIGA anterior a este projecto, com dados reais. **Faça
+  sempre uma cópia de segurança antes de correr este script** — as
+  instruções e avisos estão no cabeçalho do próprio ficheiro.
+
+  > **Política de migrações**: a partir da v01.12, cada nova versão com
+  > alterações de schema traz apenas a migração do seu passo imediatamente
+  > anterior (ex.: o pacote da v01.13 trará
+  > `SIGA_Migracao_v01.12_para_v01.13.sql`) — nunca a história completa
+  > acumulada. Este ficheiro é uma excepção: cobre o salto único desde o
+  > schema original até à v01.12, porque as versões anteriores não tinham
+  > migrações documentadas passo a passo.
 
 ### 3.1 Instalação de raiz (base de dados nova)
 
@@ -104,7 +112,7 @@ Se já tem uma base de dados SIGA criada a partir do schema original
    ```
 2. **Corra o script de migração**:
    ```bash
-   mysql -u <utilizador> -p siga < database/SIGA_Migracao_v_anterior.sql
+   mysql -u <utilizador> -p siga < database/SIGA_Migracao_original_para_v01.12.sql
    ```
 3. Reveja os avisos no início do próprio ficheiro — em particular, a
    assunção sobre qual é exactamente "a versão anterior" da sua base de

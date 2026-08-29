@@ -1,20 +1,30 @@
 -- ============================================================================
--- SIGA — Script de MIGRAÇÃO (versão anterior → versão actual)
+-- SIGA — Script de MIGRAÇÃO (schema ORIGINAL → v01.12)
 -- ============================================================================
 --
 -- ⚠️ IMPORTANTE — LEIA ANTES DE EXECUTAR:
 --
--- Este script destina-se a uma base de dados já existente, criada a partir
--- do script original fornecido no início deste projecto (antes de todas as
--- alterações abaixo descritas). NÃO o execute contra uma base de dados já
--- criada com o SIGA_Criacao_BD.sql actual — essa já tem tudo isto incluído.
+-- Este script destina-se especificamente a uma base de dados criada a
+-- partir do script ORIGINAL fornecido no início deste projecto — antes de
+-- QUALQUER uma das versões do SIGA (v01.00 em diante). Se já tem uma
+-- instalação numa versão intermédia do SIGA (ex.: já correu uma versão
+-- anterior deste próprio script), NÃO volte a correr este — precisa da
+-- migração específica dessa versão para a versão seguinte (ver política
+-- abaixo).
 --
--- Assunção adoptada (a confirmar): "a versão anterior" é o schema original
--- tal como fornecido antes de qualquer alteração feita ao longo deste
--- projecto — não uma versão intermédia específica (ex.: v01.09). Se isso
--- não corresponder à sua base de dados real, este script pode falhar a
--- meio (ex.: tentar acrescentar uma coluna que já existe) — nesse caso,
--- diga-nos em que ponto exacto está a sua base de dados para ajustarmos.
+-- POLÍTICA DE MIGRAÇÕES (a partir de agora): cada nova versão traz apenas
+-- a migração do PASSO IMEDIATAMENTE ANTERIOR para essa versão (ex.: o
+-- pacote da v01.13 trará "SIGA_Migracao_v01.12_para_v01.13.sql", não a
+-- história completa acumulada). O ficheiro SIGA_Criacao_BD.sql é sempre a
+-- fonte de verdade do schema completo e mais recente. Este ficheiro é uma
+-- excepção porque cobre o salto único e específico desde o schema
+-- original (anterior a qualquer versão) até à v01.12.
+--
+-- Assunção adoptada (a confirmar): a sua base de dados está exactamente
+-- no schema original, sem nenhuma das alterações abaixo. Se não for o
+-- caso, este script pode falhar a meio (ex.: tentar acrescentar uma
+-- coluna que já existe) — nesse caso, diga-nos em que ponto exacto está a
+-- sua base de dados para ajustarmos.
 --
 -- Este script foi escrito para ser o mais seguro possível de repetir
 -- (idempotente): usa IF NOT EXISTS / IF EXISTS onde o MariaDB permite, e
@@ -25,7 +35,7 @@
 --   mysqldump -u <utilizador> -p siga > backup_antes_da_migracao.sql
 --
 -- Execução:
---   mysql -u <utilizador> -p siga < SIGA_Migracao_v_anterior.sql
+--   mysql -u <utilizador> -p siga < SIGA_Migracao_original_para_v01.12.sql
 --
 -- ============================================================================
 
