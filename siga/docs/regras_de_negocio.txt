@@ -631,3 +631,46 @@ edicao ("Isto e uma correccao"), que:
 - nao dispensa a regra do email associativo obrigatorio (27) quando o
   destino da correccao for a seccao "Chefia".
 
+29. Pertenca simultanea: companhia local, Chefia Nacional e orgaos
+
+Foi definido que um dirigente pode estar simultaneamente em varias destas
+combinacoes:
+- numa companhia local e na Chefia Nacional;
+- numa companhia local e num ou mais orgaos (tabela nova: orgaos);
+- apenas num ou mais orgaos, sem qualquer companhia.
+
+29.1 Chefia Nacional
+
+Confirmado explicitamente: a "Chefia Nacional" e a companhia ja existente
+nos dados iniciais (ambito_global = 1) - nao e um conceito novo. Mas
+passou a ser gerida de forma independente da companhia local, porque as
+duas podem coexistir (ao contrario do que a logica anterior assumia, que
+so permitia uma companhia activa de cada vez).
+
+29.2 Orgaos (tabela nova)
+
+Criada a tabela `orgaos` (Id, Designacao, Activo) e a tabela de ligacao
+`associados_orgaos` (com DataInicio/DataFim/Activo, como as restantes
+ligacoes historicas). Confirmado explicitamente: um dirigente pode estar
+em varios orgaos em simultaneo - por isso a ligacao permite multiplas
+linhas activas para o mesmo associado.
+
+⚠️ EM ABERTO: a lista de orgaos ainda nao foi indicada. A tabela fica
+vazia no script de instalacao (sem dados inventados) ate essa lista ser
+fornecida.
+
+29.3 Aplicacao
+
+- A companhia local mantem a logica de exclusividade (uma de cada vez).
+- A Chefia Nacional e gerida por uma opcao propria ("Pertence a Chefia
+  Nacional"), independente da companhia local.
+- Os orgaos sao geridos por seleccao multipla, independente de tudo o
+  resto.
+- Isto esta disponivel tanto no registo inicial como na edicao do
+  associado.
+
+⚠️ EM ABERTO: nao ficou explicitamente decidido se a pertenca a Chefia
+Nacional e a orgaos deve ficar reservada apenas a associados na seccao
+"Chefia" (dirigentes) ou se pode ser atribuida a qualquer associado. Por
+enquanto a aplicacao NAO impede que sejam atribuidos a um associado fora
+da seccao "Chefia".

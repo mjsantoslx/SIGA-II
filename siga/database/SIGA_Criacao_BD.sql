@@ -333,6 +333,43 @@ CREATE TABLE associados_contactos_emergencia (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
 
 -- ============================================================================
+-- ÓRGÃOS
+-- Um dirigente pode estar simultaneamente numa companhia local, na Chefia
+-- Nacional (companhia com ambito_global=1) e em um ou mais órgãos — ou só
+-- num órgão, sem qualquer companhia. Por isso associados_orgaos permite
+-- várias ligações activas em simultâneo para o mesmo associado.
+-- ============================================================================
+
+CREATE TABLE orgaos (
+    Id INT NOT NULL AUTO_INCREMENT,
+    Designacao VARCHAR(150) NOT NULL,
+    Activo TINYINT(1) NOT NULL DEFAULT 1,
+    PRIMARY KEY (Id),
+    UNIQUE KEY uk_orgaos_designacao (Designacao)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
+
+CREATE TABLE associados_orgaos (
+    Id INT NOT NULL AUTO_INCREMENT,
+    IdAssociado INT NOT NULL,
+    IdOrgao INT NOT NULL,
+    DataInicio DATE NOT NULL,
+    DataFim DATE NULL,
+    Activo TINYINT(1) NOT NULL DEFAULT 1,
+    PRIMARY KEY (Id),
+    KEY ix_associados_orgaos_associado (IdAssociado),
+    KEY ix_associados_orgaos_orgao (IdOrgao),
+    CONSTRAINT fk_associados_orgaos_associado
+        FOREIGN KEY (IdAssociado) REFERENCES associados(Id),
+    CONSTRAINT fk_associados_orgaos_orgao
+        FOREIGN KEY (IdOrgao) REFERENCES orgaos(Id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
+
+-- ⚠️ POR CONFIRMAR: a lista de órgãos ainda não foi indicada — a tabela
+-- fica deliberadamente vazia (sem dados inventados) até haver essa lista.
+-- Exemplo do que costuma existir neste tipo de associação (NÃO inserido):
+-- Direção Nacional, Conselho Fiscal, Assembleia-Geral, Conselho de Ética...
+
+-- ============================================================================
 -- EVENTOS DOS ASSOCIADOS
 -- Os eventos nunca são eliminados e permanecem mesmo após desactivação.
 -- ============================================================================

@@ -116,15 +116,33 @@
                 <input type="text" name="MotivoCorrecaoSecao" placeholder="Motivo da correcção (opcional, mas recomendado)" style="margin-top: 0.4rem;">
             </div>
             <div class="campo">
-                <label for="IdCompanhia">Companhia actual</label>
+                <label for="IdCompanhia">Companhia local actual</label>
                 <select id="IdCompanhia" name="IdCompanhia">
-                    <option value="">Manter companhia actual</option>
+                    <option value="">Manter companhia local actual</option>
                     <?php foreach ($companhias as $c): ?>
                         <option value="<?= (int) $c['Id'] ?>" <?= isset($companhiaActual['IdCompanhia']) && (int) $companhiaActual['IdCompanhia'] === (int) $c['Id'] ? 'selected' : '' ?>><?= htmlspecialchars($c['Designacao']) ?></option>
                     <?php endforeach; ?>
                 </select>
+                <small>Pode coexistir com a Chefia Nacional e com órgãos, abaixo.</small>
             </div>
         </div>
+
+        <?php if ($chefiaNacional): ?>
+        <div class="grelha-checkboxes" style="margin-top: 1rem;">
+            <label><input type="checkbox" name="ChefiaNacional" value="1" <?= $naChefiaNacional ? 'checked' : '' ?>> Pertence à Chefia Nacional</label>
+        </div>
+        <?php endif; ?>
+
+        <?php if (!empty($orgaos)): ?>
+        <div class="campo" style="margin-top: 1rem;">
+            <label>Órgãos (pode seleccionar vários)</label>
+            <div class="grelha-checkboxes">
+                <?php foreach ($orgaos as $orgao): ?>
+                    <label><input type="checkbox" name="Orgaos[]" value="<?= (int) $orgao['Id'] ?>" <?= in_array((int) $orgao['Id'], $idsOrgaosActuais, true) ? 'checked' : '' ?>> <?= htmlspecialchars($orgao['Designacao']) ?></label>
+                <?php endforeach; ?>
+            </div>
+        </div>
+        <?php endif; ?>
     </fieldset>
 
     <div class="acoes-formulario">

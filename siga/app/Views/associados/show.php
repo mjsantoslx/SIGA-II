@@ -68,7 +68,9 @@
         <h2>Enquadramento na UEP</h2>
         <dl class="lista-definicao">
             <dt>Secção</dt><dd><?= htmlspecialchars($secaoActual['Designacao'] ?? '—') ?></dd>
-            <dt>Companhia</dt><dd><?= htmlspecialchars($companhiaActual['Designacao'] ?? '—') ?></dd>
+            <dt>Companhia local</dt><dd><?= htmlspecialchars($companhiaActual['Designacao'] ?? '—') ?></dd>
+            <dt>Chefia Nacional</dt><dd><?= $chefiaNacionalActual ? 'Sim' : 'Não' ?></dd>
+            <dt>Órgãos</dt><dd><?= $orgaos ? htmlspecialchars(implode(', ', array_column($orgaos, 'Designacao'))) : '—' ?></dd>
         </dl>
     </section>
 

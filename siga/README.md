@@ -127,6 +127,21 @@ siga/
   existente) ao mudar de secção para a Chefia via edição, e protegido
   contra remoção acidental enquanto o associado lá permanecer.
 
+- **Companhia local, Chefia Nacional e órgãos** (regra 29) — um dirigente
+  pode estar simultaneamente numa companhia local e na Chefia Nacional, ou
+  numa companhia local e num ou mais órgãos, ou só num ou mais órgãos.
+  Nova tabela `orgaos` (vazia por preencher — ver nota abaixo) e ligação
+  `associados_orgaos` com pertença múltipla e simultânea. Disponível tanto
+  no registo como na edição do associado.
+
+### Nota sobre a lista de órgãos
+
+A tabela `orgaos` fica **vazia** no script de instalação — ainda não foi
+indicada a lista real. Para a preencher, insira directamente em
+`database/SIGA_Criacao_BD.sql` (secção "ÓRGÃOS") ou por SQL após a
+instalação; os órgãos ficam disponíveis automaticamente nos formulários
+de associados assim que existirem.
+
 ### Nota sobre o número de documento (Cartão de Cidadão)
 
 O número é sempre tratado como texto (nunca convertido para inteiro), mas o

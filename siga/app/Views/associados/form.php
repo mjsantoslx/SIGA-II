@@ -170,7 +170,7 @@
                 </select>
             </div>
             <div class="campo">
-                <label for="IdCompanhia">Companhia</label>
+                <label for="IdCompanhia">Companhia (local)</label>
                 <select id="IdCompanhia" name="IdCompanhia">
                     <option value="">Seleccionar…</option>
                     <?php foreach ($companhias as $c): ?>
@@ -181,6 +181,24 @@
                 </select>
             </div>
         </div>
+
+        <?php if ($chefiaNacional): ?>
+        <div class="grelha-checkboxes" style="margin-top: 1rem;">
+            <input type="hidden" name="IdCompanhiaChefiaNacional" value="<?= (int) $chefiaNacional['Id'] ?>">
+            <label><input type="checkbox" name="ChefiaNacional" value="1" <?= !empty($a['ChefiaNacional']) ? 'checked' : '' ?>> Pertence também à Chefia Nacional</label>
+        </div>
+        <?php endif; ?>
+
+        <?php if (!empty($orgaos)): ?>
+        <div class="campo" style="margin-top: 1rem;">
+            <label>Órgãos (pode seleccionar vários)</label>
+            <div class="grelha-checkboxes">
+                <?php foreach ($orgaos as $orgao): ?>
+                    <label><input type="checkbox" name="Orgaos[]" value="<?= (int) $orgao['Id'] ?>"> <?= htmlspecialchars($orgao['Designacao']) ?></label>
+                <?php endforeach; ?>
+            </div>
+        </div>
+        <?php endif; ?>
     </fieldset>
 
     <fieldset>

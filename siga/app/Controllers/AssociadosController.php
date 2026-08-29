@@ -16,6 +16,8 @@ use App\Models\EventoAssociado;
 use App\Models\FichaSaude;
 use App\Models\Lookup;
 use App\Models\Morada;
+use App\Models\Orgao;
+use App\Models\OrgaoAssociado;
 use App\Models\Secao;
 
 class AssociadosController extends Controller
@@ -117,6 +119,8 @@ class AssociadosController extends Controller
             'associado'   => $associado,
             'secaoActual' => $associadoModelo->secaoActual($idAssociado),
             'companhiaActual' => $associadoModelo->companhiaActual($idAssociado),
+            'chefiaNacionalActual' => $associadoModelo->chefiaNacionalActual($idAssociado),
+            'orgaos'      => (new OrgaoAssociado())->listarDoAssociado($idAssociado),
             'morada'      => (new Morada())->moradaActivaDaPessoa((int) $associado['IdPessoa']),
             'contactos'   => (new Contacto())->listarDaPessoa((int) $associado['IdPessoa']),
             'encarregados' => (new EncarregadoEducacao())->listarDoAssociado($idAssociado),
@@ -150,6 +154,8 @@ class AssociadosController extends Controller
             'associado'       => $associado,
             'secaoActual'     => $associadoModelo->secaoActual($idAssociado),
             'companhiaActual' => $associadoModelo->companhiaActual($idAssociado),
+            'naChefiaNacional' => (bool) $associadoModelo->chefiaNacionalActual($idAssociado),
+            'idsOrgaosActuais' => array_column((new OrgaoAssociado())->listarDoAssociado($idAssociado), 'IdOrgao'),
             ...$this->dadosListasFormulario(),
         ]);
     }
@@ -231,6 +237,20 @@ class AssociadosController extends Controller
             if (!empty($dados['IdCompanhia'])) {
                 $associadoModelo->atribuirCompanhia($idAssociado, (int) $dados['IdCompanhia'], $hoje);
             }
+
+            // Chefia Nacional: independente da companhia local, pode coexistir com ela.
+            $companhiaChefiaNacional = (new Companhia())->chefiaNacional();
+            if ($companhiaChefiaNacional) {
+                if (!empty($dados['ChefiaNacional'])) {
+                    $associadoModelo->entrarNaChefiaNacional($idAssociado, (int) $companhiaChefiaNacional['Id'], $hoje);
+                } else {
+                    $associadoModelo->sairDaChefiaNacional($idAssociado, $hoje);
+                }
+            }
+
+            // Órgãos: um dirigente pode estar em vários em simultâneo.
+            $idsOrgaos = array_map('intval', $dados['Orgaos'] ?? []);
+            (new OrgaoAssociado())->sincronizar($idAssociado, $idsOrgaos, $hoje);
 
             Sessao::guardarMensagem('sucesso', 'Dados do associado actualizados com sucesso.');
             $this->redirecionar('/associados/' . $idAssociado);
@@ -371,7 +391,9 @@ class AssociadosController extends Controller
             'tiposDocumento' => Lookup::listar('tipos_documento_identificacao'),
             'tiposRelacao'   => Lookup::listar('tipos_relacao'),
             'secoes'         => (new Secao())->listarTodas(),
-            'companhias'     => (new Companhia())->listarAtivas(),
+            'companhias'     => (new Companhia())->listarLocais(),
+            'chefiaNacional' => (new Companhia())->chefiaNacional(),
+            'orgaos'         => (new Orgao())->listarAtivos(),
         ];
     }
 }

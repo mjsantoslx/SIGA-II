@@ -39,7 +39,13 @@ class Associado extends Model
                 a.Id, a.NumeroAssociado, a.DataNascimento, a.Genero, a.Activo,
                 p.Nome,
                 secaoActual.Designacao AS SecaoActual,
-                companhiaActual.Designacao AS CompanhiaActual
+                companhiaActual.Designacao AS CompanhiaActual,
+                (
+                    SELECT 1 FROM associados_companhias acn
+                    INNER JOIN companhias cn ON cn.Id = acn.IdCompanhia
+                    WHERE acn.IdAssociado = a.Id AND acn.Activo = 1 AND cn.ambito_global = 1
+                    LIMIT 1
+                ) AS NaChefiaNacional
             FROM associados a
             INNER JOIN pessoas p ON p.Id = a.IdPessoa
             LEFT JOIN (
@@ -52,7 +58,7 @@ class Associado extends Model
                 SELECT ac.IdAssociado, c.Designacao
                 FROM associados_companhias ac
                 INNER JOIN companhias c ON c.Id = ac.IdCompanhia
-                WHERE ac.Activo = 1
+                WHERE ac.Activo = 1 AND c.ambito_global = 0
             ) companhiaActual ON companhiaActual.IdAssociado = a.Id
             {$whereSql}
             ORDER BY p.Nome
@@ -96,13 +102,35 @@ class Associado extends Model
         return $registo ?: null;
     }
 
+    /**
+     * Companhia local (ambito_global = 0) actual do associado. A Chefia
+     * Nacional é gerida à parte, porque pode coexistir com esta.
+     */
     public function companhiaActual(int $idAssociado): ?array
     {
         $stmt = $this->bd->prepare("
             SELECT acomp.*, c.Designacao
             FROM associados_companhias acomp
             INNER JOIN companhias c ON c.Id = acomp.IdCompanhia
-            WHERE acomp.IdAssociado = :id AND acomp.Activo = 1
+            WHERE acomp.IdAssociado = :id AND acomp.Activo = 1 AND c.ambito_global = 0
+            ORDER BY acomp.DataInicio DESC LIMIT 1
+        ");
+        $stmt->execute(['id' => $idAssociado]);
+        $registo = $stmt->fetch();
+        return $registo ?: null;
+    }
+
+    /**
+     * Ligação activa à Chefia Nacional (companhia com ambito_global = 1),
+     * se existir.
+     */
+    public function chefiaNacionalActual(int $idAssociado): ?array
+    {
+        $stmt = $this->bd->prepare("
+            SELECT acomp.*, c.Designacao
+            FROM associados_companhias acomp
+            INNER JOIN companhias c ON c.Id = acomp.IdCompanhia
+            WHERE acomp.IdAssociado = :id AND acomp.Activo = 1 AND c.ambito_global = 1
             ORDER BY acomp.DataInicio DESC LIMIT 1
         ");
         $stmt->execute(['id' => $idAssociado]);
@@ -194,7 +222,7 @@ class Associado extends Model
                 ]);
             }
 
-            // 6. Companhia inicial
+            // 6. Companhia local inicial
             if (!empty($dados['IdCompanhia'])) {
                 $stmt = $this->bd->prepare(
                     "INSERT INTO associados_companhias (IdAssociado, IdCompanhia, DataInicio, Activo)
@@ -205,6 +233,34 @@ class Associado extends Model
                     'idCompanhia' => $dados['IdCompanhia'],
                     'dataInicio'  => $dados['DataInscricao'],
                 ]);
+            }
+
+            // 6.1 Chefia Nacional (independente da companhia local — podem coexistir)
+            if (!empty($dados['ChefiaNacional']) && !empty($dados['IdCompanhiaChefiaNacional'])) {
+                $stmt = $this->bd->prepare(
+                    "INSERT INTO associados_companhias (IdAssociado, IdCompanhia, DataInicio, Activo)
+                     VALUES (:idAssociado, :idCompanhia, :dataInicio, 1)"
+                );
+                $stmt->execute([
+                    'idAssociado' => $idAssociado,
+                    'idCompanhia' => $dados['IdCompanhiaChefiaNacional'],
+                    'dataInicio'  => $dados['DataInscricao'],
+                ]);
+            }
+
+            // 6.2 Órgãos (um dirigente pode estar em vários em simultâneo)
+            if (!empty($dados['Orgaos'])) {
+                foreach ($dados['Orgaos'] as $idOrgao) {
+                    $stmt = $this->bd->prepare(
+                        "INSERT INTO associados_orgaos (IdAssociado, IdOrgao, DataInicio, Activo)
+                         VALUES (:idAssociado, :idOrgao, :dataInicio, 1)"
+                    );
+                    $stmt->execute([
+                        'idAssociado' => $idAssociado,
+                        'idOrgao'     => (int) $idOrgao,
+                        'dataInicio'  => $dados['DataInscricao'],
+                    ]);
+                }
             }
 
             // 7. Encarregados de educação (arrays paralelos vindos do formulário)
@@ -320,7 +376,11 @@ class Associado extends Model
     }
 
     /**
-     * Fecha a companhia actual (se existir e for diferente) e abre uma nova.
+     * Fecha a companhia LOCAL actual (se existir e for diferente) e abre uma
+     * nova. Nunca mexe na ligação à Chefia Nacional — essa é independente
+     * (ver entrarNaChefiaNacional()/sairDaChefiaNacional()), porque um
+     * dirigente pode estar simultaneamente numa companhia local e na Chefia
+     * Nacional.
      */
     public function atribuirCompanhia(int $idAssociado, int $idCompanhia, string $dataInicio): void
     {
@@ -340,6 +400,35 @@ class Associado extends Model
             "INSERT INTO associados_companhias (IdAssociado, IdCompanhia, DataInicio, Activo) VALUES (:a, :c, :d, 1)"
         );
         $stmt->execute(['a' => $idAssociado, 'c' => $idCompanhia, 'd' => $dataInicio]);
+    }
+
+    /**
+     * Cria a ligação à Chefia Nacional, se ainda não estiver activa. Não
+     * fecha nem é afectada pela companhia local.
+     */
+    public function entrarNaChefiaNacional(int $idAssociado, int $idCompanhiaChefiaNacional, string $dataInicio): void
+    {
+        if ($this->chefiaNacionalActual($idAssociado)) {
+            return;
+        }
+
+        $stmt = $this->bd->prepare(
+            "INSERT INTO associados_companhias (IdAssociado, IdCompanhia, DataInicio, Activo) VALUES (:a, :c, :d, 1)"
+        );
+        $stmt->execute(['a' => $idAssociado, 'c' => $idCompanhiaChefiaNacional, 'd' => $dataInicio]);
+    }
+
+    public function sairDaChefiaNacional(int $idAssociado, string $dataFim): void
+    {
+        $actual = $this->chefiaNacionalActual($idAssociado);
+        if (!$actual) {
+            return;
+        }
+
+        $stmt = $this->bd->prepare(
+            "UPDATE associados_companhias SET Activo = 0, DataFim = :dataFim WHERE Id = :id"
+        );
+        $stmt->execute(['dataFim' => $dataFim, 'id' => $actual['Id']]);
     }
 
     /**
