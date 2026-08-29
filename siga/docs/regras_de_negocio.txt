@@ -716,3 +716,28 @@ seccao "Chefia"). A aplicacao valida isto tanto no registo como na
 edicao, considerando a seccao efectiva do associado (a nova, se estiver
 a ser alterada nesta mesma operacao, ou a actual) - mesmo padrao usado
 para a restricao da Chefia Nacional (regra 31).
+33. Alteracao a regra 2.3 — passa a existir script de migracao (fechada)
+
+A regra 2.3 dizia explicitamente que nao deveriam existir scripts de
+migracao intermedios no pacote de instalacao. Foi agora pedida
+explicitamente uma alteracao a essa decisao: o pacote passa a incluir
+DOIS ficheiros SQL:
+
+- SIGA_Criacao_BD.sql — criacao completa de raiz (mantem-se, sempre
+  actualizado com o schema mais recente);
+- SIGA_Migracao_v_anterior.sql — migra uma base de dados existente,
+  criada a partir do schema original (anterior a todas as alteracoes
+  deste projecto), para o schema actual.
+
+⚠️ EM ABERTO: assumiu-se que "a versao anterior" e o schema original tal
+como fornecido no inicio do projecto, e nao uma versao intermedia
+especifica (ex.: v01.09). Isto precisa de confirmacao explicita.
+
+⚠️ EM ABERTO: o script de migracao cobre, para ja, apenas as alteracoes
+estruturais ja feitas ate a v01.10 (tipos de evento novos, tipo de
+contacto "Email Associativo", reestruturacao de
+associados_contactos_emergencia, tabelas orgaos/associados_orgaos e seed,
+colunas Formador/InsigniaMadeira/DataInsigniaMadeira). Versoes futuras
+com alteracoes de schema devem acrescentar os passos correspondentes a
+este mesmo ficheiro (ou criar um novo, a decidir), mantendo sempre
+SIGA_Criacao_BD.sql como a fonte de verdade do schema completo.

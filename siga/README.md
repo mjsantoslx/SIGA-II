@@ -39,7 +39,21 @@ siga/
 
 ## 3. Instalação
 
-1. **Criar a base de dados** — importe o script fornecido:
+O projecto inclui **dois** scripts SQL, para dois cenários diferentes:
+
+- **`database/SIGA_Criacao_BD.sql`** — criação completa de raiz. Use este
+  se está a instalar o SIGA pela primeira vez (base de dados nova).
+- **`database/SIGA_Migracao_v_anterior.sql`** — migra uma base de dados já
+  existente (criada a partir do schema original, anterior às alterações
+  deste projecto) para o schema actual, preservando os dados existentes.
+  Use este **em vez do** script de criação se já tem uma instalação do
+  SIGA com dados reais. **Faça sempre uma cópia de segurança antes de
+  correr este script** — as instruções e avisos estão no cabeçalho do
+  próprio ficheiro.
+
+### 3.1 Instalação de raiz (base de dados nova)
+
+1. **Criar a base de dados** — importe o script de criação:
    ```bash
    mysql -u root -p < database/SIGA_Criacao_BD.sql
    ```
@@ -78,6 +92,28 @@ siga/
 
 5. **Apontar o servidor web para `public/`** (ver secção 5) e aceder a
    `/login` com o utilizador `Administrador` e a palavra-passe definida.
+
+### 3.2 Migração de uma instalação existente
+
+Se já tem uma base de dados SIGA criada a partir do schema original
+(anterior a este projecto), com dados reais que quer preservar:
+
+1. **Faça uma cópia de segurança** antes de mais nada:
+   ```bash
+   mysqldump -u <utilizador> -p siga > backup_antes_da_migracao.sql
+   ```
+2. **Corra o script de migração**:
+   ```bash
+   mysql -u <utilizador> -p siga < database/SIGA_Migracao_v_anterior.sql
+   ```
+3. Reveja os avisos no início do próprio ficheiro — em particular, a
+   assunção sobre qual é exactamente "a versão anterior" da sua base de
+   dados. Se a sua instalação já tiver algumas destas alterações (ex.: já
+   tem a tabela `orgaos`) e não outras, confirme comigo antes de correr,
+   para ajustarmos o script à sua situação exacta.
+4. Configure `config/config.php` (ou variáveis de ambiente) e o utilizador
+   de aplicação como nos passos 2-3 da secção 3.1, se ainda não estiverem
+   definidos.
 
 ## 4. Módulos incluídos até à v01.02
 
