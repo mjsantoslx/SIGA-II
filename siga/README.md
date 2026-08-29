@@ -139,7 +139,8 @@ siga/
   e na edição. Não se aplica (para já) aos órgãos.
 - **Formador e insígnia de madeira** (regra 32) — um dirigente pode ser
   formador e/ou ter insígnia de madeira; quando tem insígnia, a data de
-  atribuição é obrigatória (dd/mm/aaaa, nunca futura).
+  atribuição é obrigatória (dd/mm/aaaa, nunca futura). Restrito a
+  dirigentes (secção "Chefia"), validado no registo e na edição.
 
 ### Nota sobre o número de documento (Cartão de Cidadão)
 

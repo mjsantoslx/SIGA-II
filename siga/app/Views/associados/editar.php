@@ -148,6 +148,7 @@
             <label><input type="checkbox" name="Formador" value="1" <?= !empty($a['Formador']) ? 'checked' : '' ?>> É formador</label>
             <label><input type="checkbox" id="InsigniaMadeira" name="InsigniaMadeira" value="1" <?= !empty($a['InsigniaMadeira']) ? 'checked' : '' ?> onchange="siga.actualizarObrigatoriedadeDataInsignia(this)"> Tem insígnia de madeira</label>
         </div>
+        <small>Aplicável apenas a dirigentes (secção "Chefia").</small>
         <div class="campo" id="grupo-data-insignia" style="margin-top: 0.6rem; max-width: 220px; <?= !empty($a['InsigniaMadeira']) ? '' : 'display:none' ?>">
             <label for="DataInsigniaMadeira">Data de atribuição *</label>
             <input type="text" id="DataInsigniaMadeira" name="DataInsigniaMadeira" class="campo-data" placeholder="dd/mm/aaaa" maxlength="10" inputmode="numeric" value="<?= htmlspecialchars($a['DataInsigniaMadeira'] ?? '') ?>">

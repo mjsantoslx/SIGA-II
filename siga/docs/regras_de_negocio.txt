@@ -707,7 +707,12 @@ com outros atributos opcionais ja existentes nesta tabela, ex.:
 NominativoOutro). A data segue as mesmas regras gerais de datas do
 sistema (dd/mm/aaaa na interface, aaaa-mm-dd na BD, nunca futura).
 
-⚠️ EM ABERTO: nao ficou explicitamente decidido se estes campos devem
-ficar reservados apenas a dirigentes (seccao "Chefia") ou disponiveis a
-qualquer associado. Por enquanto a aplicacao mostra-os no formulario de
-qualquer associado, sem essa restricao.
+32.2 Restricao a dirigentes (fechada)
+
+Confirmado explicitamente (ja estava implicito no enunciado original,
+"os dirigentes poderao ser ou nao formadores..."): Formador e
+InsigniaMadeira sao atributos exclusivos de dirigentes (associados na
+seccao "Chefia"). A aplicacao valida isto tanto no registo como na
+edicao, considerando a seccao efectiva do associado (a nova, se estiver
+a ser alterada nesta mesma operacao, ou a actual) - mesmo padrao usado
+para a restricao da Chefia Nacional (regra 31).

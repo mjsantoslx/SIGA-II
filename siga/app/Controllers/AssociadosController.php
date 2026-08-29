@@ -75,6 +75,14 @@ class AssociadosController extends Controller
             $erros[] = 'Só um dirigente (associado na secção "Chefia") pode pertencer à Chefia Nacional.';
         }
 
+        // Regra 32: formador e insígnia de madeira são atributos de dirigentes.
+        if (!empty($dados['Formador']) && !$ehChefia) {
+            $erros[] = 'Só um dirigente (associado na secção "Chefia") pode ser assinalado como formador.';
+        }
+        if (!empty($dados['InsigniaMadeira']) && !$ehChefia) {
+            $erros[] = 'Só um dirigente (associado na secção "Chefia") pode ter insígnia de madeira.';
+        }
+
         if ($erros) {
             Sessao::guardarMensagem('erro', implode(' ', $erros));
             $this->vista('associados/form', [
@@ -219,11 +227,19 @@ class AssociadosController extends Controller
         // Regra 29: só um dirigente (associado na secção "Chefia") pode
         // pertencer à Chefia Nacional — considera a secção efectiva após
         // esta gravação (a nova, se estiver a mudar, ou a actual).
-        if (!empty($dados['ChefiaNacional'])) {
-            $idSecaoEfectiva = !empty($dados['IdSecao']) ? (int) $dados['IdSecao'] : ($idSecaoAtual ? (int) $idSecaoAtual : null);
-            if (!$secaoModelo->ehChefia($idSecaoEfectiva)) {
-                $erros[] = 'Só um dirigente (associado na secção "Chefia") pode pertencer à Chefia Nacional.';
-            }
+        $idSecaoEfectiva = !empty($dados['IdSecao']) ? (int) $dados['IdSecao'] : ($idSecaoAtual ? (int) $idSecaoAtual : null);
+        $seraDirigente = $secaoModelo->ehChefia($idSecaoEfectiva);
+
+        if (!empty($dados['ChefiaNacional']) && !$seraDirigente) {
+            $erros[] = 'Só um dirigente (associado na secção "Chefia") pode pertencer à Chefia Nacional.';
+        }
+
+        // Regra 32: formador e insígnia de madeira são atributos de dirigentes.
+        if (!empty($dados['Formador']) && !$seraDirigente) {
+            $erros[] = 'Só um dirigente (associado na secção "Chefia") pode ser assinalado como formador.';
+        }
+        if (!empty($dados['InsigniaMadeira']) && !$seraDirigente) {
+            $erros[] = 'Só um dirigente (associado na secção "Chefia") pode ter insígnia de madeira.';
         }
 
         if ($erros) {
