@@ -7,6 +7,8 @@ use App\Core\Data;
 use App\Core\Documentos;
 use App\Core\Sessao;
 use App\Models\Associado;
+use App\Models\Cargo;
+use App\Models\CargoAssociado;
 use App\Models\Companhia;
 use App\Models\Consentimento;
 use App\Models\Contacto;
@@ -82,6 +84,9 @@ class AssociadosController extends Controller
         if (!empty($dados['InsigniaMadeira']) && !$ehChefia) {
             $erros[] = 'Só um dirigente (associado na secção "Chefia") pode ter insígnia de madeira.';
         }
+        if (!empty($dados['Cargos']) && !$ehChefia) {
+            $erros[] = 'Só um dirigente (associado na secção "Chefia") pode ter cargos atribuídos.';
+        }
 
         if ($erros) {
             Sessao::guardarMensagem('erro', implode(' ', $erros));
@@ -139,6 +144,7 @@ class AssociadosController extends Controller
             'companhiaActual' => $associadoModelo->companhiaActual($idAssociado),
             'chefiaNacionalActual' => $associadoModelo->chefiaNacionalActual($idAssociado),
             'orgaos'      => (new OrgaoAssociado())->listarDoAssociado($idAssociado),
+            'cargos'      => (new CargoAssociado())->listarDoAssociado($idAssociado),
             'morada'      => (new Morada())->moradaActivaDaPessoa((int) $associado['IdPessoa']),
             'contactos'   => (new Contacto())->listarDaPessoa((int) $associado['IdPessoa']),
             'encarregados' => (new EncarregadoEducacao())->listarDoAssociado($idAssociado),
@@ -177,6 +183,7 @@ class AssociadosController extends Controller
             'companhiaActual' => $associadoModelo->companhiaActual($idAssociado),
             'naChefiaNacional' => (bool) $associadoModelo->chefiaNacionalActual($idAssociado),
             'idsOrgaosActuais' => array_column((new OrgaoAssociado())->listarDoAssociado($idAssociado), 'IdOrgao'),
+            'idsCargosActuais' => array_column((new CargoAssociado())->listarDoAssociado($idAssociado), 'IdCargo'),
             ...$this->dadosListasFormulario(),
         ]);
     }
@@ -241,6 +248,9 @@ class AssociadosController extends Controller
         if (!empty($dados['InsigniaMadeira']) && !$seraDirigente) {
             $erros[] = 'Só um dirigente (associado na secção "Chefia") pode ter insígnia de madeira.';
         }
+        if (!empty($dados['Cargos']) && !$seraDirigente) {
+            $erros[] = 'Só um dirigente (associado na secção "Chefia") pode ter cargos atribuídos.';
+        }
 
         if ($erros) {
             Sessao::guardarMensagem('erro', implode(' ', $erros));
@@ -290,6 +300,10 @@ class AssociadosController extends Controller
             // Órgãos: um dirigente pode estar em vários em simultâneo.
             $idsOrgaos = array_map('intval', $dados['Orgaos'] ?? []);
             (new OrgaoAssociado())->sincronizar($idAssociado, $idsOrgaos, $hoje);
+
+            // Cargos: um dirigente pode ter vários em simultâneo (regra 34).
+            $idsCargos = array_map('intval', $dados['Cargos'] ?? []);
+            (new CargoAssociado())->sincronizar($idAssociado, $idsCargos, $hoje);
 
             Sessao::guardarMensagem('sucesso', 'Dados do associado actualizados com sucesso.');
             $this->redirecionar('/associados/' . $idAssociado);
@@ -446,6 +460,7 @@ class AssociadosController extends Controller
             'companhias'     => (new Companhia())->listarLocais(),
             'chefiaNacional' => (new Companhia())->chefiaNacional(),
             'orgaos'         => (new Orgao())->listarAtivos(),
+            'cargos'         => (new Cargo())->listarAtivos(),
         ];
     }
 }

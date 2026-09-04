@@ -752,3 +752,45 @@ proprio passo imediatamente anterior.
 "original_para_v01.12" esta exactamente no schema original, sem nenhuma
 das alteracoes entretanto feitas. Isto precisa de confirmacao explicita
 antes de ser corrido em producao.
+34. Cargos de dirigentes
+
+Foi definido que os dirigentes podem ter cargos, actualizaveis ao longo
+do tempo, e que alguns cargos podem acumular com outros (ou seja, um
+dirigente pode ter mais do que um cargo em simultaneo).
+
+34.1 Lista de cargos (fechada)
+
+- Chefe da Companhia
+- Subchefe da Companhia
+- Colaborador da Chefia
+- Chefe de Divisao
+- Subchefe de Divisao
+- Chefe de Secretaria
+- Chefe de Financas
+- Assistente Confessional
+- Chefe Regional
+- Chefe Regional Adjunto
+- Chefe Nacional
+- Chefe Nacional Adjunto
+
+34.2 Implementacao
+
+Seguido o mesmo padrao ja usado para orgaos (regra 29): tabela `cargos`
+(referencia) + tabela de ligacao `associados_cargos` com historico
+(DataInicio/DataFim/Activo) e pertenca multipla e simultanea, sem
+fechar automaticamente ligacoes anteriores ao adicionar uma nova (a
+gestao e feita por sincronizacao: compara a seleccao pedida com as
+ligacoes activas).
+
+Por analogia com Formador/InsigniaMadeira/ChefiaNacional (regras 31/32):
+cargos ficaram restritos a dirigentes (associados na seccao "Chefia"),
+validado tanto no registo como na edicao.
+
+⚠️ EM ABERTO: "alguns cargos podem acumular com outros" foi entendido
+como confirmacao de que a pertenca multipla e possivel em geral (por
+isso a implementacao permite seleccionar varios cargos livremente) — mas
+NAO foi fornecida uma lista de quais cargos sao mutuamente exclusivos
+entre si (ex.: nao fazer sentido ser Chefe da Companhia e Subchefe da
+Companhia da MESMA companhia em simultaneo). Por enquanto a aplicacao
+NAO impede nenhuma combinacao de cargos. Precisa de confirmacao explicita
+se deve existir uma matriz de incompatibilidades e, se sim, qual.

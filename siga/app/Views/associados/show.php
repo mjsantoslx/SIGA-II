@@ -80,6 +80,7 @@
             <dt>Companhia local</dt><dd><?= htmlspecialchars($companhiaActual['Designacao'] ?? '—') ?></dd>
             <dt>Chefia Nacional</dt><dd><?= $chefiaNacionalActual ? 'Sim' : 'Não' ?></dd>
             <dt>Órgãos</dt><dd><?= $orgaos ? htmlspecialchars(implode(', ', array_column($orgaos, 'Designacao'))) : '—' ?></dd>
+            <dt>Cargos</dt><dd><?= $cargos ? htmlspecialchars(implode(', ', array_column($cargos, 'Designacao'))) : '—' ?></dd>
         </dl>
     </section>
 

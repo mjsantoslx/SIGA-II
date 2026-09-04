@@ -266,6 +266,21 @@ class Associado extends Model
                 }
             }
 
+            // 6.3 Cargos (um dirigente pode ter vários em simultâneo — regra 34)
+            if (!empty($dados['Cargos'])) {
+                foreach ($dados['Cargos'] as $idCargo) {
+                    $stmt = $this->bd->prepare(
+                        "INSERT INTO associados_cargos (IdAssociado, IdCargo, DataInicio, Activo)
+                         VALUES (:idAssociado, :idCargo, :dataInicio, 1)"
+                    );
+                    $stmt->execute([
+                        'idAssociado' => $idAssociado,
+                        'idCargo'     => (int) $idCargo,
+                        'dataInicio'  => $dados['DataInscricao'],
+                    ]);
+                }
+            }
+
             // 7. Encarregados de educação (arrays paralelos vindos do formulário)
             if (!empty($dados['EncarregadosNome'])) {
                 foreach ($dados['EncarregadosNome'] as $i => $nomeEE) {

@@ -144,6 +144,18 @@
         </div>
         <?php endif; ?>
 
+        <?php if (!empty($cargos)): ?>
+        <div class="campo" style="margin-top: 1rem;">
+            <label>Cargos (pode seleccionar vários — alguns acumulam)</label>
+            <div class="grelha-checkboxes">
+                <?php foreach ($cargos as $cargo): ?>
+                    <label><input type="checkbox" name="Cargos[]" value="<?= (int) $cargo['Id'] ?>" <?= in_array((int) $cargo['Id'], $idsCargosActuais, true) ? 'checked' : '' ?>> <?= htmlspecialchars($cargo['Designacao']) ?></label>
+                <?php endforeach; ?>
+            </div>
+            <small>Aplicável apenas a dirigentes (secção "Chefia").</small>
+        </div>
+        <?php endif; ?>
+
         <div class="grelha-checkboxes" style="margin-top: 1rem;">
             <label><input type="checkbox" name="Formador" value="1" <?= !empty($a['Formador']) ? 'checked' : '' ?>> É formador</label>
             <label><input type="checkbox" id="InsigniaMadeira" name="InsigniaMadeira" value="1" <?= !empty($a['InsigniaMadeira']) ? 'checked' : '' ?> onchange="siga.actualizarObrigatoriedadeDataInsignia(this)"> Tem insígnia de madeira</label>

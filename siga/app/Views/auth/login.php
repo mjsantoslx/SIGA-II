@@ -11,9 +11,7 @@
 <body class="pagina-login">
     <div class="painel-login">
         <div class="painel-login-marca">
-            <span class="cabecalho-brasao">⚜</span>
-            <h1>SIGA</h1>
-            <p>Sistema Integrado de Gestão de Associados<br>União dos Escoteiros Portugueses</p>
+            <img src="/assets/img/logo-siga-uep.png" alt="SIGA — Sistema Integrado de Gestão de Associados — União dos Escoteiros Portugueses" class="painel-login-logo">
         </div>
 
         <?php foreach (\App\Core\Sessao::obterMensagens() as $mensagem): ?>

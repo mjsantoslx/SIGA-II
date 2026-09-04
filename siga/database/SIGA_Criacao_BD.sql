@@ -377,6 +377,51 @@ VALUES
     ('Academia de Formação');
 
 -- ============================================================================
+-- CARGOS
+-- Um dirigente pode ter um ou mais cargos em simultâneo (alguns acumulam
+-- com outros — regra 34). Actualizáveis ao longo do tempo, com histórico.
+-- ============================================================================
+
+CREATE TABLE cargos (
+    Id INT NOT NULL AUTO_INCREMENT,
+    Designacao VARCHAR(150) NOT NULL,
+    Activo TINYINT(1) NOT NULL DEFAULT 1,
+    PRIMARY KEY (Id),
+    UNIQUE KEY uk_cargos_designacao (Designacao)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
+
+CREATE TABLE associados_cargos (
+    Id INT NOT NULL AUTO_INCREMENT,
+    IdAssociado INT NOT NULL,
+    IdCargo INT NOT NULL,
+    DataInicio DATE NOT NULL,
+    DataFim DATE NULL,
+    Activo TINYINT(1) NOT NULL DEFAULT 1,
+    PRIMARY KEY (Id),
+    KEY ix_associados_cargos_associado (IdAssociado),
+    KEY ix_associados_cargos_cargo (IdCargo),
+    CONSTRAINT fk_associados_cargos_associado
+        FOREIGN KEY (IdAssociado) REFERENCES associados(Id),
+    CONSTRAINT fk_associados_cargos_cargo
+        FOREIGN KEY (IdCargo) REFERENCES cargos(Id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
+
+INSERT INTO cargos (Designacao)
+VALUES
+    ('Chefe da Companhia'),
+    ('Subchefe da Companhia'),
+    ('Colaborador da Chefia'),
+    ('Chefe de Divisão'),
+    ('Subchefe de Divisão'),
+    ('Chefe de Secretaria'),
+    ('Chefe de Finanças'),
+    ('Assistente Confessional'),
+    ('Chefe Regional'),
+    ('Chefe Regional Adjunto'),
+    ('Chefe Nacional'),
+    ('Chefe Nacional Adjunto');
+
+-- ============================================================================
 -- EVENTOS DOS ASSOCIADOS
 -- Os eventos nunca são eliminados e permanecem mesmo após desactivação.
 -- ============================================================================

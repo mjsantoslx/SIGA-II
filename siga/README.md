@@ -43,21 +43,19 @@ O projecto inclui **dois** scripts SQL, para dois cenários diferentes:
 
 - **`database/SIGA_Criacao_BD.sql`** — criação completa de raiz. Use este
   se está a instalar o SIGA pela primeira vez (base de dados nova).
-- **`database/SIGA_Migracao_original_para_v01.12.sql`** — migra uma base
-  de dados criada a partir do schema **original** (anterior a qualquer
-  versão deste projecto) para o schema actual, preservando os dados
+- **`database/SIGA_Migracao_v01.12_para_v01.13.sql`** — migra uma base de
+  dados já na v01.12 do SIGA para a v01.13, preservando os dados
   existentes. Use este **em vez do** script de criação se já tem uma
-  instalação do SIGA anterior a este projecto, com dados reais. **Faça
-  sempre uma cópia de segurança antes de correr este script** — as
-  instruções e avisos estão no cabeçalho do próprio ficheiro.
+  instalação do SIGA na v01.12. **Faça sempre uma cópia de segurança
+  antes de correr este script** — as instruções estão no cabeçalho do
+  próprio ficheiro.
 
-  > **Política de migrações**: a partir da v01.12, cada nova versão com
-  > alterações de schema traz apenas a migração do seu passo imediatamente
-  > anterior (ex.: o pacote da v01.13 trará
-  > `SIGA_Migracao_v01.12_para_v01.13.sql`) — nunca a história completa
-  > acumulada. Este ficheiro é uma excepção: cobre o salto único desde o
-  > schema original até à v01.12, porque as versões anteriores não tinham
-  > migrações documentadas passo a passo.
+  > **Política de migrações**: cada nova versão com alterações de schema
+  > traz apenas a migração do seu passo imediatamente anterior — nunca a
+  > história completa acumulada. Se a sua base de dados estiver numa
+  > versão mais antiga (ex.: ainda no schema original, anterior a
+  > qualquer versão do SIGA), precisa dos scripts de migração das versões
+  > intermédias, que fizeram parte dos respectivos pacotes anteriores.
 
 ### 3.1 Instalação de raiz (base de dados nova)
 
@@ -101,24 +99,23 @@ O projecto inclui **dois** scripts SQL, para dois cenários diferentes:
 5. **Apontar o servidor web para `public/`** (ver secção 5) e aceder a
    `/login` com o utilizador `Administrador` e a palavra-passe definida.
 
-### 3.2 Migração de uma instalação existente
+### 3.2 Migração de uma instalação existente (v01.12 → v01.13)
 
-Se já tem uma base de dados SIGA criada a partir do schema original
-(anterior a este projecto), com dados reais que quer preservar:
+Se já tem uma base de dados SIGA na v01.12, com dados reais que quer
+preservar:
 
 1. **Faça uma cópia de segurança** antes de mais nada:
    ```bash
-   mysqldump -u <utilizador> -p siga > backup_antes_da_migracao.sql
+   mysqldump -u <utilizador> -p siga > backup_antes_da_v01.13.sql
    ```
 2. **Corra o script de migração**:
    ```bash
-   mysql -u <utilizador> -p siga < database/SIGA_Migracao_original_para_v01.12.sql
+   mysql -u <utilizador> -p siga < database/SIGA_Migracao_v01.12_para_v01.13.sql
    ```
-3. Reveja os avisos no início do próprio ficheiro — em particular, a
-   assunção sobre qual é exactamente "a versão anterior" da sua base de
-   dados. Se a sua instalação já tiver algumas destas alterações (ex.: já
-   tem a tabela `orgaos`) e não outras, confirme comigo antes de correr,
-   para ajustarmos o script à sua situação exacta.
+3. Se a sua base de dados **não** estiver ainda na v01.12 (por exemplo,
+   ainda está no schema original, ou numa versão mais antiga), precisa
+   primeiro de aplicar os scripts de migração das versões intermédias
+   correspondentes, antes deste.
 4. Configure `config/config.php` (ou variáveis de ambiente) e o utilizador
    de aplicação como nos passos 2-3 da secção 3.1, se ainda não estiverem
    definidos.
@@ -185,6 +182,16 @@ Se já tem uma base de dados SIGA criada a partir do schema original
   formador e/ou ter insígnia de madeira; quando tem insígnia, a data de
   atribuição é obrigatória (dd/mm/aaaa, nunca futura). Restrito a
   dirigentes (secção "Chefia"), validado no registo e na edição.
+
+- **Cargos de dirigentes** (regra 34) — um dirigente pode ter um ou mais
+  cargos em simultâneo (Chefe da Companhia, Subchefe da Companhia,
+  Colaborador da Chefia, Chefe de Divisão, Subchefe de Divisão, Chefe de
+  Secretaria, Chefe de Finanças, Assistente Confessional, Chefe Regional,
+  Chefe Regional Adjunto, Chefe Nacional, Chefe Nacional Adjunto),
+  actualizáveis ao longo do tempo (histórico) e restritos a dirigentes
+  (secção "Chefia"). **Nota**: por agora nenhuma combinação de cargos é
+  impedida — ainda não há uma lista de incompatibilidades definida (ver
+  regra 34.2 no documento de regras de negócio).
 
 ### Nota sobre o número de documento (Cartão de Cidadão)
 
