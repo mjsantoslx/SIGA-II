@@ -12,6 +12,8 @@ return [
         // Ajustar consoante a pasta/subdomínio onde o public/ for publicado.
         'base_url'  => '/',
         'timezone'  => 'Europe/Lisbon',
+        // Actualizado a cada nova versão entregue — aparece no rodapé.
+        'versao'    => 'v01.20',
     ],
 
     'db' => [

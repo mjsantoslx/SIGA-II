@@ -91,9 +91,13 @@ a { color: var(--verde-medio); }
 }
 
 .rodape {
-    text-align: center; color: var(--texto-suave); font-size: 0.78rem;
-    padding: 2rem 1rem; border-top: 1px solid var(--borda); margin-top: 3rem;
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;
+    gap: 0.4rem 1rem;
+    color: var(--texto-suave); font-size: 0.78rem;
+    padding: 1.4rem 1.75rem; border-top: 1px solid var(--borda); margin-top: 3rem;
 }
+.rodape p { margin: 0; }
+.rodape-creditos { margin-left: auto; }
 
 /* ---------- Alertas ---------- */
 
