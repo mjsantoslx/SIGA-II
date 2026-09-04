@@ -11,11 +11,7 @@
 <body>
 <header class="cabecalho">
     <div class="cabecalho-marca">
-        <span class="cabecalho-brasao">⚜</span>
-        <div>
-            <strong>SIGA</strong>
-            <small>União dos Escoteiros Portugueses</small>
-        </div>
+        <a href="/" class="cabecalho-logo-fundo"><img src="/assets/img/logo-header-uep.png" alt="União dos Escoteiros Portugueses" class="cabecalho-logo"></a>
     </div>
 
     <?php if ($utilizadorAutenticado): ?>

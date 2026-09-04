@@ -64,9 +64,11 @@ a { color: var(--verde-medio); }
 }
 
 .cabecalho-marca { display: flex; align-items: center; gap: 0.6rem; }
-.cabecalho-marca strong { display: block; font-family: var(--fonte-arredondada); font-size: 1.1rem; letter-spacing: 0.03em; }
-.cabecalho-marca small { display: block; color: var(--caqui); font-size: 0.72rem; }
-.cabecalho-brasao { font-size: 1.6rem; color: var(--fogueira-clara); }
+.cabecalho-logo-fundo {
+    display: flex; align-items: center; background: var(--papel);
+    border-radius: 8px; padding: 0.35rem 0.7rem; line-height: 0;
+}
+.cabecalho-logo { height: 32px; width: auto; display: block; }
 
 .cabecalho-nav { display: flex; gap: 1.5rem; }
 .cabecalho-nav a { color: var(--creme); text-decoration: none; font-weight: 500; font-size: 0.92rem; opacity: 0.9; }
@@ -134,7 +136,7 @@ a { color: var(--verde-medio); }
 }
 
 .painel-login-marca { text-align: center; margin-bottom: 1.6rem; }
-.painel-login-logo { width: 92px; height: 92px; object-fit: contain; }
+.painel-login-logo { width: 220px; height: 220px; object-fit: contain; }
 
 .formulario-login { display: flex; flex-direction: column; gap: 0.35rem; }
 .formulario-login label { font-size: 0.82rem; font-weight: 600; margin-top: 0.6rem; }
