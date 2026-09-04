@@ -116,11 +116,16 @@ a { color: var(--verde-medio); }
 
 .pagina-login {
     min-height: 100vh; display: flex; align-items: center; justify-content: center;
-    background: var(--verde-escoteiro);
-    background-image: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.05), transparent 45%),
-                       radial-gradient(circle at 85% 80%, rgba(184,84,28,0.18), transparent 40%);
+    background: #0D2A4A;
+    background-image: radial-gradient(circle at 18% 15%, rgba(255,255,255,0.08), transparent 45%),
+                       radial-gradient(circle at 85% 85%, rgba(242,183,5,0.16), transparent 42%),
+                       linear-gradient(180deg, #123A63 0%, #0D2A4A 55%, #081D33 100%);
     padding: 1.5rem;
 }
+
+.pagina-login .botao-primario { background: #F2B705; color: #1A1300; }
+.pagina-login .botao-primario:hover { background: #D9A400; }
+.pagina-login input:focus { outline-color: #1B4F8C; border-color: #1B4F8C; }
 
 .painel-login {
     background: var(--papel); border-radius: 16px; padding: 2.4rem 2.2rem;
@@ -128,7 +133,7 @@ a { color: var(--verde-medio); }
 }
 
 .painel-login-marca { text-align: center; margin-bottom: 1.6rem; }
-.painel-login-logo { width: 150px; height: 150px; object-fit: contain; }
+.painel-login-logo { width: 92px; height: 92px; object-fit: contain; }
 
 .formulario-login { display: flex; flex-direction: column; gap: 0.35rem; }
 .formulario-login label { font-size: 0.82rem; font-weight: 600; margin-top: 0.6rem; }
