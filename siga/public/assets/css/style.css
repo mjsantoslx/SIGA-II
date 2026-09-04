@@ -1,7 +1,9 @@
 /* ============================================================
    SIGA — Sistema Integrado de Gestão de Associados (UEP)
    Paleta: azul-marinho, dourado, verde e vermelho (cores do logótipo SIGA/UEP).
-   Tipografia: Fraunces (títulos) + Inter (texto e interface).
+   Tipografia: Arial Rounded (Arial Rounded MT Bold) — fonte comercial,
+   usada automaticamente se estiver instalada; caso contrário, recorre a
+   Varela Round (livre, visualmente próxima) e depois a sans-serif genérica.
    ============================================================ */
 
 :root {
@@ -22,22 +24,23 @@
     --borda:           #D7DEE8;
     --sombra: 0 1px 2px rgba(13, 42, 74, 0.08), 0 4px 12px rgba(13, 42, 74, 0.08);
     --raio: 10px;
+    --fonte-arredondada: 'Arial Rounded MT Bold', 'Arial Rounded MT', 'Varela Round', Arial, sans-serif;
 }
 
 * { box-sizing: border-box; }
 
 body {
     margin: 0;
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-family: var(--fonte-arredondada);
     background: var(--creme);
     color: var(--texto);
     line-height: 1.5;
 }
 
 h1, h2, h3 {
-    font-family: 'Fraunces', Georgia, serif;
+    font-family: var(--fonte-arredondada);
     color: var(--verde-escoteiro);
-    font-weight: 600;
+    font-weight: 700;
     margin: 0 0 0.4em;
 }
 
@@ -61,7 +64,7 @@ a { color: var(--verde-medio); }
 }
 
 .cabecalho-marca { display: flex; align-items: center; gap: 0.6rem; }
-.cabecalho-marca strong { display: block; font-family: 'Fraunces', serif; font-size: 1.1rem; letter-spacing: 0.03em; }
+.cabecalho-marca strong { display: block; font-family: var(--fonte-arredondada); font-size: 1.1rem; letter-spacing: 0.03em; }
 .cabecalho-marca small { display: block; color: var(--caqui); font-size: 0.72rem; }
 .cabecalho-brasao { font-size: 1.6rem; color: var(--fogueira-clara); }
 
@@ -152,7 +155,7 @@ input:focus, select:focus, textarea:focus {
 .formulario-filtros select { width: auto; }
 
 fieldset { border: 1px solid var(--borda); border-radius: var(--raio); padding: 1.2rem 1.4rem; margin-bottom: 1.2rem; background: var(--papel); }
-legend { font-family: 'Fraunces', serif; color: var(--verde-escoteiro); font-weight: 600; padding: 0 0.5rem; }
+legend { font-family: var(--fonte-arredondada); color: var(--verde-escoteiro); font-weight: 600; padding: 0 0.5rem; }
 .ajuda-fieldset { color: var(--texto-suave); font-size: 0.85rem; margin-top: -0.3rem; }
 
 .grelha-formulario { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
@@ -197,7 +200,7 @@ legend { font-family: 'Fraunces', serif; color: var(--verde-escoteiro); font-wei
 .cartao { background: var(--papel); border-radius: var(--raio); padding: 1.3rem; box-shadow: var(--sombra); text-align: center; }
 .cartao-destaque { background: var(--verde-escoteiro); }
 .cartao-destaque .cartao-numero, .cartao-destaque .cartao-legenda { color: var(--creme); }
-.cartao-numero { display: block; font-family: 'Fraunces', serif; font-size: 2.2rem; font-weight: 600; color: var(--verde-escoteiro); }
+.cartao-numero { display: block; font-family: var(--fonte-arredondada); font-size: 2.2rem; font-weight: 600; color: var(--verde-escoteiro); }
 .cartao-legenda { color: var(--texto-suave); font-size: 0.85rem; }
 
 .seccao { margin-bottom: 2rem; }
