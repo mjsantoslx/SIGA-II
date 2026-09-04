@@ -257,3 +257,96 @@ server {
     }
 }
 ```
+
+## 7. Histórico de versões
+
+Esta secção é actualizada a cada nova versão entregue, com as alterações
+feitas desde a versão anterior. Mais recente primeiro.
+
+### v01.24
+- Logótipos do cabeçalho e do rodapé aumentados de novo (cabeçalho: 52px; rodapé: 92px).
+- Este histórico de versões passa a fazer parte permanente do README.
+
+### v01.23
+- Logótipo do rodapé aumentado (44px → 64px).
+- Todos os ficheiros de texto do projecto convertidos para terminação de linha CRLF (`\r\n`).
+
+### v01.22
+- Logótipo do rodapé aumentado (28px → 44px).
+
+### v01.21
+- Logótipo do SIGA acrescentado ao canto esquerdo do rodapé.
+
+### v01.20
+- "Powered By MLX-PT" e o número de versão acrescentados ao canto direito do rodapé.
+- Número de versão passa a estar centralizado em `config/config.php` (`app.versao`).
+
+### v01.19
+- Corrigido o login: passa a aceitar apenas nome de utilizador (deixou de aceitar email).
+
+### v01.18
+- Logótipo da UEP acrescentado ao cabeçalho (canto esquerdo), sobre fundo branco para contraste.
+- Logótipo do SIGA no login aumentado (92px → 220px).
+
+### v01.17
+- Tipo de letra alterado para Arial Rounded (com Varela Round como alternativa livre).
+
+### v01.16
+- Esquema de cores de toda a aplicação alinhado com o logótipo (azul-marinho/dourado), antes só aplicado ao login.
+
+### v01.15
+- Logótipo do SIGA no login reduzido de tamanho.
+- Cores do ecrã de login alteradas para azul-marinho/dourado, a condizer com o logótipo.
+
+### v01.14
+- Logótipo do SIGA acrescentado ao ecrã de login.
+
+### v01.13
+- Nova funcionalidade: cargos de dirigentes (regra 34) — tabelas `cargos`/`associados_cargos`, com pertença múltipla e simultânea, restrita a dirigentes.
+- Lista de 12 cargos semeada (Chefe da Companhia, Subchefe da Companhia, Colaborador da Chefia, Chefe de Divisão, Subchefe de Divisão, Chefe de Secretaria, Chefe de Finanças, Assistente Confessional, Chefe Regional, Chefe Regional Adjunto, Chefe Nacional, Chefe Nacional Adjunto).
+- Script de migração `SIGA_Migracao_v01.12_para_v01.13.sql` incluído.
+
+### v01.12
+- Corrigida a política de scripts de migração: cada pacote passa a trazer apenas a migração do passo imediatamente anterior, nunca a história acumulada.
+- Ficheiro de migração renomeado para reflectir com precisão o que cobre.
+
+### v01.11
+- Introduzido o segundo ficheiro SQL do pacote: script de migração, além do de criação de raiz (alteração explícita à regra 2.3 original).
+
+### v01.10
+- Chefia Nacional, Formador e Insígnia de Madeira restritos a dirigentes (associados na secção "Chefia"), validado no registo e na edição.
+
+### v01.09
+- Tabela `orgaos` semeada (Mesa do Indaba, Conselho Fiscal, Conselho Jurisdicional, Academia de Formação).
+- Novos atributos do associado: Formador (sim/não) e Insígnia de Madeira (sim/não, com data de atribuição obrigatória quando aplicável).
+
+### v01.08
+- Novo modelo de enquadramento de dirigentes: companhia local, Chefia Nacional e órgãos passam a poder coexistir (a Chefia Nacional deixou de ser exclusiva com a companhia local).
+- Novas tabelas `orgaos` (vazia nesta versão) e `associados_orgaos`, com pertença múltipla e simultânea.
+
+### v01.07
+- Acrescentada via de correcção explícita para mudanças de secção que representem um recuo ("Isto é uma correcção"), sempre registada como evento.
+
+### v01.06
+- Corrigida a regra de progressão entre secções: passa a permitir avançar para qualquer secção posterior na sequência (não só a imediatamente a seguir) — nunca recuar em uso normal.
+
+### v01.05
+- Email associativo passa a ser obrigatório para associados na secção "Chefia", validado no registo e na mudança de secção; protegido contra remoção enquanto o associado estiver na Chefia.
+
+### v01.04
+- Novo tipo de contacto "Email Associativo", para uso dos dirigentes.
+
+### v01.03
+- Novo ecrã único de gestão de contactos do associado (`/associados/{id}/contactos`), reunindo morada e contactos.
+
+### v01.02
+- Datas em todo o sistema passam a usar o formato dd/mm/aaaa (com máscara e validação de datas não-futuras).
+- Desactivação/reactivação de associados passam a registar sempre um evento correspondente.
+- Contactos de emergência deixam de depender de um registo em "pessoas".
+- Introduzida a correcção vs. substituição de morada, e a gestão de morada de companhias/Chefia Nacional.
+- `config.php` movido para `config/config.php`.
+- Corrigido erro de login (parâmetro SQL nomeado duplicado).
+
+### v01.00 – v01.01
+- Primeira entrega: esqueleto MVC completo, autenticação, painel principal e módulo de gestão de associados (registo, listagem, edição, ficha de detalhe, desactivação/reactivação).
+- Corrigido o `config.php` para usar as credenciais fornecidas.
