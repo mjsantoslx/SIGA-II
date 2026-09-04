@@ -1,26 +1,26 @@
 /* ============================================================
    SIGA — Sistema Integrado de Gestão de Associados (UEP)
-   Paleta: verde-floresta, caqui, creme, laranja-fogueira.
+   Paleta: azul-marinho, dourado, verde e vermelho (cores do logótipo SIGA/UEP).
    Tipografia: Fraunces (títulos) + Inter (texto e interface).
    ============================================================ */
 
 :root {
-    --verde-escoteiro: #24402F;
-    --verde-medio:     #3D6349;
-    --verde-claro:     #6E8F73;
-    --caqui:           #C9BE9C;
-    --creme:           #F6F3EA;
+    --verde-escoteiro: #0D2A4A;
+    --verde-medio:     #1B4F8C;
+    --verde-claro:     #5C87B3;
+    --caqui:           #A9C4DD;
+    --creme:           #F2F5F9;
     --papel:           #FFFFFF;
-    --texto:           #23291E;
-    --texto-suave:     #5B6459;
-    --fogueira:        #B8541C;
-    --fogueira-clara:  #E08A4F;
-    --erro:            #A6362B;
+    --texto:           #17233A;
+    --texto-suave:     #5C6B80;
+    --fogueira:        #F2B705;
+    --fogueira-clara:  #F5CB43;
+    --erro:            #C6302B;
     --erro-fundo:      #FBEAE7;
-    --sucesso:         #2F6F4E;
+    --sucesso:         #1E7A46;
     --sucesso-fundo:   #E7F1EA;
-    --borda:           #DDD6C4;
-    --sombra: 0 1px 2px rgba(35, 41, 30, 0.06), 0 4px 12px rgba(35, 41, 30, 0.06);
+    --borda:           #D7DEE8;
+    --sombra: 0 1px 2px rgba(13, 42, 74, 0.08), 0 4px 12px rgba(13, 42, 74, 0.08);
     --raio: 10px;
 }
 
@@ -104,8 +104,8 @@ a { color: var(--verde-medio); }
     cursor: pointer; transition: transform 0.08s ease, box-shadow 0.08s ease;
 }
 .botao:active { transform: translateY(1px); }
-.botao-primario { background: var(--fogueira); color: #fff; }
-.botao-primario:hover { background: #9E4517; }
+.botao-primario { background: var(--fogueira); color: #1A1300; }
+.botao-primario:hover { background: #D9A400; }
 .botao-secundario { background: var(--papel); color: var(--verde-escoteiro); border: 1px solid var(--borda); }
 .botao-secundario:hover { border-color: var(--verde-claro); }
 .botao-perigo { background: var(--erro-fundo); color: var(--erro); border: 1px solid #EAC3BC; }
@@ -123,8 +123,6 @@ a { color: var(--verde-medio); }
     padding: 1.5rem;
 }
 
-.pagina-login .botao-primario { background: #F2B705; color: #1A1300; }
-.pagina-login .botao-primario:hover { background: #D9A400; }
 .pagina-login input:focus { outline-color: #1B4F8C; border-color: #1B4F8C; }
 
 .painel-login {
@@ -189,7 +187,7 @@ legend { font-family: 'Fraunces', serif; color: var(--verde-escoteiro); font-wei
 
 .etiqueta { display: inline-block; padding: 0.15rem 0.6rem; border-radius: 999px; font-size: 0.74rem; font-weight: 600; }
 .etiqueta-ativo { background: var(--sucesso-fundo); color: var(--sucesso); }
-.etiqueta-inativo { background: #EFEAE0; color: var(--texto-suave); }
+.etiqueta-inativo { background: #E7ECF2; color: var(--texto-suave); }
 
 .texto-vazio { color: var(--texto-suave); font-style: italic; }
 
