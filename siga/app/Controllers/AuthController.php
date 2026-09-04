@@ -24,17 +24,17 @@ class AuthController extends Controller
     {
         $this->validarCsrf();
 
-        $identificador = trim($_POST['identificador'] ?? '');
-        $palavraPasse  = (string) ($_POST['palavra_passe'] ?? '');
+        $nomeUtilizador = trim($_POST['nome_utilizador'] ?? '');
+        $palavraPasse   = (string) ($_POST['palavra_passe'] ?? '');
 
-        if ($identificador === '' || $palavraPasse === '') {
+        if ($nomeUtilizador === '' || $palavraPasse === '') {
             Sessao::guardarMensagem('erro', 'Preencha o utilizador e a palavra-passe.');
             $this->redirecionar('/login');
             return;
         }
 
         $utilizadorModelo = new Utilizador();
-        $utilizador = $utilizadorModelo->encontrarPorNomeOuEmail($identificador);
+        $utilizador = $utilizadorModelo->encontrarPorNome($nomeUtilizador);
 
         if (!$utilizador || !password_verify($palavraPasse, $utilizador['Password'])) {
             Sessao::guardarMensagem('erro', 'Credenciais inválidas. Verifique o utilizador e a palavra-passe.');

@@ -23,8 +23,8 @@
         <form action="/login" method="post" class="formulario-login">
             <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
 
-            <label for="identificador">Utilizador ou email</label>
-            <input type="text" id="identificador" name="identificador" autocomplete="username" required autofocus>
+            <label for="nome_utilizador">Utilizador</label>
+            <input type="text" id="nome_utilizador" name="nome_utilizador" autocomplete="username" required autofocus>
 
             <label for="palavra_passe">Palavra-passe</label>
             <input type="password" id="palavra_passe" name="palavra_passe" autocomplete="current-password" required>
