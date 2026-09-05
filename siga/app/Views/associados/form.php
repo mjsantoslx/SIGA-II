@@ -1,7 +1,7 @@
 <?php $a = $associado ?? []; ?>
 
 <h1><?= htmlspecialchars($titulo) ?></h1>
-<p class="subtitulo">Preencha os dados abaixo para registar um novo associado na UEP.</p>
+<p class="subtitulo">Preencha os dados abaixo para registar um novo associado na UEP. O número de sócio é atribuído automaticamente, de forma sequencial.</p>
 
 <form action="/associados/criar" method="post" class="formulario-associado">
     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
@@ -13,12 +13,6 @@
             <div class="campo campo-largo">
                 <label for="Nome">Nome completo *</label>
                 <input type="text" id="Nome" name="Nome" required value="<?= htmlspecialchars($a['Nome'] ?? '') ?>">
-            </div>
-
-            <div class="campo">
-                <label for="NumeroAssociado">Número de associado</label>
-                <input type="text" id="NumeroAssociado" name="NumeroAssociado" value="<?= htmlspecialchars($a['NumeroAssociado'] ?? '') ?>">
-                <small>Deixe em branco para atribuição posterior.</small>
             </div>
 
             <div class="campo">
@@ -214,7 +208,7 @@
                     <label><input type="checkbox" name="Cargos[]" value="<?= (int) $cargo['Id'] ?>"> <?= htmlspecialchars($cargo['Designacao']) ?></label>
                 <?php endforeach; ?>
             </div>
-            <small>Aplicável apenas a dirigentes (secção "Chefia").</small>
+            <small>Aplicável apenas a dirigentes (secção "Chefia"), excepto "Equipa Nacional de Clã", exclusivo de associados na secção "Clã".</small>
         </div>
         <?php endif; ?>
 
@@ -230,23 +224,18 @@
     </fieldset>
 
     <fieldset>
-        <legend>5. Encarregados de educação</legend>
-        <p class="ajuda-fieldset">Preencha uma linha por encarregado de educação (normalmente aplicável a associados menores).</p>
-        <div id="lista-encarregados">
-            <?php for ($i = 0; $i < 2; $i++): ?>
-            <div class="linha-repetivel">
-                <input type="text" name="EncarregadosNome[]" placeholder="Nome completo">
-                <select name="EncarregadosRelacao[]">
-                    <option value="">Relação…</option>
-                    <?php foreach ($tiposRelacao as $tr): ?>
-                        <option value="<?= (int) $tr['Id'] ?>"><?= htmlspecialchars($tr['Designacao']) ?></option>
-                    <?php endforeach; ?>
-                </select>
-                <input type="text" name="EncarregadosContacto[]" placeholder="Contacto (telemóvel)">
-            </div>
-            <?php endfor; ?>
+        <legend>5. Encarregado de educação</legend>
+        <p class="ajuda-fieldset">Cada associado só pode ter um encarregado de educação (normalmente aplicável a menores). Para um associado adulto, pode indicar-se "O Próprio".</p>
+        <div class="linha-repetivel">
+            <input type="text" name="EncarregadosNome[]" placeholder="Nome completo">
+            <select name="EncarregadosRelacao[]">
+                <option value="">Relação…</option>
+                <?php foreach ($tiposRelacao as $tr): ?>
+                    <option value="<?= (int) $tr['Id'] ?>"><?= htmlspecialchars($tr['Designacao']) ?></option>
+                <?php endforeach; ?>
+            </select>
+            <input type="text" name="EncarregadosContacto[]" placeholder="Contacto (telemóvel)">
         </div>
-        <button type="button" class="botao botao-secundario botao-pequeno" onclick="siga.adicionarLinha('lista-encarregados', 'EncarregadosNome[]', 'EncarregadosRelacao[]', 'EncarregadosContacto[]')">+ Adicionar encarregado</button>
     </fieldset>
 
     <fieldset>

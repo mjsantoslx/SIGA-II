@@ -419,7 +419,8 @@ VALUES
     ('Chefe Regional'),
     ('Chefe Regional Adjunto'),
     ('Chefe Nacional'),
-    ('Chefe Nacional Adjunto');
+    ('Chefe Nacional Adjunto'),
+    ('Equipa Nacional de Clã');
 
 -- ============================================================================
 -- EVENTOS DOS ASSOCIADOS
@@ -475,6 +476,7 @@ VALUES
     ('Amigo'),
     ('Vizinho'),
     ('Colega'),
+    ('O Próprio'),
     ('Outro');
 
 INSERT INTO estados_civis (Designacao)

@@ -115,10 +115,15 @@ class AssociadosController extends Controller
         $erros = $this->validarDadosAssociado($dados);
 
         $ehChefia = (new Secao())->ehChefia(!empty($dados['IdSecao']) ? (int) $dados['IdSecao'] : null);
+        $ehCla = (new Secao())->ehCla(!empty($dados['IdSecao']) ? (int) $dados['IdSecao'] : null);
 
-        // Regra 27: email associativo obrigatório para a secção "Chefia".
+        // Regra 27: email associativo obrigatório para a secção "Chefia" —
+        // e só pode ser preenchido nesse caso (regra 38).
         if ($ehChefia && trim($dados['EmailAssociativo'] ?? '') === '') {
             $erros[] = 'O email associativo é obrigatório para associados na secção "Chefia".';
+        }
+        if (!$ehChefia && trim($dados['EmailAssociativo'] ?? '') !== '') {
+            $erros[] = 'O email associativo só pode ser preenchido para associados dirigentes (secção "Chefia").';
         }
 
         // Regra 29: só um dirigente (associado na secção "Chefia") pode
@@ -134,9 +139,16 @@ class AssociadosController extends Controller
         if (!empty($dados['InsigniaMadeira']) && !$ehChefia) {
             $erros[] = 'Só um dirigente (associado na secção "Chefia") pode ter insígnia de madeira.';
         }
-        if (!empty($dados['Cargos']) && !$ehChefia) {
-            $erros[] = 'Só um dirigente (associado na secção "Chefia") pode ter cargos atribuídos.';
+
+        // Regra 40: um associado só pode ter um encarregado de educação.
+        $nomesEncarregados = array_filter(array_map('trim', $dados['EncarregadosNome'] ?? []), fn($n) => $n !== '');
+        if (count($nomesEncarregados) > 1) {
+            $erros[] = 'Um associado só pode ter um encarregado de educação.';
         }
+
+        // Regra 34/39: cargos são de dirigentes, excepto "Equipa Nacional de
+        // Clã", exclusivo de associados na secção "Clã".
+        $erros = array_merge($erros, $this->validarCargos($dados['Cargos'] ?? [], $ehChefia, $ehCla));
 
         if ($erros) {
             Sessao::guardarMensagem('erro', implode(' ', $erros));
@@ -294,6 +306,7 @@ class AssociadosController extends Controller
         // esta gravação (a nova, se estiver a mudar, ou a actual).
         $idSecaoEfectiva = !empty($dados['IdSecao']) ? (int) $dados['IdSecao'] : ($idSecaoAtual ? (int) $idSecaoAtual : null);
         $seraDirigente = $secaoModelo->ehChefia($idSecaoEfectiva);
+        $seraCla = $secaoModelo->ehCla($idSecaoEfectiva);
 
         if (!empty($dados['ChefiaNacional']) && !$seraDirigente) {
             $erros[] = 'Só um dirigente (associado na secção "Chefia") pode pertencer à Chefia Nacional.';
@@ -306,9 +319,10 @@ class AssociadosController extends Controller
         if (!empty($dados['InsigniaMadeira']) && !$seraDirigente) {
             $erros[] = 'Só um dirigente (associado na secção "Chefia") pode ter insígnia de madeira.';
         }
-        if (!empty($dados['Cargos']) && !$seraDirigente) {
-            $erros[] = 'Só um dirigente (associado na secção "Chefia") pode ter cargos atribuídos.';
-        }
+
+        // Regra 34/39: cargos são de dirigentes, excepto "Equipa Nacional de
+        // Clã", exclusivo de associados na secção "Clã".
+        $erros = array_merge($erros, $this->validarCargos($dados['Cargos'] ?? [], $seraDirigente, $seraCla));
 
         if ($erros) {
             Sessao::guardarMensagem('erro', implode(' ', $erros));
@@ -445,6 +459,35 @@ class AssociadosController extends Controller
      * Valida e, em caso de sucesso, converte no próprio array $dados as datas
      * de dd/mm/aaaa para aaaa-mm-dd (o formato usado a partir daqui pelos modelos).
      */
+    /**
+     * Regra 34/39: cada cargo tem a sua própria condição — "Equipa Nacional
+     * de Clã" exige a secção "Clã"; todos os outros exigem a secção
+     * "Chefia" (dirigentes).
+     *
+     * @param array $idsCargos
+     */
+    private function validarCargos(array $idsCargos, bool $ehChefia, bool $ehCla): array
+    {
+        $erros = [];
+        if (empty($idsCargos)) {
+            return $erros;
+        }
+
+        $cargoModelo = new Cargo();
+        foreach ($idsCargos as $idCargo) {
+            $designacao = $cargoModelo->designacaoPorId((int) $idCargo);
+            if ($designacao === 'Equipa Nacional de Clã') {
+                if (!$ehCla) {
+                    $erros[] = 'O cargo "Equipa Nacional de Clã" é exclusivo de associados na secção "Clã".';
+                }
+            } elseif (!$ehChefia) {
+                $erros[] = 'Só um dirigente (associado na secção "Chefia") pode ter cargos atribuídos (excepto "Equipa Nacional de Clã", exclusivo da secção "Clã").';
+            }
+        }
+
+        return array_unique($erros);
+    }
+
     private function validarDadosAssociado(array &$dados, bool $validarInscricao = true): array
     {
         $erros = [];

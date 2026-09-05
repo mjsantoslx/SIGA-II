@@ -864,3 +864,46 @@ Consequencia directa das regras 35.2/35.3: ao ligar um utilizador a um
 associado, esse associado tem de estar na Chefia Nacional (utilizador
 fica administrador) OU ter uma companhia local (utilizador fica
 nao-administrador, restrito a essa companhia) — nunca nenhuma das duas.
+36. Numero de associado automatico
+
+O numero de associado passa a ser gerado automaticamente pela aplicacao:
+sequencial, com 5 algarismos, a comecar em "00001". Deixou de ser um
+campo editavel no registo (foi removido do formulario) e e imutavel
+apos a criacao (so-leitura na edicao). Calculado dentro da propria
+transaccao de criacao, com bloqueio (SELECT ... FOR UPDATE) sobre o
+ultimo numero, para reduzir o risco de duplicacao em registos
+simultaneos.
+
+37. Nacionalidade Portuguesa sempre em primeiro lugar
+
+Na lista de nacionalidades apresentada nos formularios, "Portuguesa"
+aparece sempre como primeira opcao, independentemente da ordem
+alfabetica das restantes.
+
+38. Email associativo exclusivo de dirigentes (fechada)
+
+Complementa a regra 27: o email associativo nao e so obrigatorio para
+associados na seccao "Chefia" — so PODE ser preenchido nesse caso. Fora
+da seccao "Chefia", o campo fica desactivado no formulario (e o valor
+e limpo se a seccao for alterada) e o servidor rejeita o pedido se vier
+preenchido mesmo assim.
+
+39. Cargo "Equipa Nacional de Cla" exclusivo do Cla (fechada)
+
+Excepcao a regra 34 (cargos restritos a dirigentes): o cargo "Equipa
+Nacional de Cla" e exclusivo de associados na seccao "Cla" — nao exige
+(nem beneficia de) estar tambem na seccao "Chefia". Confirmado
+explicitamente: um associado do Cla nao precisa de ser dirigente para
+ter este cargo.
+
+Implementado por cargo, nao globalmente: cada cargo seleccionado e
+validado com a sua propria condicao — "Equipa Nacional de Cla" exige a
+seccao "Cla"; todos os outros continuam a exigir a seccao "Chefia".
+
+40. Um so encarregado de educacao, com opcao "O Proprio" (fechada)
+
+Um associado so pode ter um encarregado de educacao (deixou de ser
+possivel adicionar mais do que um no formulario). A lista de tipos de
+relacao passou a incluir "O Proprio", para associados adultos que sao o
+seu proprio encarregado. Validacao defensiva no servidor impede mais do
+que um encarregado mesmo que o pedido seja manipulado.

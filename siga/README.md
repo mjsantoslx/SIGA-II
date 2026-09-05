@@ -201,6 +201,13 @@ preservar:
   - Um utilizador não-administrador só pode ver e alterar informação **da sua própria companhia** — aplicado a associados, contactos, morada, companhias, estatísticas do painel, e à criação de novos associados (a companhia é sempre a do próprio utilizador, forçada no servidor).
   - Salvaguardas adicionais: não é possível remover os próprios privilégios de administrador, desactivar a própria conta, nem remover o último administrador activo do sistema.
 
+- **Correcções ao registo de associados** (regras 36-40):
+  - **Número de sócio automático** — sequencial, 5 algarismos, a começar em "00001"; deixou de ser editável.
+  - **Nacionalidade Portuguesa sempre em primeiro lugar** na lista.
+  - **Email associativo exclusivo de dirigentes** — só pode ser preenchido para associados na secção "Chefia" (antes só era obrigatório nesse caso; agora também não é permitido fora dele).
+  - **Cargo "Equipa Nacional de Clã" exclusivo do Clã** — excepção à regra geral de cargos restritos a dirigentes; um associado do Clã não precisa de ser dirigente para ter este cargo.
+  - **Um só encarregado de educação por associado**, com a opção "O Próprio" para associados adultos.
+
 ### Nota sobre o número de documento (Cartão de Cidadão)
 
 O número é sempre tratado como texto (nunca convertido para inteiro), mas o
@@ -270,6 +277,13 @@ server {
 
 Esta secção é actualizada a cada nova versão entregue, com as alterações
 feitas desde a versão anterior. Mais recente primeiro.
+
+### v01.27
+- Número de sócio passa a ser gerado automaticamente (sequencial, 5 algarismos, a começar em "00001") — deixou de ser editável.
+- Nacionalidade "Portuguesa" passa a aparecer sempre em primeiro na lista de nacionalidades.
+- Email associativo só pode ser preenchido para associados dirigentes (secção "Chefia").
+- Novo cargo "Equipa Nacional de Clã", exclusivo de associados na secção "Clã" (não exige ser dirigente).
+- Um associado só pode ter um encarregado de educação; novo tipo de relação "O Próprio" para associados adultos.
 
 ### v01.26
 - Regras de utilizadores e permissões (regras 35.1-35.4): o utilizador "Administrador" é intocável (nunca eliminado/desactivado/despromovido); todos os outros utilizadores têm de estar ligados a um associado; estatuto de administrador automático via Chefia Nacional (deixou de ser uma opção manual); utilizadores não-administradores restritos à sua própria companhia em toda a aplicação (associados, contactos, morada, companhias, painel, e criação de novos associados).

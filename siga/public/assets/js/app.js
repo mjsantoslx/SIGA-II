@@ -57,9 +57,9 @@ window.siga = {
     },
 
     /**
-     * Regra 27: o email associativo é obrigatório para associados na secção
-     * "Chefia" (dirigentes). Torna o campo obrigatório e destaca a ajuda
-     * quando essa secção é seleccionada.
+     * Regra 27/36: o email associativo é obrigatório para associados na
+     * secção "Chefia" (dirigentes), e só pode ser preenchido nesse caso —
+     * por isso o campo fica desactivado (e é limpo) fora da secção "Chefia".
      */
     actualizarObrigatoriedadeEmailAssociativo(selectSecao) {
         const campoEmail = document.getElementById('EmailAssociativo');
@@ -70,6 +70,10 @@ window.siga = {
         const eChefia = opcaoSeleccionada && opcaoSeleccionada.dataset.designacao === 'Chefia';
 
         campoEmail.required = eChefia;
+        campoEmail.disabled = !eChefia;
+        if (!eChefia) {
+            campoEmail.value = '';
+        }
         if (ajuda) {
             ajuda.style.color = eChefia ? 'var(--fogueira)' : '';
             ajuda.style.fontWeight = eChefia ? '600' : '';

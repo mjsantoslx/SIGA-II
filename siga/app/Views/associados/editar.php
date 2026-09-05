@@ -15,7 +15,8 @@
             </div>
             <div class="campo">
                 <label for="NumeroAssociado">Número de associado</label>
-                <input type="text" id="NumeroAssociado" name="NumeroAssociado" value="<?= htmlspecialchars($a['NumeroAssociado'] ?? '') ?>">
+                <input type="text" id="NumeroAssociado" value="<?= htmlspecialchars($a['NumeroAssociado'] ?? '') ?>" readonly disabled>
+                <small>Atribuído automaticamente no registo — não é editável.</small>
             </div>
             <div class="campo">
                 <label for="DataNascimento">Data de nascimento *</label>
@@ -152,7 +153,7 @@
                     <label><input type="checkbox" name="Cargos[]" value="<?= (int) $cargo['Id'] ?>" <?= in_array((int) $cargo['Id'], $idsCargosActuais, true) ? 'checked' : '' ?>> <?= htmlspecialchars($cargo['Designacao']) ?></label>
                 <?php endforeach; ?>
             </div>
-            <small>Aplicável apenas a dirigentes (secção "Chefia").</small>
+            <small>Aplicável apenas a dirigentes (secção "Chefia"), excepto "Equipa Nacional de Clã", exclusivo de associados na secção "Clã".</small>
         </div>
         <?php endif; ?>
 

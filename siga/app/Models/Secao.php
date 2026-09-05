@@ -34,6 +34,18 @@ class Secao extends Model
         return $this->designacaoPorId($idSecao) === 'Chefia';
     }
 
+    /**
+     * Regra 35: o cargo "Equipa Nacional de Clã" é exclusivo de associados
+     * na secção "Clã".
+     */
+    public function ehCla(?int $idSecao): bool
+    {
+        if (!$idSecao) {
+            return false;
+        }
+        return $this->designacaoPorId($idSecao) === 'Clã';
+    }
+
     public function designacaoPorId(int $idSecao): ?string
     {
         $stmt = $this->bd->prepare("SELECT Designacao FROM secoes WHERE Id = :id");

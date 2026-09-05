@@ -153,6 +153,25 @@ class Associado extends Model
      * @return int Id do associado criado.
      * @throws \Throwable relançada após rollback, para o controlador tratar a mensagem.
      */
+    /**
+     * Próximo número de sócio: sequencial, com 5 algarismos, a começar em
+     * "00001". Chamado sempre dentro da transacção de criarCompleto(), com
+     * um SELECT ... FOR UPDATE sobre o último número para reduzir o risco
+     * de duplicação em registos simultâneos.
+     */
+    private function proximoNumeroAssociado(): string
+    {
+        $stmt = $this->bd->query(
+            "SELECT NumeroAssociado FROM associados
+             WHERE NumeroAssociado REGEXP '^[0-9]+$'
+             ORDER BY CAST(NumeroAssociado AS UNSIGNED) DESC
+             LIMIT 1 FOR UPDATE"
+        );
+        $ultimo = $stmt->fetchColumn();
+        $proximo = $ultimo !== false ? ((int) $ultimo) + 1 : 1;
+        return str_pad((string) $proximo, 5, '0', STR_PAD_LEFT);
+    }
+
     public function criarCompleto(array $dados): int
     {
         $pessoaModelo    = new Pessoa();
@@ -199,7 +218,7 @@ class Associado extends Model
             // 4. Associado
             $idAssociado = $this->inserir('associados', [
                 'IdPessoa'                       => $idPessoa,
-                'NumeroAssociado'                 => $dados['NumeroAssociado'] ?: null,
+                'NumeroAssociado'                 => $this->proximoNumeroAssociado(),
                 'DataNascimento'                  => $dados['DataNascimento'],
                 'Genero'                          => $dados['Genero'],
                 'IdNacionalidade'                 => $dados['IdNacionalidade'] ?: null,
@@ -354,7 +373,6 @@ class Associado extends Model
             (new Pessoa())->actualizarNome($idPessoa, $dados['Nome']);
 
             $this->actualizar('associados', [
-                'NumeroAssociado'                => $dados['NumeroAssociado'] ?: null,
                 'DataNascimento'                  => $dados['DataNascimento'],
                 'Genero'                          => $dados['Genero'],
                 'IdNacionalidade'                 => $dados['IdNacionalidade'] ?: null,

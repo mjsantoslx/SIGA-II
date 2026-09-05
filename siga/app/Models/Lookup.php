@@ -31,7 +31,13 @@ class Lookup
         }
 
         $coluna = self::TABELAS_PERMITIDAS[$tabela];
-        $stmt = Database::ligacao()->query("SELECT Id, {$coluna} AS Designacao FROM {$tabela} ORDER BY {$coluna}");
+
+        // Regra: na lista de nacionalidades, "Portuguesa" aparece sempre primeiro.
+        $ordem = $tabela === 'nacionalidades'
+            ? "ORDER BY ({$coluna} != 'Portuguesa'), {$coluna}"
+            : "ORDER BY {$coluna}";
+
+        $stmt = Database::ligacao()->query("SELECT Id, {$coluna} AS Designacao FROM {$tabela} {$ordem}");
         return $stmt->fetchAll();
     }
 }
