@@ -64,6 +64,20 @@ abstract class Controller
     }
 
     /**
+     * Garante autenticação e que o utilizador pertence ao grupo de
+     * administradores; caso contrário, envia para o painel principal.
+     */
+    protected function exigirAdministrador(): void
+    {
+        $this->exigirAutenticacao();
+
+        if (!Sessao::ehAdministrador()) {
+            Sessao::guardarMensagem('erro', 'Não tem permissões para aceder a essa página.');
+            $this->redirecionar('/');
+        }
+    }
+
+    /**
      * Verifica um token CSRF simples baseado em sessão.
      */
     protected function validarCsrf(): void

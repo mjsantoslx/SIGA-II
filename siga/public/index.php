@@ -10,6 +10,7 @@ use App\Controllers\CompanhiasController;
 use App\Controllers\ContactosController;
 use App\Controllers\DashboardController;
 use App\Controllers\MoradasController;
+use App\Controllers\UtilizadoresController;
 use App\Core\Router;
 use App\Core\Sessao;
 
@@ -62,5 +63,12 @@ $router->get('/companhias/{id}', [CompanhiasController::class, 'ver']);
 $router->get('/companhias/{id}/morada/editar', [MoradasController::class, 'editarCompanhia']);
 $router->post('/companhias/{id}/morada/corrigir', [MoradasController::class, 'corrigirCompanhia']);
 $router->post('/companhias/{id}/morada/substituir', [MoradasController::class, 'substituirCompanhia']);
+
+// Utilizadores (acesso restrito a administradores)
+$router->get('/utilizadores', [UtilizadoresController::class, 'index']);
+$router->get('/utilizadores/criar', [UtilizadoresController::class, 'criar']);
+$router->post('/utilizadores/criar', [UtilizadoresController::class, 'guardar']);
+$router->get('/utilizadores/{id}/editar', [UtilizadoresController::class, 'editar']);
+$router->post('/utilizadores/{id}/editar', [UtilizadoresController::class, 'atualizar']);
 
 $router->despachar($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);

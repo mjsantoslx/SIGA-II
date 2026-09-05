@@ -13,7 +13,7 @@ return [
         'base_url'  => '/',
         'timezone'  => 'Europe/Lisbon',
         // Actualizado a cada nova versão entregue — aparece no rodapé.
-        'versao'    => 'v01.24',
+        'versao'    => 'v01.25',
     ],
 
     'db' => [

@@ -19,6 +19,9 @@
         <a href="/">Painel</a>
         <a href="/associados">Associados</a>
         <a href="/companhias">Companhias</a>
+        <?php if (\App\Core\Sessao::ehAdministrador()): ?>
+            <a href="/utilizadores">Utilizadores</a>
+        <?php endif; ?>
     </nav>
     <div class="cabecalho-utilizador">
         <span><?= htmlspecialchars($utilizadorAutenticado['Nome']) ?></span>

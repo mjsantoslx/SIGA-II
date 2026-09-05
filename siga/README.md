@@ -193,6 +193,8 @@ preservar:
   impedida — ainda não há uma lista de incompatibilidades definida (ver
   regra 34.2 no documento de regras de negócio).
 
+- **Gestão de utilizadores** (`/utilizadores`) — criação, edição e desactivação de acessos à aplicação, com atribuição do grupo de administrador. Acesso restrito a utilizadores administradores (o link no menu só aparece para eles, e a página bloqueia o acesso a qualquer outro). Salvaguardas incluídas: não é possível remover os próprios privilégios de administrador, desactivar a própria conta, nem remover o último administrador activo do sistema.
+
 ### Nota sobre o número de documento (Cartão de Cidadão)
 
 O número é sempre tratado como texto (nunca convertido para inteiro), mas o
@@ -262,6 +264,10 @@ server {
 
 Esta secção é actualizada a cada nova versão entregue, com as alterações
 feitas desde a versão anterior. Mais recente primeiro.
+
+### v01.25
+- Nova página de gestão de utilizadores (`/utilizadores`), com acesso restrito a administradores: criar, editar (nome, email, palavra-passe, grupo de administrador, estado).
+- Salvaguardas: impede remover os próprios privilégios de administrador, desactivar a própria conta, ou remover o último administrador activo do sistema.
 
 ### v01.24
 - Logótipos do cabeçalho e do rodapé aumentados de novo (cabeçalho: 52px; rodapé: 92px).
