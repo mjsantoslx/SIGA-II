@@ -950,3 +950,17 @@ montado.
 
 Esta e uma regra transversal: qualquer nova listagem criada no futuro
 deve seguir o mesmo padrao (App\Core\Tabela) desde o inicio.
+43. Secoes de dirigente/Cla escondidas por defeito no formulario
+
+Complementa as regras 29, 31, 32, 34 e 39: no formulario de associado
+(registo e edicao), a seccao inteira de Chefia Nacional, orgaos, cargos
+(excepto "Equipa Nacional de Cla"), formador e insignia de madeira so
+fica visivel quando a seccao escolhida e "Chefia". O cargo "Equipa
+Nacional de Cla" tem o seu proprio bloco, visivel apenas quando a
+seccao escolhida e "Cla".
+
+Antes, estes campos estavam sempre visiveis (so validados no servidor),
+o que obrigava o utilizador a perceber pelas notas de ajuda quais eram
+aplicaveis. Passam agora a aparecer/desaparecer dinamicamente consoante
+a seccao escolhida, e os valores sao limpos ao esconder (para nao ficar
+uma seleccao escondida a ser submetida por engano).

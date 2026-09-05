@@ -213,6 +213,8 @@ preservar:
 
 - **Ordenação em todas as listagens** (regra 42) — os cabeçalhos de coluna nas listagens de associados, companhias e utilizadores são clicáveis para ordenar (ascendente/descendente, com indicador visual), preservando os filtros activos. Qualquer listagem nova deve seguir o mesmo padrão (`App\Core\Tabela`).
 
+- **Secções de dirigente/Clã escondidas por defeito** (regra 43) — no formulário de associado, o bloco de Chefia Nacional/órgãos/cargos/formador/insígnia só aparece quando a secção escolhida é "Chefia"; o cargo "Equipa Nacional de Clã" só aparece quando é "Clã".
+
 ### Nota sobre o número de documento (Cartão de Cidadão)
 
 O número é sempre tratado como texto (nunca convertido para inteiro), mas o
@@ -282,6 +284,9 @@ server {
 
 Esta secção é actualizada a cada nova versão entregue, com as alterações
 feitas desde a versão anterior. Mais recente primeiro.
+
+### v01.31
+- No formulário de associado (registo e edição), o bloco de Chefia Nacional/órgãos/cargos/formador/insígnia de madeira só aparece quando a secção escolhida é "Chefia"; o cargo "Equipa Nacional de Clã" só aparece quando é "Clã". Antes estavam sempre visíveis, só validados no servidor.
 
 ### v01.30
 - Ordenação por qualquer coluna nas três listagens existentes (associados, companhias, utilizadores): cabeçalhos clicáveis, ascendente/descendente, com indicador visual; filtros e ordenação preservados entre si. Nova classe `App\Core\Tabela`, reutilizável em listagens futuras.

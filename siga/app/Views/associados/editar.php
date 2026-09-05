@@ -100,10 +100,10 @@
         <div class="grelha-formulario">
             <div class="campo">
                 <label for="IdSecao">Secção actual</label>
-                <select id="IdSecao" name="IdSecao">
-                    <option value="">Manter secção actual</option>
+                <select id="IdSecao" name="IdSecao" onchange="siga.actualizarDependenciasSeccao(this)">
+                    <option value="" data-designacao="<?= htmlspecialchars($secaoActual['Designacao'] ?? '') ?>">Manter secção actual</option>
                     <?php foreach ($secoes as $s): ?>
-                        <option value="<?= (int) $s['Id'] ?>" <?= isset($secaoActual['IdSecao']) && (int) $secaoActual['IdSecao'] === (int) $s['Id'] ? 'selected' : '' ?>><?= htmlspecialchars($s['Designacao']) ?></option>
+                        <option value="<?= (int) $s['Id'] ?>" data-designacao="<?= htmlspecialchars($s['Designacao']) ?>" <?= isset($secaoActual['IdSecao']) && (int) $secaoActual['IdSecao'] === (int) $s['Id'] ? 'selected' : '' ?>><?= htmlspecialchars($s['Designacao']) ?></option>
                     <?php endforeach; ?>
                 </select>
                 <small>Em uso normal só é possível avançar (ou saltar para a frente) na sequência Colónia → Alcateia → Tribo Júnior → Tribo Sénior → Clã → Chefia — nunca recuar. Para "Chefia", o associado já tem de ter um contacto "Email Associativo" (em "Gerir contactos").</small>
@@ -128,43 +128,64 @@
             </div>
         </div>
 
-        <?php if ($chefiaNacional): ?>
-        <div class="grelha-checkboxes" style="margin-top: 1rem;">
-            <label><input type="checkbox" name="ChefiaNacional" value="1" <?= $naChefiaNacional ? 'checked' : '' ?>> Pertence à Chefia Nacional</label>
+        <?php
+        // "Equipa Nacional de Clã" é exclusivo da secção "Clã" — separa-se
+        // dos restantes cargos, que são exclusivos de dirigentes (Chefia).
+        $cargoCla = null;
+        $outrosCargos = [];
+        foreach ($cargos as $cargo) {
+            if ($cargo['Designacao'] === 'Equipa Nacional de Clã') {
+                $cargoCla = $cargo;
+            } else {
+                $outrosCargos[] = $cargo;
+            }
+        }
+        ?>
+
+        <?php if ($cargoCla): ?>
+        <div class="campo" id="grupo-cla" style="margin-top: 1rem; display: none;">
+            <label><input type="checkbox" name="Cargos[]" value="<?= (int) $cargoCla['Id'] ?>" <?= in_array((int) $cargoCla['Id'], $idsCargosActuais, true) ? 'checked' : '' ?>> <?= htmlspecialchars($cargoCla['Designacao']) ?></label>
+            <small>Exclusivo de associados na secção "Clã".</small>
         </div>
         <?php endif; ?>
 
-        <?php if (!empty($orgaos)): ?>
-        <div class="campo" style="margin-top: 1rem;">
-            <label>Órgãos (pode seleccionar vários)</label>
-            <div class="grelha-checkboxes">
-                <?php foreach ($orgaos as $orgao): ?>
-                    <label><input type="checkbox" name="Orgaos[]" value="<?= (int) $orgao['Id'] ?>" <?= in_array((int) $orgao['Id'], $idsOrgaosActuais, true) ? 'checked' : '' ?>> <?= htmlspecialchars($orgao['Designacao']) ?></label>
-                <?php endforeach; ?>
+        <div id="grupo-dirigente" style="display: none;">
+            <?php if ($chefiaNacional): ?>
+            <div class="grelha-checkboxes" style="margin-top: 1rem;">
+                <label><input type="checkbox" name="ChefiaNacional" value="1" <?= $naChefiaNacional ? 'checked' : '' ?>> Pertence à Chefia Nacional</label>
             </div>
-        </div>
-        <?php endif; ?>
+            <?php endif; ?>
 
-        <?php if (!empty($cargos)): ?>
-        <div class="campo" style="margin-top: 1rem;">
-            <label>Cargos (pode seleccionar vários — alguns acumulam)</label>
-            <div class="grelha-checkboxes">
-                <?php foreach ($cargos as $cargo): ?>
-                    <label><input type="checkbox" name="Cargos[]" value="<?= (int) $cargo['Id'] ?>" <?= in_array((int) $cargo['Id'], $idsCargosActuais, true) ? 'checked' : '' ?>> <?= htmlspecialchars($cargo['Designacao']) ?></label>
-                <?php endforeach; ?>
+            <?php if (!empty($orgaos)): ?>
+            <div class="campo" style="margin-top: 1rem;">
+                <label>Órgãos (pode seleccionar vários)</label>
+                <div class="grelha-checkboxes">
+                    <?php foreach ($orgaos as $orgao): ?>
+                        <label><input type="checkbox" name="Orgaos[]" value="<?= (int) $orgao['Id'] ?>" <?= in_array((int) $orgao['Id'], $idsOrgaosActuais, true) ? 'checked' : '' ?>> <?= htmlspecialchars($orgao['Designacao']) ?></label>
+                    <?php endforeach; ?>
+                </div>
             </div>
-            <small>Aplicável apenas a dirigentes (secção "Chefia"), excepto "Equipa Nacional de Clã", exclusivo de associados na secção "Clã".</small>
-        </div>
-        <?php endif; ?>
+            <?php endif; ?>
 
-        <div class="grelha-checkboxes" style="margin-top: 1rem;">
-            <label><input type="checkbox" name="Formador" value="1" <?= !empty($a['Formador']) ? 'checked' : '' ?>> É formador</label>
-            <label><input type="checkbox" id="InsigniaMadeira" name="InsigniaMadeira" value="1" <?= !empty($a['InsigniaMadeira']) ? 'checked' : '' ?> onchange="siga.actualizarObrigatoriedadeDataInsignia(this)"> Tem insígnia de madeira</label>
-        </div>
-        <small>Aplicável apenas a dirigentes (secção "Chefia").</small>
-        <div class="campo" id="grupo-data-insignia" style="margin-top: 0.6rem; max-width: 220px; <?= !empty($a['InsigniaMadeira']) ? '' : 'display:none' ?>">
-            <label for="DataInsigniaMadeira">Data de atribuição *</label>
-            <input type="text" id="DataInsigniaMadeira" name="DataInsigniaMadeira" class="campo-data" placeholder="dd/mm/aaaa" maxlength="10" inputmode="numeric" value="<?= htmlspecialchars($a['DataInsigniaMadeira'] ?? '') ?>">
+            <?php if (!empty($outrosCargos)): ?>
+            <div class="campo" style="margin-top: 1rem;">
+                <label>Cargos (pode seleccionar vários — alguns acumulam)</label>
+                <div class="grelha-checkboxes">
+                    <?php foreach ($outrosCargos as $cargo): ?>
+                        <label><input type="checkbox" name="Cargos[]" value="<?= (int) $cargo['Id'] ?>" <?= in_array((int) $cargo['Id'], $idsCargosActuais, true) ? 'checked' : '' ?>> <?= htmlspecialchars($cargo['Designacao']) ?></label>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+            <?php endif; ?>
+
+            <div class="grelha-checkboxes" style="margin-top: 1rem;">
+                <label><input type="checkbox" name="Formador" value="1" <?= !empty($a['Formador']) ? 'checked' : '' ?>> É formador</label>
+                <label><input type="checkbox" id="InsigniaMadeira" name="InsigniaMadeira" value="1" <?= !empty($a['InsigniaMadeira']) ? 'checked' : '' ?> onchange="siga.actualizarObrigatoriedadeDataInsignia(this)"> Tem insígnia de madeira</label>
+            </div>
+            <div class="campo" id="grupo-data-insignia" style="margin-top: 0.6rem; max-width: 220px; <?= !empty($a['InsigniaMadeira']) ? '' : 'display:none' ?>">
+                <label for="DataInsigniaMadeira">Data de atribuição *</label>
+                <input type="text" id="DataInsigniaMadeira" name="DataInsigniaMadeira" class="campo-data" placeholder="dd/mm/aaaa" maxlength="10" inputmode="numeric" value="<?= htmlspecialchars($a['DataInsigniaMadeira'] ?? '') ?>">
+            </div>
         </div>
     </fieldset>
 

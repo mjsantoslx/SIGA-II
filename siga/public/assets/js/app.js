@@ -47,12 +47,49 @@ window.siga = {
 
         const selectSecao = document.getElementById('IdSecao');
         if (selectSecao) {
-            this.actualizarObrigatoriedadeEmailAssociativo(selectSecao);
+            this.actualizarDependenciasSeccao(selectSecao);
         }
 
         const checkboxInsignia = document.getElementById('InsigniaMadeira');
         if (checkboxInsignia) {
             this.actualizarObrigatoriedadeDataInsignia(checkboxInsignia);
+        }
+    },
+
+    /**
+     * Regra 27/36/39: reúne todas as dependências da secção escolhida no
+     * formulário de associado — email associativo, o bloco inteiro de
+     * dirigente (Chefia Nacional, órgãos, cargos, formador, insígnia de
+     * madeira) e o cargo "Equipa Nacional de Clã" (exclusivo do Clã).
+     * Esconde e limpa cada bloco quando a secção escolhida não se aplica,
+     * para não sobrar uma selecção escondida a ser submetida por engano.
+     */
+    actualizarDependenciasSeccao(selectSecao) {
+        this.actualizarObrigatoriedadeEmailAssociativo(selectSecao);
+
+        const opcaoSeleccionada = selectSecao.options[selectSecao.selectedIndex];
+        const designacao = opcaoSeleccionada ? opcaoSeleccionada.dataset.designacao : '';
+
+        const grupoDirigente = document.getElementById('grupo-dirigente');
+        if (grupoDirigente) {
+            const eChefia = designacao === 'Chefia';
+            grupoDirigente.style.display = eChefia ? 'block' : 'none';
+            if (!eChefia) {
+                grupoDirigente.querySelectorAll('input[type="checkbox"]').forEach((cb) => { cb.checked = false; });
+                const campoDataInsignia = document.getElementById('DataInsigniaMadeira');
+                if (campoDataInsignia) campoDataInsignia.value = '';
+                const grupoDataInsignia = document.getElementById('grupo-data-insignia');
+                if (grupoDataInsignia) grupoDataInsignia.style.display = 'none';
+            }
+        }
+
+        const grupoCla = document.getElementById('grupo-cla');
+        if (grupoCla) {
+            const eCla = designacao === 'Clã';
+            grupoCla.style.display = eCla ? 'block' : 'none';
+            if (!eCla) {
+                grupoCla.querySelectorAll('input[type="checkbox"]').forEach((cb) => { cb.checked = false; });
+            }
         }
     },
 
