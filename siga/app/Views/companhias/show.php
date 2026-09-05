@@ -1,9 +1,22 @@
 <div class="cabecalho-pagina">
     <div>
         <h1><?= htmlspecialchars($companhia['Designacao']) ?></h1>
-        <p class="subtitulo"><?= $companhia['ambito_global'] ? 'Âmbito nacional' : 'Âmbito local' ?></p>
+        <p class="subtitulo">
+            <?= $companhia['ambito_global'] ? 'Âmbito nacional' : 'Âmbito local' ?>
+            <?php if (\App\Core\Sessao::ehAdministrador()): ?>
+                &middot;
+                <span class="etiqueta etiqueta-<?= $companhia['Activo'] ? 'ativo' : 'inativo' ?>">
+                    <?= $companhia['Activo'] ? 'Activa' : 'Inactiva' ?>
+                </span>
+            <?php endif; ?>
+        </p>
     </div>
-    <a href="/companhias/<?= (int) $companhia['Id'] ?>/morada/editar" class="botao botao-secundario">Gerir morada</a>
+    <div class="acoes-rapidas">
+        <?php if (\App\Core\Sessao::ehAdministrador()): ?>
+            <a href="/companhias/<?= (int) $companhia['Id'] ?>/editar" class="botao botao-secundario">Editar</a>
+        <?php endif; ?>
+        <a href="/companhias/<?= (int) $companhia['Id'] ?>/morada/editar" class="botao botao-secundario">Gerir morada</a>
+    </div>
 </div>
 
 <section class="cartao-seccao">

@@ -208,6 +208,9 @@ preservar:
   - **Cargo "Equipa Nacional de Clã" exclusivo do Clã** — excepção à regra geral de cargos restritos a dirigentes; um associado do Clã não precisa de ser dirigente para ter este cargo.
   - **Um só encarregado de educação por associado**, com a opção "O Próprio" para associados adultos.
 
+- **Gestão de companhias** (`/companhias/criar`, `/companhias/{id}/editar`, regra 41)
+  — criação e edição dos dados base (designação, âmbito nacional/local, estado), restrita a administradores. Designação única; só pode existir uma companhia de âmbito nacional (Chefia Nacional) activa de cada vez. A gestão de morada mantém-se disponível a qualquer utilizador da própria companhia.
+
 ### Nota sobre o número de documento (Cartão de Cidadão)
 
 O número é sempre tratado como texto (nunca convertido para inteiro), mas o
@@ -277,6 +280,11 @@ server {
 
 Esta secção é actualizada a cada nova versão entregue, com as alterações
 feitas desde a versão anterior. Mais recente primeiro.
+
+### v01.29
+- Nova secção de gestão de companhias: criação e edição dos dados base (designação, âmbito nacional/local, estado), restrita a administradores.
+- Administradores passam a ver todas as companhias na listagem (incluindo inactivas).
+- Validações: designação única; só uma companhia de âmbito nacional activa de cada vez.
 
 ### v01.28
 - Corrigido um erro no registo de associados: quando uma validação não relacionada com datas falhava (ex.: cargos, encarregados), o formulário reexibido mostrava as datas já convertidas para aaaa-mm-dd em vez de dd/mm/aaaa, o que podia levar a um erro de formato numa submissão seguinte.

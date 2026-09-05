@@ -1,5 +1,12 @@
-<h1>Companhias</h1>
-<p class="subtitulo">Inclui a Chefia Nacional. A criação de novas companhias fica disponível na página de administração (próxima versão).</p>
+<div class="cabecalho-pagina">
+    <div>
+        <h1>Companhias</h1>
+        <p class="subtitulo">Inclui a Chefia Nacional.</p>
+    </div>
+    <?php if (\App\Core\Sessao::ehAdministrador()): ?>
+        <a href="/companhias/criar" class="botao botao-primario">+ Nova companhia</a>
+    <?php endif; ?>
+</div>
 
 <?php if (empty($companhias)): ?>
     <p class="texto-vazio">Não existem companhias registadas.</p>
@@ -11,6 +18,7 @@
                 <th>Designação</th>
                 <th>Âmbito</th>
                 <th>Morada actual</th>
+                <?php if (\App\Core\Sessao::ehAdministrador()): ?><th>Estado</th><?php endif; ?>
                 <th></th>
             </tr>
         </thead>
@@ -20,8 +28,18 @@
                     <td><?= htmlspecialchars($companhia['Designacao']) ?></td>
                     <td><?= $companhia['ambito_global'] ? 'Nacional' : 'Local' ?></td>
                     <td><?= $companhia['Morada'] ? htmlspecialchars($companhia['Morada']['Morada']) : '—' ?></td>
+                    <?php if (\App\Core\Sessao::ehAdministrador()): ?>
+                    <td>
+                        <span class="etiqueta etiqueta-<?= $companhia['Activo'] ? 'ativo' : 'inativo' ?>">
+                            <?= $companhia['Activo'] ? 'Activa' : 'Inactiva' ?>
+                        </span>
+                    </td>
+                    <?php endif; ?>
                     <td class="tabela-acoes">
                         <a href="/companhias/<?= (int) $companhia['Id'] ?>">Ver</a>
+                        <?php if (\App\Core\Sessao::ehAdministrador()): ?>
+                            <a href="/companhias/<?= (int) $companhia['Id'] ?>/editar">Editar</a>
+                        <?php endif; ?>
                     </td>
                 </tr>
             <?php endforeach; ?>

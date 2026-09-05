@@ -59,7 +59,11 @@ $router->post('/associados/{id}/contactos/{idContacto}/remover', [ContactosContr
 
 // Companhias
 $router->get('/companhias', [CompanhiasController::class, 'index']);
+$router->get('/companhias/criar', [CompanhiasController::class, 'criar']);
+$router->post('/companhias/criar', [CompanhiasController::class, 'guardar']);
 $router->get('/companhias/{id}', [CompanhiasController::class, 'ver']);
+$router->get('/companhias/{id}/editar', [CompanhiasController::class, 'editar']);
+$router->post('/companhias/{id}/editar', [CompanhiasController::class, 'atualizar']);
 $router->get('/companhias/{id}/morada/editar', [MoradasController::class, 'editarCompanhia']);
 $router->post('/companhias/{id}/morada/corrigir', [MoradasController::class, 'corrigirCompanhia']);
 $router->post('/companhias/{id}/morada/substituir', [MoradasController::class, 'substituirCompanhia']);

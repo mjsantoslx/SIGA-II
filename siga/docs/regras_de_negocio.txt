@@ -907,3 +907,23 @@ possivel adicionar mais do que um no formulario). A lista de tipos de
 relacao passou a incluir "O Proprio", para associados adultos que sao o
 seu proprio encarregado. Validacao defensiva no servidor impede mais do
 que um encarregado mesmo que o pedido seja manipulado.
+41. Gestao de companhias (criacao e edicao)
+
+A criacao e edicao dos dados base das companhias (designacao, ambito
+nacional/local, estado activo/inactivo) deixou de ficar reservada para
+"a pagina de administracao" mencionada em versoes anteriores — passou a
+existir directamente em /companhias, restrita a administradores.
+
+Implementado:
+- So administradores veem os botoes/rotas de criar e editar companhias;
+  um utilizador nao-administrador continua a poder gerir a MORADA da
+  sua propria companhia (MoradasController, ja existente), mas nao os
+  dados base.
+- Administradores veem TODAS as companhias na listagem (incluindo
+  inactivas); utilizadores nao-administradores continuam a ver so a
+  sua propria (regra 35.2).
+- Designacao tem de ser unica.
+- So pode existir uma companhia de ambito nacional (Chefia Nacional)
+  activa de cada vez — o resto da aplicacao assume uma unica (ex.:
+  Companhia::chefiaNacional() devolve so uma linha). Validado tanto na
+  criacao como na edicao.
