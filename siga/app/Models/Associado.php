@@ -40,6 +40,19 @@ class Associado extends Model
 
         $whereSql = $condicoes ? ('WHERE ' . implode(' AND ', $condicoes)) : '';
 
+        // Ordenação: whitelist fixa de colunas — nunca aceitar o nome da
+        // coluna directamente do pedido, para evitar SQL injection.
+        $colunasOrdenaveis = [
+            'nome'       => 'p.Nome',
+            'numero'     => 'a.NumeroAssociado',
+            'secao'      => 'secaoActual.Designacao',
+            'companhia'  => 'companhiaActual.Designacao',
+            'nascimento' => 'a.DataNascimento',
+            'estado'     => 'a.Activo',
+        ];
+        $ordenarSql = $colunasOrdenaveis[$filtros['ordenar'] ?? ''] ?? 'p.Nome';
+        $direcaoSql = (($filtros['direcao'] ?? '') === 'desc') ? 'DESC' : 'ASC';
+
         $sql = "
             SELECT
                 a.Id, a.NumeroAssociado, a.DataNascimento, a.Genero, a.Activo,
@@ -67,7 +80,7 @@ class Associado extends Model
                 WHERE ac.Activo = 1 AND c.ambito_global = 0
             ) companhiaActual ON companhiaActual.IdAssociado = a.Id
             {$whereSql}
-            ORDER BY p.Nome
+            ORDER BY {$ordenarSql} {$direcaoSql}
         ";
 
         $stmt = $this->bd->prepare($sql);

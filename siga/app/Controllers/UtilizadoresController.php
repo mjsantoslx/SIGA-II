@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Core\Controller;
 use App\Core\Sessao;
+use App\Core\Tabela;
 use App\Models\Associado;
 use App\Models\Utilizador;
 use App\Models\UtilizadorAssociado;
@@ -46,9 +47,19 @@ class UtilizadoresController extends Controller
         }
         unset($utilizador);
 
+        [$ordenar, $direcao] = Tabela::normalizar(
+            $_GET['ordenar'] ?? '',
+            $_GET['direcao'] ?? '',
+            ['Nome', 'Email', 'AssociadoLigado', 'Administrador', 'Activo'],
+            'Nome'
+        );
+        $utilizadores = Tabela::ordenarArray($utilizadores, $ordenar, $direcao);
+
         $this->vista('utilizadores/index', [
             'titulo'       => 'Utilizadores',
             'utilizadores' => $utilizadores,
+            'ordenar'      => $ordenar,
+            'direcao'      => $direcao,
         ]);
     }
 

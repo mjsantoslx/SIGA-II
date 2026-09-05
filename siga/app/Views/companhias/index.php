@@ -15,10 +15,10 @@
     <table class="tabela">
         <thead>
             <tr>
-                <th>Designação</th>
-                <th>Âmbito</th>
-                <th>Morada actual</th>
-                <?php if (\App\Core\Sessao::ehAdministrador()): ?><th>Estado</th><?php endif; ?>
+                <th><?= \App\Core\Tabela::cabecalhoOrdenavel('Designacao', 'Designação', $ordenar, $direcao) ?></th>
+                <th><?= \App\Core\Tabela::cabecalhoOrdenavel('ambito_global', 'Âmbito', $ordenar, $direcao) ?></th>
+                <th><?= \App\Core\Tabela::cabecalhoOrdenavel('Morada->Morada', 'Morada actual', $ordenar, $direcao) ?></th>
+                <?php if (\App\Core\Sessao::ehAdministrador()): ?><th><?= \App\Core\Tabela::cabecalhoOrdenavel('Activo', 'Estado', $ordenar, $direcao) ?></th><?php endif; ?>
                 <th></th>
             </tr>
         </thead>

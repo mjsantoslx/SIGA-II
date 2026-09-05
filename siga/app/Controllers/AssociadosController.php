@@ -6,6 +6,7 @@ use App\Core\Controller;
 use App\Core\Data;
 use App\Core\Documentos;
 use App\Core\Sessao;
+use App\Core\Tabela;
 use App\Models\Associado;
 use App\Models\Cargo;
 use App\Models\CargoAssociado;
@@ -30,10 +31,19 @@ class AssociadosController extends Controller
 
         $associadoModelo = new Associado();
 
+        [$ordenar, $direcao] = Tabela::normalizar(
+            $_GET['ordenar'] ?? '',
+            $_GET['direcao'] ?? '',
+            ['nome', 'numero', 'secao', 'companhia', 'nascimento', 'estado'],
+            'nome'
+        );
+
         $filtros = [
             'pesquisa' => trim($_GET['pesquisa'] ?? ''),
             'idSecao'  => $_GET['idSecao'] ?? '',
             'activo'   => $_GET['activo'] ?? '1',
+            'ordenar'  => $ordenar,
+            'direcao'  => $direcao,
         ];
 
         // Regra 2: utilizadores não-administradores só veem associados da sua companhia.
@@ -49,6 +59,8 @@ class AssociadosController extends Controller
             'associados' => $associadoModelo->listar($filtros),
             'secoes'     => (new Secao())->listarTodas(),
             'filtros'    => $filtros,
+            'ordenar'    => $ordenar,
+            'direcao'    => $direcao,
         ]);
     }
 

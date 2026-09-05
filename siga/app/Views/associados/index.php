@@ -7,6 +7,8 @@
 </div>
 
 <form action="/associados" method="get" class="formulario-filtros">
+    <input type="hidden" name="ordenar" value="<?= htmlspecialchars($ordenar) ?>">
+    <input type="hidden" name="direcao" value="<?= htmlspecialchars($direcao) ?>">
     <input type="text" name="pesquisa" placeholder="Pesquisar por nome ou número de associado"
            value="<?= htmlspecialchars($filtros['pesquisa']) ?>">
 
@@ -28,6 +30,14 @@
     <button type="submit" class="botao botao-secundario">Filtrar</button>
 </form>
 
+<?php
+$parametrosOrdenacao = [
+    'pesquisa' => $filtros['pesquisa'],
+    'idSecao'  => $filtros['idSecao'],
+    'activo'   => $filtros['activo'],
+];
+?>
+
 <?php if (empty($associados)): ?>
     <p class="texto-vazio">Não foram encontrados associados com os critérios indicados.</p>
 <?php else: ?>
@@ -35,12 +45,12 @@
     <table class="tabela">
         <thead>
             <tr>
-                <th>Nome</th>
-                <th>Nº associado</th>
-                <th>Secção</th>
-                <th>Companhia</th>
-                <th>Data nasc.</th>
-                <th>Estado</th>
+                <th><?= \App\Core\Tabela::cabecalhoOrdenavel('nome', 'Nome', $ordenar, $direcao, $parametrosOrdenacao) ?></th>
+                <th><?= \App\Core\Tabela::cabecalhoOrdenavel('numero', 'Nº associado', $ordenar, $direcao, $parametrosOrdenacao) ?></th>
+                <th><?= \App\Core\Tabela::cabecalhoOrdenavel('secao', 'Secção', $ordenar, $direcao, $parametrosOrdenacao) ?></th>
+                <th><?= \App\Core\Tabela::cabecalhoOrdenavel('companhia', 'Companhia', $ordenar, $direcao, $parametrosOrdenacao) ?></th>
+                <th><?= \App\Core\Tabela::cabecalhoOrdenavel('nascimento', 'Data nasc.', $ordenar, $direcao, $parametrosOrdenacao) ?></th>
+                <th><?= \App\Core\Tabela::cabecalhoOrdenavel('estado', 'Estado', $ordenar, $direcao, $parametrosOrdenacao) ?></th>
                 <th></th>
             </tr>
         </thead>

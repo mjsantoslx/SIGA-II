@@ -927,3 +927,26 @@ Implementado:
   activa de cada vez — o resto da aplicacao assume uma unica (ex.:
   Companhia::chefiaNacional() devolve so uma linha). Validado tanto na
   criacao como na edicao.
+42. Ordenacao em todas as listagens
+
+Foi pedido explicitamente que, em todas as listagens da aplicacao, seja
+possivel ordenar por qualquer uma das colunas apresentadas.
+
+Implementado nas tres listagens existentes (associados, companhias,
+utilizadores): cabecalhos de coluna clicaveis, que alternam entre
+ascendente/descendente e mostram uma seta a indicar a ordenacao activa.
+A ordenacao e sempre validada contra uma lista fixa de colunas
+permitidas (nunca aceite directamente do pedido), para evitar SQL
+injection atraves do nome da coluna. Os restantes filtros activos
+(pesquisa, seccao, estado) sao sempre preservados ao ordenar, e a
+ordenacao activa e preservada ao filtrar.
+
+Nota tecnica: na listagem de associados a ordenacao e feita ao nivel da
+base de dados (ORDER BY); nas listagens de companhias e utilizadores
+(tipicamente mais pequenas, e que combinam dados de varias fontes em
+PHP apos a consulta principal — ex.: morada da companhia, associado
+ligado ao utilizador) a ordenacao e feita em PHP, sobre o resultado ja
+montado.
+
+Esta e uma regra transversal: qualquer nova listagem criada no futuro
+deve seguir o mesmo padrao (App\Core\Tabela) desde o inicio.

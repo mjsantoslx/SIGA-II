@@ -10,11 +10,11 @@
     <table class="tabela">
         <thead>
             <tr>
-                <th>Nome</th>
-                <th>Email</th>
-                <th>Associado ligado</th>
-                <th>Administrador</th>
-                <th>Estado</th>
+                <th><?= \App\Core\Tabela::cabecalhoOrdenavel('Nome', 'Nome', $ordenar, $direcao) ?></th>
+                <th><?= \App\Core\Tabela::cabecalhoOrdenavel('Email', 'Email', $ordenar, $direcao) ?></th>
+                <th><?= \App\Core\Tabela::cabecalhoOrdenavel('AssociadoLigado', 'Associado ligado', $ordenar, $direcao) ?></th>
+                <th><?= \App\Core\Tabela::cabecalhoOrdenavel('Administrador', 'Administrador', $ordenar, $direcao) ?></th>
+                <th><?= \App\Core\Tabela::cabecalhoOrdenavel('Activo', 'Estado', $ordenar, $direcao) ?></th>
                 <th></th>
             </tr>
         </thead>

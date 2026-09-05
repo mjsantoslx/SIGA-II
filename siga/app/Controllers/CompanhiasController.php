@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Core\Controller;
 use App\Core\Sessao;
+use App\Core\Tabela;
 use App\Models\Associado;
 use App\Models\Companhia;
 use App\Models\Morada;
@@ -42,9 +43,19 @@ class CompanhiasController extends Controller
         }
         unset($companhia);
 
+        [$ordenar, $direcao] = Tabela::normalizar(
+            $_GET['ordenar'] ?? '',
+            $_GET['direcao'] ?? '',
+            ['Designacao', 'ambito_global', 'Morada->Morada', 'Activo'],
+            'Designacao'
+        );
+        $companhias = Tabela::ordenarArray($companhias, $ordenar, $direcao);
+
         $this->vista('companhias/index', [
             'titulo'     => 'Companhias',
             'companhias' => $companhias,
+            'ordenar'    => $ordenar,
+            'direcao'    => $direcao,
         ]);
     }
 

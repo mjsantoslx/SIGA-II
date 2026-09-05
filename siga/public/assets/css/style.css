@@ -192,6 +192,8 @@ legend { font-family: var(--fonte-arredondada); color: var(--verde-escoteiro); f
 .tabela { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
 .tabela th, .tabela td { text-align: left; padding: 0.75rem 1rem; border-bottom: 1px solid var(--borda); }
 .tabela th { background: var(--creme); color: var(--verde-escoteiro); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.03em; }
+.ligacao-ordenacao { color: inherit; text-decoration: none; display: inline-block; white-space: nowrap; }
+.ligacao-ordenacao:hover { text-decoration: underline; }
 .tabela tbody tr:hover { background: #FBFAF5; }
 .tabela-acoes a { margin-right: 0.8rem; font-size: 0.85rem; text-decoration: none; }
 .tabela-acoes a:hover { text-decoration: underline; }

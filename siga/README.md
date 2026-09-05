@@ -211,6 +211,8 @@ preservar:
 - **Gestão de companhias** (`/companhias/criar`, `/companhias/{id}/editar`, regra 41)
   — criação e edição dos dados base (designação, âmbito nacional/local, estado), restrita a administradores. Designação única; só pode existir uma companhia de âmbito nacional (Chefia Nacional) activa de cada vez. A gestão de morada mantém-se disponível a qualquer utilizador da própria companhia.
 
+- **Ordenação em todas as listagens** (regra 42) — os cabeçalhos de coluna nas listagens de associados, companhias e utilizadores são clicáveis para ordenar (ascendente/descendente, com indicador visual), preservando os filtros activos. Qualquer listagem nova deve seguir o mesmo padrão (`App\Core\Tabela`).
+
 ### Nota sobre o número de documento (Cartão de Cidadão)
 
 O número é sempre tratado como texto (nunca convertido para inteiro), mas o
@@ -280,6 +282,9 @@ server {
 
 Esta secção é actualizada a cada nova versão entregue, com as alterações
 feitas desde a versão anterior. Mais recente primeiro.
+
+### v01.30
+- Ordenação por qualquer coluna nas três listagens existentes (associados, companhias, utilizadores): cabeçalhos clicáveis, ascendente/descendente, com indicador visual; filtros e ordenação preservados entre si. Nova classe `App\Core\Tabela`, reutilizável em listagens futuras.
 
 ### v01.29
 - Nova secção de gestão de companhias: criação e edição dos dados base (designação, âmbito nacional/local, estado), restrita a administradores.
