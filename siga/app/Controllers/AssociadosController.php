@@ -36,6 +36,14 @@ class AssociadosController extends Controller
             'activo'   => $_GET['activo'] ?? '1',
         ];
 
+        // Regra 2: utilizadores não-administradores só veem associados da sua companhia.
+        if (!Sessao::ehAdministrador()) {
+            $idAssociadoUtilizador = Sessao::idAssociado();
+            $filtros['idCompanhiaRestricao'] = $idAssociadoUtilizador
+                ? ($associadoModelo->companhiaActual($idAssociadoUtilizador)['IdCompanhia'] ?? -1)
+                : -1;
+        }
+
         $this->vista('associados/index', [
             'titulo'     => 'Associados',
             'associados' => $associadoModelo->listar($filtros),
@@ -48,12 +56,39 @@ class AssociadosController extends Controller
     {
         $this->exigirAutenticacao();
 
+        $companhiaRestrita = $this->companhiaRestritaDoUtilizador();
+        if ($companhiaRestrita === false) {
+            Sessao::guardarMensagem('erro', 'A sua conta não está associada a nenhuma companhia — não pode criar associados. Contacte um administrador.');
+            $this->redirecionar('/associados');
+            return;
+        }
+
         $this->vista('associados/form', [
-            'titulo'      => 'Novo associado',
-            'modo'        => 'criar',
-            'associado'   => ['DataInscricao' => Data::hojePt()],
+            'titulo'            => 'Novo associado',
+            'modo'              => 'criar',
+            'associado'         => ['DataInscricao' => Data::hojePt()],
+            'companhiaRestrita' => $companhiaRestrita,
             ...$this->dadosListasFormulario(),
         ]);
+    }
+
+    /**
+     * Regra 2: um utilizador não-administrador só pode criar associados na
+     * sua própria companhia. Devolve null se o utilizador for administrador
+     * (sem restrição), o array da companhia se houver restrição, ou false
+     * se o utilizador não-administrador não tiver nenhuma companhia (não
+     * pode criar associados nesse caso).
+     */
+    private function companhiaRestritaDoUtilizador()
+    {
+        if (Sessao::ehAdministrador()) {
+            return null;
+        }
+
+        $idAssociadoUtilizador = Sessao::idAssociado();
+        $companhia = $idAssociadoUtilizador ? (new Associado())->companhiaActual($idAssociadoUtilizador) : null;
+
+        return $companhia ?: false;
     }
 
     public function guardar(): void
@@ -61,7 +96,22 @@ class AssociadosController extends Controller
         $this->exigirAutenticacao();
         $this->validarCsrf();
 
+        $companhiaRestrita = $this->companhiaRestritaDoUtilizador();
+        if ($companhiaRestrita === false) {
+            Sessao::guardarMensagem('erro', 'A sua conta não está associada a nenhuma companhia — não pode criar associados. Contacte um administrador.');
+            $this->redirecionar('/associados');
+            return;
+        }
+
         $dados = $_POST;
+
+        // Regra 2: um utilizador não-administrador só pode criar associados
+        // na sua própria companhia — força-se aqui, ignorando qualquer
+        // manipulação do campo no pedido.
+        if ($companhiaRestrita !== null) {
+            $dados['IdCompanhia'] = $companhiaRestrita['IdCompanhia'];
+        }
+
         $erros = $this->validarDadosAssociado($dados);
 
         $ehChefia = (new Secao())->ehChefia(!empty($dados['IdSecao']) ? (int) $dados['IdSecao'] : null);
@@ -94,6 +144,7 @@ class AssociadosController extends Controller
                 'titulo'    => 'Novo associado',
                 'modo'      => 'criar',
                 'associado' => $dados,
+                'companhiaRestrita' => $companhiaRestrita,
                 ...$this->dadosListasFormulario(),
             ]);
             return;
@@ -118,6 +169,7 @@ class AssociadosController extends Controller
                 'titulo'    => 'Novo associado',
                 'modo'      => 'criar',
                 'associado' => $dados,
+                'companhiaRestrita' => $companhiaRestrita,
                 ...$this->dadosListasFormulario(),
             ]);
         }
@@ -128,6 +180,8 @@ class AssociadosController extends Controller
         $this->exigirAutenticacao();
 
         $idAssociado = (int) $id;
+        $this->exigirAcessoAssociado($idAssociado);
+
         $associadoModelo = new Associado();
         $associado = $associadoModelo->encontrarCompletoPorId($idAssociado);
 
@@ -161,6 +215,8 @@ class AssociadosController extends Controller
         $this->exigirAutenticacao();
 
         $idAssociado = (int) $id;
+        $this->exigirAcessoAssociado($idAssociado);
+
         $associadoModelo = new Associado();
         $associado = $associadoModelo->encontrarCompletoPorId($idAssociado);
 
@@ -194,6 +250,8 @@ class AssociadosController extends Controller
         $this->validarCsrf();
 
         $idAssociado = (int) $id;
+        $this->exigirAcessoAssociado($idAssociado);
+
         $associadoModelo = new Associado();
         $associadoExistente = $associadoModelo->encontrarCompletoPorId($idAssociado);
 
@@ -325,6 +383,8 @@ class AssociadosController extends Controller
         $this->validarCsrf();
 
         $idAssociado = (int) $id;
+        $this->exigirAcessoAssociado($idAssociado);
+
         $dataBd = $this->validarDataEvento($_POST['DataEvento'] ?? '');
 
         if ($dataBd === null) {
@@ -351,6 +411,8 @@ class AssociadosController extends Controller
         $this->validarCsrf();
 
         $idAssociado = (int) $id;
+        $this->exigirAcessoAssociado($idAssociado);
+
         $dataBd = $this->validarDataEvento($_POST['DataEvento'] ?? '');
 
         if ($dataBd === null) {

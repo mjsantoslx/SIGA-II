@@ -30,7 +30,7 @@ class Sessao
         }
     }
 
-    public static function autenticar(array $utilizador): void
+    public static function autenticar(array $utilizador, ?int $idAssociado): void
     {
         session_regenerate_id(true);
         $_SESSION['utilizador'] = [
@@ -38,6 +38,7 @@ class Sessao
             'Nome'          => $utilizador['Nome'],
             'Email'         => $utilizador['Email'],
             'Administrador' => (bool) $utilizador['Administrador'],
+            'IdAssociado'   => $idAssociado,
         ];
     }
 
@@ -60,6 +61,11 @@ class Sessao
     public static function ehAdministrador(): bool
     {
         return self::autenticado() && !empty($_SESSION['utilizador']['Administrador']);
+    }
+
+    public static function idAssociado(): ?int
+    {
+        return $_SESSION['utilizador']['IdAssociado'] ?? null;
     }
 
     public static function guardarMensagem(string $tipo, string $texto): void

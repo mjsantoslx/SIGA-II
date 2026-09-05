@@ -78,6 +78,57 @@ abstract class Controller
     }
 
     /**
+     * Regra 2: um utilizador não-administrador só pode ver/alterar
+     * informação de associados da SUA companhia. Administradores têm
+     * sempre acesso total. Se o utilizador não-administrador não tiver
+     * companhia (não devia acontecer, dada a regra 2, mas por segurança) ou
+     * a companhia não corresponder à do associado-alvo, bloqueia o acesso.
+     */
+    protected function exigirAcessoAssociado(int $idAssociadoAlvo): void
+    {
+        $this->exigirAutenticacao();
+
+        if (Sessao::ehAdministrador()) {
+            return;
+        }
+
+        $idAssociadoUtilizador = Sessao::idAssociado();
+        $associadoModelo = new \App\Models\Associado();
+
+        $idCompanhiaUtilizador = $idAssociadoUtilizador
+            ? ($associadoModelo->companhiaActual($idAssociadoUtilizador)['IdCompanhia'] ?? null)
+            : null;
+        $idCompanhiaAlvo = $associadoModelo->companhiaActual($idAssociadoAlvo)['IdCompanhia'] ?? null;
+
+        if (!$idCompanhiaUtilizador || $idCompanhiaUtilizador !== $idCompanhiaAlvo) {
+            Sessao::guardarMensagem('erro', 'Não tem permissões para aceder a informação de associados de outra companhia.');
+            $this->redirecionar('/associados');
+        }
+    }
+
+    /**
+     * Idem, para uma companhia directamente (ex.: ficha da própria companhia).
+     */
+    protected function exigirAcessoCompanhia(int $idCompanhiaAlvo): void
+    {
+        $this->exigirAutenticacao();
+
+        if (Sessao::ehAdministrador()) {
+            return;
+        }
+
+        $idAssociadoUtilizador = Sessao::idAssociado();
+        $idCompanhiaUtilizador = $idAssociadoUtilizador
+            ? ((new \App\Models\Associado())->companhiaActual($idAssociadoUtilizador)['IdCompanhia'] ?? null)
+            : null;
+
+        if (!$idCompanhiaUtilizador || $idCompanhiaUtilizador !== $idCompanhiaAlvo) {
+            Sessao::guardarMensagem('erro', 'Não tem permissões para aceder a informação de outra companhia.');
+            $this->redirecionar('/companhias');
+        }
+    }
+
+    /**
      * Verifica um token CSRF simples baseado em sessão.
      */
     protected function validarCsrf(): void

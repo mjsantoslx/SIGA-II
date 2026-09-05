@@ -171,14 +171,20 @@
             </div>
             <div class="campo">
                 <label for="IdCompanhia">Companhia (local)</label>
-                <select id="IdCompanhia" name="IdCompanhia">
-                    <option value="">Seleccionar…</option>
-                    <?php foreach ($companhias as $c): ?>
-                        <option value="<?= (int) $c['Id'] ?>" <?= (string) ($a['IdCompanhia'] ?? '') === (string) $c['Id'] ? 'selected' : '' ?>>
-                            <?= htmlspecialchars($c['Designacao']) ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
+                <?php if (!empty($companhiaRestrita)): ?>
+                    <input type="text" value="<?= htmlspecialchars($companhiaRestrita['Designacao']) ?>" disabled>
+                    <input type="hidden" name="IdCompanhia" value="<?= (int) $companhiaRestrita['IdCompanhia'] ?>">
+                    <small>A sua conta só pode criar associados nesta companhia.</small>
+                <?php else: ?>
+                    <select id="IdCompanhia" name="IdCompanhia">
+                        <option value="">Seleccionar…</option>
+                        <?php foreach ($companhias as $c): ?>
+                            <option value="<?= (int) $c['Id'] ?>" <?= (string) ($a['IdCompanhia'] ?? '') === (string) $c['Id'] ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($c['Designacao']) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                <?php endif; ?>
             </div>
         </div>
 

@@ -1,7 +1,7 @@
 <?php $u = $utilizador ?? []; ?>
 
 <h1><?= htmlspecialchars($titulo) ?></h1>
-<p class="subtitulo">Crie um novo acesso à aplicação.</p>
+<p class="subtitulo">Crie um novo acesso à aplicação, ligado a um associado.</p>
 
 <form action="/utilizadores/criar" method="post" class="formulario-associado">
     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
@@ -22,9 +22,22 @@
                 <input type="password" id="PalavraPasse" name="PalavraPasse" required autocomplete="new-password">
                 <small>Mínimo 8 caracteres.</small>
             </div>
-        </div>
-        <div class="grelha-checkboxes" style="margin-top: 1rem;">
-            <label><input type="checkbox" name="Administrador" value="1" <?= !empty($u['Administrador']) ? 'checked' : '' ?>> É administrador</label>
+            <div class="campo campo-largo">
+                <label for="IdAssociado">Associado ligado *</label>
+                <select id="IdAssociado" name="IdAssociado" required>
+                    <option value="">Seleccionar…</option>
+                    <?php foreach ($associados as $associado): ?>
+                        <option value="<?= (int) $associado['Id'] ?>" <?= (string) ($u['IdAssociado'] ?? '') === (string) $associado['Id'] ? 'selected' : '' ?>>
+                            <?= htmlspecialchars($associado['Nome']) ?><?= $associado['NumeroAssociado'] ? ' (nº ' . htmlspecialchars($associado['NumeroAssociado']) . ')' : '' ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+                <small>
+                    Obrigatório para todos os utilizadores (regra 4). O estatuto de administrador é automático:
+                    se o associado ligado estiver na Chefia Nacional, o utilizador passa a administrador; caso
+                    contrário, tem de ter uma companhia local.
+                </small>
+            </div>
         </div>
     </fieldset>
 

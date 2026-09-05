@@ -12,6 +12,7 @@
             <tr>
                 <th>Nome</th>
                 <th>Email</th>
+                <th>Associado ligado</th>
                 <th>Administrador</th>
                 <th>Estado</th>
                 <th></th>
@@ -22,6 +23,7 @@
                 <tr>
                     <td><?= htmlspecialchars($utilizador['Nome']) ?></td>
                     <td><?= htmlspecialchars($utilizador['Email']) ?></td>
+                    <td><?= $utilizador['AssociadoLigado'] ? htmlspecialchars($utilizador['AssociadoLigado']) : '—' ?></td>
                     <td><?= $utilizador['Administrador'] ? 'Sim' : 'Não' ?></td>
                     <td>
                         <span class="etiqueta etiqueta-<?= $utilizador['Activo'] ? 'ativo' : 'inativo' ?>">

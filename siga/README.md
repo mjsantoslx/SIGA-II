@@ -193,7 +193,13 @@ preservar:
   impedida — ainda não há uma lista de incompatibilidades definida (ver
   regra 34.2 no documento de regras de negócio).
 
-- **Gestão de utilizadores** (`/utilizadores`) — criação, edição e desactivação de acessos à aplicação, com atribuição do grupo de administrador. Acesso restrito a utilizadores administradores (o link no menu só aparece para eles, e a página bloqueia o acesso a qualquer outro). Salvaguardas incluídas: não é possível remover os próprios privilégios de administrador, desactivar a própria conta, nem remover o último administrador activo do sistema.
+- **Gestão de utilizadores e permissões** (`/utilizadores`, regras 35.1-35.4)
+  — acesso restrito a administradores. Regras aplicadas:
+  - O utilizador especial **"Administrador"** nunca pode ser eliminado, desactivado, ou perder o estatuto de administrador — nome e privilégios bloqueados no formulário e forçados no servidor.
+  - Todos os outros utilizadores têm de estar **ligados a um associado**.
+  - O estatuto de administrador de qualquer utilizador (excepto o "Administrador") é **automático**: um utilizador ligado a um associado da Chefia Nacional é sempre administrador; ao sair da Chefia Nacional, deixa de o ser — sem intervenção manual.
+  - Um utilizador não-administrador só pode ver e alterar informação **da sua própria companhia** — aplicado a associados, contactos, morada, companhias, estatísticas do painel, e à criação de novos associados (a companhia é sempre a do próprio utilizador, forçada no servidor).
+  - Salvaguardas adicionais: não é possível remover os próprios privilégios de administrador, desactivar a própria conta, nem remover o último administrador activo do sistema.
 
 ### Nota sobre o número de documento (Cartão de Cidadão)
 
@@ -264,6 +270,10 @@ server {
 
 Esta secção é actualizada a cada nova versão entregue, com as alterações
 feitas desde a versão anterior. Mais recente primeiro.
+
+### v01.26
+- Regras de utilizadores e permissões (regras 35.1-35.4): o utilizador "Administrador" é intocável (nunca eliminado/desactivado/despromovido); todos os outros utilizadores têm de estar ligados a um associado; estatuto de administrador automático via Chefia Nacional (deixou de ser uma opção manual); utilizadores não-administradores restritos à sua própria companhia em toda a aplicação (associados, contactos, morada, companhias, painel, e criação de novos associados).
+- Todos os ficheiros novos/alterados mantidos em CRLF.
 
 ### v01.25
 - Nova página de gestão de utilizadores (`/utilizadores`), com acesso restrito a administradores: criar, editar (nome, email, palavra-passe, grupo de administrador, estado).

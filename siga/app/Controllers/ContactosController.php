@@ -21,6 +21,7 @@ class ContactosController extends Controller
     public function gerir(string $id): void
     {
         $this->exigirAutenticacao();
+        $this->exigirAcessoAssociado((int) $id);
 
         $idAssociado = (int) $id;
         $associado = (new Associado())->encontrarCompletoPorId($idAssociado);
@@ -49,6 +50,7 @@ class ContactosController extends Controller
     public function adicionar(string $id): void
     {
         $this->exigirAutenticacao();
+        $this->exigirAcessoAssociado((int) $id);
         $this->validarCsrf();
 
         $idAssociado = (int) $id;
@@ -76,6 +78,7 @@ class ContactosController extends Controller
     public function editar(string $id, string $idContacto): void
     {
         $this->exigirAutenticacao();
+        $this->exigirAcessoAssociado((int) $id);
         $this->validarCsrf();
 
         $idAssociado = (int) $id;
@@ -111,6 +114,7 @@ class ContactosController extends Controller
     public function remover(string $id, string $idContacto): void
     {
         $this->exigirAutenticacao();
+        $this->exigirAcessoAssociado((int) $id);
         $this->validarCsrf();
 
         $idAssociado = (int) $id;

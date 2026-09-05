@@ -22,6 +22,7 @@ class MoradasController extends Controller
     public function editarPessoa(string $idAssociado): void
     {
         $this->exigirAutenticacao();
+        $this->exigirAcessoAssociado((int) $idAssociado);
 
         $idAssociado = (int) $idAssociado;
         $associado = (new Associado())->encontrarCompletoPorId($idAssociado);
@@ -49,6 +50,7 @@ class MoradasController extends Controller
     public function corrigirPessoa(string $idAssociado): void
     {
         $this->exigirAutenticacao();
+        $this->exigirAcessoAssociado((int) $idAssociado);
         $this->validarCsrf();
 
         $idAssociado = (int) $idAssociado;
@@ -83,6 +85,7 @@ class MoradasController extends Controller
     public function substituirPessoa(string $idAssociado): void
     {
         $this->exigirAutenticacao();
+        $this->exigirAcessoAssociado((int) $idAssociado);
         $this->validarCsrf();
 
         $idAssociado = (int) $idAssociado;
@@ -124,6 +127,7 @@ class MoradasController extends Controller
     public function editarCompanhia(string $idCompanhia): void
     {
         $this->exigirAutenticacao();
+        $this->exigirAcessoCompanhia((int) $idCompanhia);
 
         $idCompanhia = (int) $idCompanhia;
         $companhia = (new Companhia())->encontrarPorId($idCompanhia);
@@ -151,6 +155,7 @@ class MoradasController extends Controller
     public function corrigirCompanhia(string $idCompanhia): void
     {
         $this->exigirAutenticacao();
+        $this->exigirAcessoCompanhia((int) $idCompanhia);
         $this->validarCsrf();
 
         $idCompanhia = (int) $idCompanhia;
@@ -185,6 +190,7 @@ class MoradasController extends Controller
     public function substituirCompanhia(string $idCompanhia): void
     {
         $this->exigirAutenticacao();
+        $this->exigirAcessoCompanhia((int) $idCompanhia);
         $this->validarCsrf();
 
         $idCompanhia = (int) $idCompanhia;

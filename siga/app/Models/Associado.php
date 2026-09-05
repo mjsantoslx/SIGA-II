@@ -32,6 +32,12 @@ class Associado extends Model
             $parametros['activo'] = $filtros['activo'];
         }
 
+        // Regra 2: utilizadores não-administradores só veem associados da sua companhia.
+        if (!empty($filtros['idCompanhiaRestricao'])) {
+            $condicoes[] = 'companhiaActual.IdCompanhia = :idCompanhiaRestricao';
+            $parametros['idCompanhiaRestricao'] = $filtros['idCompanhiaRestricao'];
+        }
+
         $whereSql = $condicoes ? ('WHERE ' . implode(' AND ', $condicoes)) : '';
 
         $sql = "
@@ -55,7 +61,7 @@ class Associado extends Model
                 WHERE s.Activo = 1
             ) secaoActual ON secaoActual.IdAssociado = a.Id
             LEFT JOIN (
-                SELECT ac.IdAssociado, c.Designacao
+                SELECT ac.IdAssociado, c.Designacao, c.Id AS IdCompanhia
                 FROM associados_companhias ac
                 INNER JOIN companhias c ON c.Id = ac.IdCompanhia
                 WHERE ac.Activo = 1 AND c.ambito_global = 0
@@ -437,6 +443,8 @@ class Associado extends Model
             "INSERT INTO associados_companhias (IdAssociado, IdCompanhia, DataInicio, Activo) VALUES (:a, :c, :d, 1)"
         );
         $stmt->execute(['a' => $idAssociado, 'c' => $idCompanhiaChefiaNacional, 'd' => $dataInicio]);
+
+        $this->sincronizarAdministradorPorChefiaNacional($idAssociado, true);
     }
 
     public function sairDaChefiaNacional(int $idAssociado, string $dataFim): void
@@ -450,6 +458,31 @@ class Associado extends Model
             "UPDATE associados_companhias SET Activo = 0, DataFim = :dataFim WHERE Id = :id"
         );
         $stmt->execute(['dataFim' => $dataFim, 'id' => $actual['Id']]);
+
+        $this->sincronizarAdministradorPorChefiaNacional($idAssociado, false);
+    }
+
+    /**
+     * Regra 3: um utilizador ligado a um associado da Chefia Nacional tem
+     * sempre privilégios de administrador — automaticamente, ao entrar ou
+     * sair. Nunca mexe no utilizador especial "Administrador" (esse está
+     * isento da regra 4 e as suas permissões nunca são alteradas — regra 1).
+     */
+    private function sincronizarAdministradorPorChefiaNacional(int $idAssociado, bool $administrador): void
+    {
+        $idUtilizador = (new UtilizadorAssociado())->idUtilizadorDoAssociado($idAssociado);
+        if (!$idUtilizador) {
+            return;
+        }
+
+        $utilizadorModelo = new Utilizador();
+        $utilizador = $utilizadorModelo->encontrarPorId($idUtilizador);
+        if (!$utilizador || $utilizador['Nome'] === 'Administrador') {
+            return;
+        }
+
+        $this->bd->prepare("UPDATE utilizadores SET Administrador = :administrador WHERE Id = :id")
+            ->execute(['administrador' => $administrador ? 1 : 0, 'id' => $idUtilizador]);
     }
 
     /**
@@ -492,9 +525,17 @@ class Associado extends Model
         }
     }
 
-    public function contarPorEstado(): array
+    public function contarPorEstado(?int $idCompanhiaRestricao = null): array
     {
-        $stmt = $this->bd->query("SELECT Activo, COUNT(*) AS Total FROM associados GROUP BY Activo");
+        $sql = "SELECT a.Activo, COUNT(*) AS Total FROM associados a";
+        $parametros = [];
+        if ($idCompanhiaRestricao !== null) {
+            $sql .= " INNER JOIN associados_companhias ac ON ac.IdAssociado = a.Id AND ac.Activo = 1 AND ac.IdCompanhia = :idCompanhia";
+            $parametros['idCompanhia'] = $idCompanhiaRestricao;
+        }
+        $sql .= " GROUP BY a.Activo";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute($parametros);
         $linhas = $stmt->fetchAll();
         $resultado = ['ativos' => 0, 'inativos' => 0];
         foreach ($linhas as $linha) {
@@ -507,16 +548,44 @@ class Associado extends Model
         return $resultado;
     }
 
-    public function contarPorSecao(): array
+    public function contarPorSecao(?int $idCompanhiaRestricao = null): array
     {
-        $stmt = $this->bd->query("
+        $sql = "
             SELECT sec.Designacao, COUNT(*) AS Total
             FROM associados_secoes asec
             INNER JOIN secoes sec ON sec.Id = asec.IdSecao
-            WHERE asec.Activo = 1
-            GROUP BY sec.Designacao
-            ORDER BY sec.Id
-        ");
+        ";
+        $parametros = [];
+        if ($idCompanhiaRestricao !== null) {
+            $sql .= " INNER JOIN associados_companhias acr ON acr.IdAssociado = asec.IdAssociado AND acr.Activo = 1 AND acr.IdCompanhia = :idCompanhia";
+            $parametros['idCompanhia'] = $idCompanhiaRestricao;
+        }
+        $sql .= " WHERE asec.Activo = 1 GROUP BY sec.Designacao ORDER BY sec.Id";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute($parametros);
+        return $stmt->fetchAll();
+    }
+
+    /**
+     * Associados activos ainda sem utilizador ligado (ou ligados ao próprio
+     * utilizador que está a ser editado, para continuar a aparecer
+     * seleccionado) — usado no formulário de gestão de utilizadores (regra 4).
+     */
+    public function listarDisponiveisParaUtilizador(?int $idUtilizadorActual): array
+    {
+        $sql = "
+            SELECT a.Id, a.NumeroAssociado, p.Nome
+            FROM associados a
+            INNER JOIN pessoas p ON p.Id = a.IdPessoa
+            WHERE a.Activo = 1
+              AND a.Id NOT IN (
+                  SELECT IdAssociado FROM utilizadores_associados
+                  WHERE Activo = 1" . ($idUtilizadorActual !== null ? " AND IdUtilizador != :idUtilizadorActual" : "") . "
+              )
+            ORDER BY p.Nome
+        ";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->execute($idUtilizadorActual !== null ? ['idUtilizadorActual' => $idUtilizadorActual] : []);
         return $stmt->fetchAll();
     }
 }

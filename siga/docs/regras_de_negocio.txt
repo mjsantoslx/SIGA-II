@@ -794,3 +794,73 @@ entre si (ex.: nao fazer sentido ser Chefe da Companhia e Subchefe da
 Companhia da MESMA companhia em simultaneo). Por enquanto a aplicacao
 NAO impede nenhuma combinacao de cargos. Precisa de confirmacao explicita
 se deve existir uma matriz de incompatibilidades e, se sim, qual.
+35. Regras de utilizadores e permissoes
+
+35.1 O utilizador "Administrador" e intocavel (fechada)
+
+O utilizador especial "Administrador" (semeado na instalacao) nunca pode
+ser eliminado, desactivado, ou perder o estatuto de administrador — "e o
+que pode fazer tudo". Implementado: identificado pelo Nome
+("Administrador"); o nome tambem fica bloqueado, para a identificacao se
+manter estavel. So o email e a palavra-passe podem ser alterados. Esta
+conta esta isenta da regra 4 (nao precisa de associado ligado).
+
+35.2 Utilizadores nao-administradores precisam de uma companhia (fechada)
+
+Um utilizador nao-administrador tem de ter uma companhia associada
+(atraves do associado a que esta ligado) e so pode ver e alterar
+informacao relativa a essa companhia.
+
+Implementado:
+- Listagem e ficha de associados, gestao de contactos/morada, e a
+  ficha/listagem de companhias: restritos a associados/companhia do
+  proprio utilizador (Controller::exigirAcessoAssociado() /
+  exigirAcessoCompanhia()).
+- Estatisticas do painel principal tambem filtradas pela companhia do
+  utilizador.
+- Criacao de novos associados: um utilizador nao-administrador so pode
+  criar associados na SUA propria companhia — o campo fica bloqueado no
+  formulario (mostra o nome da companhia, nao um menu) e o valor e
+  sempre forcado no servidor, ignorando qualquer manipulacao do pedido.
+  Se o utilizador nao tiver companhia (situacao anomala), fica impedido
+  de criar associados, com mensagem a pedir contacto com um
+  administrador.
+
+⚠️ EM ABERTO: esta restricao de companhia foi aplicada aos modulos
+principais (associados, contactos, morada, companhias, painel). Novos
+modulos futuros que exponham informacao de associados devem repetir o
+mesmo padrao — nao esta garantido automaticamente por nenhum mecanismo
+central unico.
+
+35.3 Administrador automatico via Chefia Nacional (fechada)
+
+Um utilizador ligado a um associado da Chefia Nacional tem sempre
+privilegios de administrador — de forma automatica, nao manual. Ao
+entrar na Chefia Nacional, o utilizador ligado (se existir) passa
+automaticamente a administrador; ao sair, deixa de o ser
+automaticamente. Implementado directamente nos metodos
+Associado::entrarNaChefiaNacional()/sairDaChefiaNacional(). Nunca afecta
+o utilizador "Administrador" (regra 35.1).
+
+Consequencia pratica: no formulario de gestao de utilizadores, o campo
+"Administrador" deixou de ser uma opcao manual para qualquer utilizador
+que nao seja o "Administrador" — passou a ser puramente informativo,
+calculado a partir do associado ligado.
+
+⚠️ LIMITACAO CONHECIDA: o estatuto de administrador de um utilizador ja
+autenticado fica guardado na sessao no momento do login. Se a Chefia
+Nacional desse utilizador mudar enquanto ele tem sessao activa, a
+sessao so reflecte a mudanca apos novo login.
+
+35.4 Utilizador tem de estar ligado a um associado (fechada)
+
+Com excepcao do utilizador "Administrador" (regra 35.1), todos os
+utilizadores tem de estar ligados a um associado — implementado atraves
+da tabela utilizadores_associados (ja existente no schema), campo
+obrigatorio nos formularios de criacao/edicao de utilizador. Um
+associado so pode estar ligado a um utilizador de cada vez.
+
+Consequencia directa das regras 35.2/35.3: ao ligar um utilizador a um
+associado, esse associado tem de estar na Chefia Nacional (utilizador
+fica administrador) OU ter uma companhia local (utilizador fica
+nao-administrador, restrito a essa companhia) — nunca nenhuma das duas.

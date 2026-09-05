@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Core\Controller;
 use App\Core\Sessao;
+use App\Models\Associado;
 use App\Models\Companhia;
 use App\Models\Morada;
 
@@ -22,7 +23,18 @@ class CompanhiasController extends Controller
         $companhiaModelo = new Companhia();
         $moradaModelo = new Morada();
 
-        $companhias = $companhiaModelo->listarAtivas();
+        // Regra 2: utilizadores não-administradores só veem a sua própria companhia.
+        if (Sessao::ehAdministrador()) {
+            $companhias = $companhiaModelo->listarAtivas();
+        } else {
+            $idAssociadoUtilizador = Sessao::idAssociado();
+            $idCompanhiaUtilizador = $idAssociadoUtilizador
+                ? ((new Associado())->companhiaActual($idAssociadoUtilizador)['IdCompanhia'] ?? null)
+                : null;
+            $companhia = $idCompanhiaUtilizador ? $companhiaModelo->encontrarPorId($idCompanhiaUtilizador) : null;
+            $companhias = $companhia ? [$companhia] : [];
+        }
+
         foreach ($companhias as &$companhia) {
             $companhia['Morada'] = $moradaModelo->ligacaoActivaDaCompanhia((int) $companhia['Id']);
         }
@@ -39,6 +51,8 @@ class CompanhiasController extends Controller
         $this->exigirAutenticacao();
 
         $idCompanhia = (int) $id;
+        $this->exigirAcessoCompanhia($idCompanhia);
+
         $companhia = (new Companhia())->encontrarPorId($idCompanhia);
 
         if (!$companhia) {

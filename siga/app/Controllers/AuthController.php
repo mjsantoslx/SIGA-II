@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Core\Controller;
 use App\Core\Sessao;
+use App\Models\UtilizadorAssociado;
 use App\Models\Utilizador;
 
 class AuthController extends Controller
@@ -42,7 +43,7 @@ class AuthController extends Controller
             return;
         }
 
-        Sessao::autenticar($utilizador);
+        Sessao::autenticar($utilizador, (new UtilizadorAssociado())->idAssociadoDoUtilizador((int) $utilizador['Id']));
         Sessao::guardarMensagem('sucesso', 'Sessão iniciada com sucesso. Bem-vindo(a), ' . $utilizador['Nome'] . '.');
         $this->redirecionar('/');
     }
