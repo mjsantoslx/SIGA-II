@@ -278,6 +278,9 @@ server {
 Esta secção é actualizada a cada nova versão entregue, com as alterações
 feitas desde a versão anterior. Mais recente primeiro.
 
+### v01.28
+- Corrigido um erro no registo de associados: quando uma validação não relacionada com datas falhava (ex.: cargos, encarregados), o formulário reexibido mostrava as datas já convertidas para aaaa-mm-dd em vez de dd/mm/aaaa, o que podia levar a um erro de formato numa submissão seguinte.
+
 ### v01.27
 - Número de sócio passa a ser gerado automaticamente (sequencial, 5 algarismos, a começar em "00001") — deixou de ser editável.
 - Nacionalidade "Portuguesa" passa a aparecer sempre em primeiro na lista de nacionalidades.

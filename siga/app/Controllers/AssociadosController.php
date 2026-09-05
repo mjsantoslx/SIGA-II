@@ -152,6 +152,15 @@ class AssociadosController extends Controller
 
         if ($erros) {
             Sessao::guardarMensagem('erro', implode(' ', $erros));
+            // validarDadosAssociado() já pode ter convertido as datas válidas
+            // para aaaa-mm-dd antes de sabermos se outra validação (não
+            // relacionada com datas) falhou — repõe-se sempre em dd/mm/aaaa
+            // para o formulário, independentemente de qual validação falhou.
+            $dados['DataNascimento'] = Data::paraApresentacao($dados['DataNascimento'] ?? null) ?: ($dados['DataNascimento'] ?? '');
+            $dados['DataInscricao']  = Data::paraApresentacao($dados['DataInscricao'] ?? null) ?: ($dados['DataInscricao'] ?? '');
+            if (!empty($dados['InsigniaMadeira'])) {
+                $dados['DataInsigniaMadeira'] = Data::paraApresentacao($dados['DataInsigniaMadeira'] ?? null) ?: ($dados['DataInsigniaMadeira'] ?? '');
+            }
             $this->vista('associados/form', [
                 'titulo'    => 'Novo associado',
                 'modo'      => 'criar',
