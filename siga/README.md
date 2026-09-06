@@ -285,6 +285,9 @@ server {
 Esta secção é actualizada a cada nova versão entregue, com as alterações
 feitas desde a versão anterior. Mais recente primeiro.
 
+### v01.38
+- Corrigido: a v01.37 tinha movido também o rótulo "Divisão actual" para o bloco de ajuda lateral. O rótulo volta a ficar por cima da caixa de selecção, como qualquer outro campo; só o texto de ajuda fica ao lado.
+
 ### v01.37
 - Corrigido o posicionamento introduzido na v01.35: o texto de ajuda da divisão passa a aparecer ao lado da caixa de seleção (na coluna seguinte, alinhado com ela), em vez de por cima.
 

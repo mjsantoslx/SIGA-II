@@ -99,6 +99,7 @@
         <legend>Enquadramento na UEP</legend>
         <div class="grelha-formulario">
             <div class="campo">
+                <label for="IdSecao">Divisão actual</label>
                 <select id="IdSecao" name="IdSecao" onchange="siga.actualizarDependenciasSeccao(this)">
                     <option value="" data-designacao="<?= htmlspecialchars($secaoActual['Designacao'] ?? '') ?>">Manter divisão actual</option>
                     <?php foreach ($secoes as $s): ?>
@@ -107,7 +108,6 @@
                 </select>
             </div>
             <div class="campo campo-ajuda-alinhada">
-                <label for="IdSecao">Divisão actual</label>
                 <small>Em uso normal só é possível avançar (ou saltar para a frente) na sequência Colónia → Alcateia → Tribo Júnior → Tribo Sénior → Clã → Chefia — nunca recuar. Para "Chefia", o associado já tem de ter um contacto "Email Associativo" (em "Gerir contactos").</small>
             </div>
             <div class="campo campo-largo">
