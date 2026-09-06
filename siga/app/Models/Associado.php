@@ -608,6 +608,8 @@ class Associado extends Model
             SELECT a.Id, a.NumeroAssociado, p.Nome
             FROM associados a
             INNER JOIN pessoas p ON p.Id = a.IdPessoa
+            INNER JOIN associados_secoes asec ON asec.IdAssociado = a.Id AND asec.Activo = 1
+            INNER JOIN secoes sec ON sec.Id = asec.IdSecao AND sec.Designacao = 'Chefia'
             WHERE a.Activo = 1
               AND a.Id NOT IN (
                   SELECT IdAssociado FROM utilizadores_associados
@@ -618,5 +620,20 @@ class Associado extends Model
         $stmt = $this->bd->prepare($sql);
         $stmt->execute($idUtilizadorActual !== null ? ['idUtilizadorActual' => $idUtilizadorActual] : []);
         return $stmt->fetchAll();
+    }
+
+    /**
+     * Regra 44: só um dirigente (associado na secção "Chefia") pode ser
+     * ligado a um utilizador do sistema.
+     */
+    public function estaNaSeccaoChefia(int $idAssociado): bool
+    {
+        $stmt = $this->bd->prepare("
+            SELECT 1 FROM associados_secoes asec
+            INNER JOIN secoes sec ON sec.Id = asec.IdSecao
+            WHERE asec.IdAssociado = :id AND asec.Activo = 1 AND sec.Designacao = 'Chefia'
+        ");
+        $stmt->execute(['id' => $idAssociado]);
+        return (bool) $stmt->fetchColumn();
     }
 }

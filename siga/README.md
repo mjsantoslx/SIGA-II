@@ -196,7 +196,7 @@ preservar:
 - **Gestão de utilizadores e permissões** (`/utilizadores`, regras 35.1-35.4)
   — acesso restrito a administradores. Regras aplicadas:
   - O utilizador especial **"Administrador"** nunca pode ser eliminado, desactivado, ou perder o estatuto de administrador — nome e privilégios bloqueados no formulário e forçados no servidor.
-  - Todos os outros utilizadores têm de estar **ligados a um associado**.
+  - Todos os outros utilizadores têm de estar **ligados a um associado**, e esse associado tem de ser um **dirigente** (secção "Chefia") — só estes aparecem disponíveis para ligar (regra 44).
   - O estatuto de administrador de qualquer utilizador (excepto o "Administrador") é **automático**: um utilizador ligado a um associado da Chefia Nacional é sempre administrador; ao sair da Chefia Nacional, deixa de o ser — sem intervenção manual.
   - Um utilizador não-administrador só pode ver e alterar informação **da sua própria companhia** — aplicado a associados, contactos, morada, companhias, estatísticas do painel, e à criação de novos associados (a companhia é sempre a do próprio utilizador, forçada no servidor).
   - Salvaguardas adicionais: não é possível remover os próprios privilégios de administrador, desactivar a própria conta, nem remover o último administrador activo do sistema.
@@ -284,6 +284,9 @@ server {
 
 Esta secção é actualizada a cada nova versão entregue, com as alterações
 feitas desde a versão anterior. Mais recente primeiro.
+
+### v01.33
+- Só um dirigente (associado na secção "Chefia") pode ser ligado a um utilizador do sistema — a lista de associados disponíveis na gestão de utilizadores passa a mostrar só dirigentes, com validação equivalente no servidor.
 
 ### v01.32
 - No formulário de associado, a área "É formador"/"Tem insígnia de madeira" passa a ter o rótulo "Progresso Pessoal do Dirigente".

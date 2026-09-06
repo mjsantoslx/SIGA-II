@@ -964,3 +964,25 @@ o que obrigava o utilizador a perceber pelas notas de ajuda quais eram
 aplicaveis. Passam agora a aparecer/desaparecer dinamicamente consoante
 a seccao escolhida, e os valores sao limpos ao esconder (para nao ficar
 uma seleccao escondida a ser submetida por engano).
+44. So dirigentes podem ser utilizadores (fechada)
+
+Complementa a regra 35.4: alem de ter de estar ligado a um associado,
+esse associado tem de estar na seccao "Chefia" (ser dirigente). Um
+associado fora da Chefia nao pode ser ligado a um utilizador do
+sistema, mesmo que va ficar nao-administrador (restrito a uma
+companhia).
+
+Implementado: a lista de associados disponiveis para ligar a um
+utilizador (Associado::listarDisponiveisParaUtilizador()) so mostra
+dirigentes; validacao defensiva equivalente no servidor
+(Associado::estaNaSeccaoChefia()), para o caso de o pedido ser
+manipulado.
+
+⚠️ LIMITACAO CONHECIDA: se um utilizador ja existente estiver ligado a
+um associado que entretanto deixou de estar na seccao "Chefia" (ex.:
+por uma correccao de seccao), esse associado deixa de aparecer na
+lista de seleccao ao editar esse utilizador, e qualquer gravacao dessa
+edicao (mesmo so para mudar a palavra-passe) fica bloqueada ate se
+escolher um associado dirigente valido. Nao foi implementada nenhuma
+solucao especial para este caso, por ser considerado pouco provavel na
+pratica.
