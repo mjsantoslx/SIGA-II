@@ -164,6 +164,7 @@ input:focus, select:focus, textarea:focus {
 
 fieldset { border: 1px solid var(--borda); border-radius: var(--raio); padding: 1.2rem 1.4rem; margin-bottom: 1.2rem; background: var(--papel); }
 legend { font-family: var(--fonte-arredondada); color: var(--verde-escoteiro); font-weight: 600; padding: 0 0.5rem; }
+.rotulo-subseccao { font-weight: 600; color: var(--verde-escoteiro); font-size: 0.85rem; margin-bottom: 0; border-top: 1px dashed var(--borda); padding-top: 0.8rem; }
 .ajuda-fieldset { color: var(--texto-suave); font-size: 0.85rem; margin-top: -0.3rem; }
 
 .grelha-formulario { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }

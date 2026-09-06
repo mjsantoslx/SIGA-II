@@ -178,7 +178,8 @@
             </div>
             <?php endif; ?>
 
-            <div class="grelha-checkboxes" style="margin-top: 1rem;">
+            <p class="rotulo-subseccao" style="margin-top: 1rem;">Progresso Pessoal do Dirigente</p>
+            <div class="grelha-checkboxes" style="margin-top: 0.4rem;">
                 <label><input type="checkbox" name="Formador" value="1" <?= !empty($a['Formador']) ? 'checked' : '' ?>> É formador</label>
                 <label><input type="checkbox" id="InsigniaMadeira" name="InsigniaMadeira" value="1" <?= !empty($a['InsigniaMadeira']) ? 'checked' : '' ?> onchange="siga.actualizarObrigatoriedadeDataInsignia(this)"> Tem insígnia de madeira</label>
             </div>

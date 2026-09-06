@@ -285,6 +285,9 @@ server {
 Esta secção é actualizada a cada nova versão entregue, com as alterações
 feitas desde a versão anterior. Mais recente primeiro.
 
+### v01.32
+- No formulário de associado, a área "É formador"/"Tem insígnia de madeira" passa a ter o rótulo "Progresso Pessoal do Dirigente".
+
 ### v01.31
 - No formulário de associado (registo e edição), o bloco de Chefia Nacional/órgãos/cargos/formador/insígnia de madeira só aparece quando a secção escolhida é "Chefia"; o cargo "Equipa Nacional de Clã" só aparece quando é "Clã". Antes estavam sempre visíveis, só validados no servidor.
 
