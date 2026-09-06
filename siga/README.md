@@ -211,6 +211,8 @@ preservar:
 - **Gestão de companhias** (`/companhias/criar`, `/companhias/{id}/editar`, regra 41)
   — criação e edição dos dados base (designação, âmbito nacional/local, estado), restrita a administradores. Designação única; só pode existir uma companhia de âmbito nacional (Chefia Nacional) activa de cada vez. A gestão de morada mantém-se disponível a qualquer utilizador da própria companhia.
 
+- **Backoffice de tabelas de referência** (`/admin`, regra 47) — acesso restrito a administradores. Gestão de divisões, nacionalidades, estados civis, confissões religiosas, tipos de documento/contacto/relação/evento, órgãos e cargos (listar, criar, editar, eliminar — com desactivação em vez de eliminação onde aplicável). A eliminação é sempre bloqueada se o registo estiver em uso.
+
 - **Ordenação em todas as listagens** (regra 42) — os cabeçalhos de coluna nas listagens de associados, companhias e utilizadores são clicáveis para ordenar (ascendente/descendente, com indicador visual), preservando os filtros activos. Qualquer listagem nova deve seguir o mesmo padrão (`App\Core\Tabela`).
 
 - **Secções de dirigente/Clã escondidas por defeito** (regra 43) — no formulário de associado, o bloco de Chefia Nacional/órgãos/cargos/formador/insígnia só aparece quando a secção escolhida é "Chefia"; o cargo "Equipa Nacional de Clã" só aparece quando é "Clã".
@@ -284,6 +286,10 @@ server {
 
 Esta secção é actualizada a cada nova versão entregue, com as alterações
 feitas desde a versão anterior. Mais recente primeiro.
+
+### v01.40
+- Nova página de administração (`/admin`), restrita a administradores: gestão de divisões, nacionalidades, estados civis, confissões religiosas, tipos de documento/contacto/relação/evento, órgãos e cargos — antes só editáveis directamente por SQL.
+- Mecanismo genérico reutilizável (`App\Models\ReferenciaGenerica` + `App\Controllers\ReferenciasController`) para tabelas de referência simples; controlador próprio para divisões (campos extra).
 
 ### v01.39
 - O bloco de ajuda da divisão passa a ocupar duas colunas da grelha (mais largo), em vez de uma — menos linhas, mais compridas.

@@ -80,6 +80,18 @@ a { color: var(--verde-medio); }
     background: none; border: none; color: var(--caqui); cursor: pointer;
     font: inherit; text-decoration: underline; padding: 0;
 }
+.tabela-acoes .ligacao-botao { color: var(--verde-medio); font-size: 0.85rem; margin-right: 0.8rem; }
+.tabela-acoes .ligacao-botao-perigo { color: var(--erro); }
+
+.grelha-admin { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
+.cartao-admin {
+    display: flex; flex-direction: column; gap: 0.4rem; background: var(--papel);
+    border: 1px solid var(--borda); border-radius: var(--raio); padding: 1.1rem 1.2rem;
+    text-decoration: none; box-shadow: var(--sombra); transition: border-color 0.1s ease;
+}
+.cartao-admin:hover { border-color: var(--verde-claro); }
+.cartao-admin strong { color: var(--verde-escoteiro); font-family: var(--fonte-arredondada); font-size: 1rem; }
+.cartao-admin span { color: var(--texto-suave); font-size: 0.82rem; line-height: 1.4; }
 
 /* ---------- Conteúdo ---------- */
 

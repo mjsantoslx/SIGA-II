@@ -1045,3 +1045,36 @@ deixando a select sem rotulo visivel proprio. Isso nao era pretendido:
 confirmado explicitamente que o rotulo "Divisão actual" deve manter-se
 por cima da caixa de selecao, como qualquer outro campo do formulario.
 O bloco lateral fica apenas com o texto de ajuda, sem rotulo proprio.
+47. Backoffice de tabelas de referencia (fechada)
+
+Criada a pagina de administracao (/admin), acesso restrito a
+administradores, com gestao de todas as tabelas de referencia que ate
+agora so podiam ser alteradas directamente por SQL:
+
+- Divisoes (secoes) — controlador e vistas proprios, por ter campos
+  extra (NominativoMasculino/NominativoFeminino). A ordem de
+  progressao entre divisoes (regra 28) continua fixa no codigo
+  (App\Models\Secao::SEQUENCIA) — acrescentar uma divisao aqui nao a
+  insere automaticamente nessa sequencia.
+- Nacionalidades, estados civis, confissoes religiosas, tipos de
+  documento de identificacao, tipos de contacto, tipos de relacao,
+  tipos de evento, orgaos e cargos — mecanismo generico
+  (App\Models\ReferenciaGenerica + App\Controllers\ReferenciasController),
+  parametrizado por uma whitelist fixa de tabelas permitidas (nunca
+  aceite directamente do pedido, para evitar SQL injection atraves do
+  nome da tabela/coluna).
+
+Operacoes disponiveis: listar, criar, editar, eliminar. Tabelas com
+coluna Activo (orgaos, cargos) tambem permitem desactivar em vez de
+eliminar. A eliminacao e sempre bloqueada pela base de dados (FK) se o
+registo estiver em uso — a aplicacao apanha esse erro e mostra uma
+mensagem amigavel, sugerindo desactivar quando aplicavel.
+
+Companhias e utilizadores ja tinham a sua propria gestao (regras 41 e
+"Gestao de utilizadores") — a pagina /admin tem apenas atalhos para
+essas paginas, para ficarem todas acessiveis a partir do mesmo sitio.
+
+⚠️ EM ABERTO (ja identificado antes de agora): continua por implementar
+uma matriz de incompatibilidade entre cargos, o historico de alteracoes
+a ficha de saude, e a gestao de permissoes por companhia ao nivel do
+utilizador (utilizadores_companhias).

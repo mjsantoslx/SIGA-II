@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../app/autoload.php';
 
+use App\Controllers\AdminController;
 use App\Controllers\AssociadosController;
 use App\Controllers\AuthController;
 use App\Controllers\CompanhiasController;
 use App\Controllers\ContactosController;
 use App\Controllers\DashboardController;
+use App\Controllers\DivisoesController;
 use App\Controllers\MoradasController;
+use App\Controllers\ReferenciasController;
 use App\Controllers\UtilizadoresController;
 use App\Core\Router;
 use App\Core\Sessao;
@@ -74,5 +77,22 @@ $router->get('/utilizadores/criar', [UtilizadoresController::class, 'criar']);
 $router->post('/utilizadores/criar', [UtilizadoresController::class, 'guardar']);
 $router->get('/utilizadores/{id}/editar', [UtilizadoresController::class, 'editar']);
 $router->post('/utilizadores/{id}/editar', [UtilizadoresController::class, 'atualizar']);
+
+// Administração (backoffice) — todas as rotas exigem administrador.
+$router->get('/admin', [AdminController::class, 'index']);
+
+$router->get('/admin/divisoes', [DivisoesController::class, 'index']);
+$router->get('/admin/divisoes/criar', [DivisoesController::class, 'criar']);
+$router->post('/admin/divisoes/criar', [DivisoesController::class, 'guardar']);
+$router->get('/admin/divisoes/{id}/editar', [DivisoesController::class, 'editar']);
+$router->post('/admin/divisoes/{id}/editar', [DivisoesController::class, 'atualizar']);
+$router->post('/admin/divisoes/{id}/eliminar', [DivisoesController::class, 'eliminar']);
+
+$router->get('/admin/referencias/{tabela}', [ReferenciasController::class, 'index']);
+$router->get('/admin/referencias/{tabela}/criar', [ReferenciasController::class, 'criar']);
+$router->post('/admin/referencias/{tabela}/criar', [ReferenciasController::class, 'guardar']);
+$router->get('/admin/referencias/{tabela}/{id}/editar', [ReferenciasController::class, 'editar']);
+$router->post('/admin/referencias/{tabela}/{id}/editar', [ReferenciasController::class, 'atualizar']);
+$router->post('/admin/referencias/{tabela}/{id}/eliminar', [ReferenciasController::class, 'eliminar']);
 
 $router->despachar($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);

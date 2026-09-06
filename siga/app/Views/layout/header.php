@@ -21,6 +21,7 @@
         <a href="/companhias">Companhias</a>
         <?php if (\App\Core\Sessao::ehAdministrador()): ?>
             <a href="/utilizadores">Utilizadores</a>
+            <a href="/admin">Administração</a>
         <?php endif; ?>
     </nav>
     <div class="cabecalho-utilizador">
