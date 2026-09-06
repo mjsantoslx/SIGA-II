@@ -978,11 +978,22 @@ dirigentes; validacao defensiva equivalente no servidor
 (Associado::estaNaSeccaoChefia()), para o caso de o pedido ser
 manipulado.
 
-⚠️ LIMITACAO CONHECIDA: se um utilizador ja existente estiver ligado a
-um associado que entretanto deixou de estar na seccao "Chefia" (ex.:
-por uma correccao de seccao), esse associado deixa de aparecer na
-lista de seleccao ao editar esse utilizador, e qualquer gravacao dessa
-edicao (mesmo so para mudar a palavra-passe) fica bloqueada ate se
-escolher um associado dirigente valido. Nao foi implementada nenhuma
-solucao especial para este caso, por ser considerado pouco provavel na
-pratica.
+44.1 Nota (confirmada): quando e que um dirigente deixa de o ser
+
+Confirmado explicitamente: a progressao normal entre seccoes (regra 28)
+nunca retira um associado da seccao "Chefia" para o colocar noutra —
+a sequencia (Colonia -> Alcateia -> Tribo Junior -> Tribo Senior -> Cla
+-> Chefia) so anda para a frente, e "Chefia" e o ultimo passo. Um
+associado so pode deixar de estar na seccao "Chefia" atraves da via de
+correccao explicita (regra 28.2), usada apenas para corrigir um erro
+concreto — nunca como consequencia do uso normal da aplicacao.
+
+Impacto pratico: se um administrador usar essa correccao para tirar da
+seccao "Chefia" um associado que esteja ligado a um utilizador, esse
+associado deixa de aparecer na lista de seleccao ao editar esse
+utilizador, e qualquer gravacao dessa edicao (mesmo so para mudar a
+palavra-passe) fica bloqueada ate se escolher um associado dirigente
+valido. Como isto so acontece por uma accao deliberada e rara do
+administrador (nao no uso normal), nao foi implementada nenhuma
+solucao automatica (ex.: desligar o utilizador nesse momento) — fica
+como algo a ter em conta manualmente por quem fizer a correccao.

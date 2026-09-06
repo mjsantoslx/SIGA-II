@@ -285,6 +285,9 @@ server {
 Esta secção é actualizada a cada nova versão entregue, com as alterações
 feitas desde a versão anterior. Mais recente primeiro.
 
+### v01.34
+- Apenas documentação: esclarecido no documento de regras de negócio que um dirigente só deixa de estar na secção "Chefia" através da via de correcção explícita (nunca pela progressão normal entre secções) — sem alterações de código.
+
 ### v01.33
 - Só um dirigente (associado na secção "Chefia") pode ser ligado a um utilizador do sistema — a lista de associados disponíveis na gestão de utilizadores passa a mostrar só dirigentes, com validação equivalente no servidor.
 
