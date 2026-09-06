@@ -997,3 +997,37 @@ valido. Como isto so acontece por uma accao deliberada e rara do
 administrador (nao no uso normal), nao foi implementada nenhuma
 solucao automatica (ex.: desligar o utilizador nesse momento) — fica
 como algo a ter em conta manualmente por quem fizer a correccao.
+45. Etiqueta "Divisão" em vez de "Secção" na interface (fechada)
+
+Foi pedido que, em toda a interface visivel ao utilizador, a palavra
+"Secção"/"secção" passe a aparecer como "Divisão"/"divisão".
+
+Implementado como uma mudanca de ETIQUETA apenas: todos os textos visiveis
+(rotulos de campos, cabecalhos de tabela, mensagens de erro/sucesso,
+opcoes de filtro, textos de ajuda) foram actualizados. Por decisao
+deliberada, NAO foram renomeados a nivel interno: a tabela `secoes`, o
+modelo `Secao`, as colunas `IdSecao`, os nomes de metodos
+(`ehChefia`, `secaoActual`, etc.) e os comentarios tecnicos internos do
+codigo mantiveram-se como estavam — isto e uma alteracao de apresentacao,
+nao de esquema. Excepcao adicional preservada de proposito: o valor
+"Correcção de secção" guardado na tabela `tipos_evento` (usado para
+procurar o tipo de evento correcto) NAO foi alterado, para nao partir essa
+pesquisa — so passaria a "divisão" se fosse feita uma migracao explicita
+dos dados existentes.
+
+⚠️ ATENCAO — POSSIVEL AMBIGUIDADE: ja existiam os cargos "Chefe de
+Divisão" e "Subchefe de Divisão" (regra 34.1), que sao um conceito
+diferente (um cargo de dirigente) do que passou agora a chamar-se
+"Divisão" (o antigo "Secção": Colonia, Alcateia, Tribo Junior, Tribo
+Senior, Cla, Chefia). A partir de agora a interface tem duas coisas
+distintas com nomes parecidos: a "Divisão" do associado (Colonia/
+Alcateia/.../Chefia) e o cargo "Chefe de Divisão"/"Subchefe de Divisão".
+Isto foi implementado exactamente como pedido, mas fica aqui sinalizado
+para confirmacao — se causar confusao na pratica, pode ser necessario
+renomear os cargos ou reconsiderar a etiqueta.
+
+46. Texto de ajuda antes da caixa de escolha (fechada)
+
+No formulario de edicao do associado, o texto de ajuda da divisao (regras
+de progressao e requisito do email associativo) passou a aparecer antes
+da caixa de selecao, em vez de depois.

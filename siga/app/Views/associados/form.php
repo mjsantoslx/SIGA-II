@@ -144,7 +144,7 @@
             <div class="campo">
                 <label for="EmailAssociativo">Email associativo</label>
                 <input type="email" id="EmailAssociativo" name="EmailAssociativo" value="<?= htmlspecialchars($a['EmailAssociativo'] ?? '') ?>">
-                <small id="ajudaEmailAssociativo">Obrigatório para dirigentes (secção "Chefia").</small>
+                <small id="ajudaEmailAssociativo">Obrigatório para dirigentes (divisão "Chefia").</small>
             </div>
         </div>
     </fieldset>
@@ -153,7 +153,7 @@
         <legend>4. Enquadramento na UEP</legend>
         <div class="grelha-formulario">
             <div class="campo">
-                <label for="IdSecao">Secção</label>
+                <label for="IdSecao">Divisão</label>
                 <select id="IdSecao" name="IdSecao" onchange="siga.actualizarDependenciasSeccao(this)">
                     <option value="">Seleccionar…</option>
                     <?php foreach ($secoes as $s): ?>
@@ -183,7 +183,7 @@
         </div>
 
         <?php
-        // "Equipa Nacional de Clã" é exclusivo da secção "Clã" — separa-se
+        // "Equipa Nacional de Clã" é exclusivo da divisão "Clã" — separa-se
         // dos restantes cargos, que são exclusivos de dirigentes (Chefia).
         $cargoCla = null;
         $outrosCargos = [];
@@ -199,7 +199,7 @@
         <?php if ($cargoCla): ?>
         <div class="campo" id="grupo-cla" style="margin-top: 1rem; display: none;">
             <label><input type="checkbox" name="Cargos[]" value="<?= (int) $cargoCla['Id'] ?>"> <?= htmlspecialchars($cargoCla['Designacao']) ?></label>
-            <small>Exclusivo de associados na secção "Clã".</small>
+            <small>Exclusivo de associados na divisão "Clã".</small>
         </div>
         <?php endif; ?>
 

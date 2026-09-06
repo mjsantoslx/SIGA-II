@@ -43,7 +43,7 @@
                     <?php endforeach; ?>
                 </select>
                 <small>
-                    Obrigatório (regra 4). Só um dirigente (associado na secção "Chefia") pode ser ligado a
+                    Obrigatório (regra 4). Só um dirigente (associado na divisão "Chefia") pode ser ligado a
                     um utilizador — por isso só estes aparecem na lista. O estatuto de administrador é
                     automático: se o associado ligado estiver na Chefia Nacional, o utilizador passa a
                     administrador; caso contrário, tem de ter uma companhia local.

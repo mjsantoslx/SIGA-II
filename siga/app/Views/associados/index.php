@@ -13,7 +13,7 @@
            value="<?= htmlspecialchars($filtros['pesquisa']) ?>">
 
     <select name="idSecao">
-        <option value="">Todas as secções</option>
+        <option value="">Todas as divisões</option>
         <?php foreach ($secoes as $secao): ?>
             <option value="<?= (int) $secao['Id'] ?>" <?= (string) $filtros['idSecao'] === (string) $secao['Id'] ? 'selected' : '' ?>>
                 <?= htmlspecialchars($secao['Designacao']) ?>
@@ -47,7 +47,7 @@ $parametrosOrdenacao = [
             <tr>
                 <th><?= \App\Core\Tabela::cabecalhoOrdenavel('nome', 'Nome', $ordenar, $direcao, $parametrosOrdenacao) ?></th>
                 <th><?= \App\Core\Tabela::cabecalhoOrdenavel('numero', 'Nº associado', $ordenar, $direcao, $parametrosOrdenacao) ?></th>
-                <th><?= \App\Core\Tabela::cabecalhoOrdenavel('secao', 'Secção', $ordenar, $direcao, $parametrosOrdenacao) ?></th>
+                <th><?= \App\Core\Tabela::cabecalhoOrdenavel('secao', 'Divisão', $ordenar, $direcao, $parametrosOrdenacao) ?></th>
                 <th><?= \App\Core\Tabela::cabecalhoOrdenavel('companhia', 'Companhia', $ordenar, $direcao, $parametrosOrdenacao) ?></th>
                 <th><?= \App\Core\Tabela::cabecalhoOrdenavel('nascimento', 'Data nasc.', $ordenar, $direcao, $parametrosOrdenacao) ?></th>
                 <th><?= \App\Core\Tabela::cabecalhoOrdenavel('estado', 'Estado', $ordenar, $direcao, $parametrosOrdenacao) ?></th>

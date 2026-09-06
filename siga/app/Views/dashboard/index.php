@@ -17,9 +17,9 @@
 </div>
 
 <section class="seccao">
-    <h2>Associados por secção</h2>
+    <h2>Associados por divisão</h2>
     <?php if (empty($porSecao)): ?>
-        <p class="texto-vazio">Ainda não existem associados atribuídos a secções.</p>
+        <p class="texto-vazio">Ainda não existem associados atribuídos a divisões.</p>
     <?php else: ?>
         <ul class="lista-barras">
             <?php $maximo = max(array_column($porSecao, 'Total')); ?>

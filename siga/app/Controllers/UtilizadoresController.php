@@ -237,10 +237,10 @@ class UtilizadoresController extends Controller
                 $erros[] = 'Esse associado já está ligado a outro utilizador.';
             }
 
-            // Regra 44: só um dirigente (associado na secção "Chefia") pode
+            // Regra 44: só um dirigente (associado na divisão "Chefia") pode
             // ser ligado a um utilizador do sistema.
             if (!$associadoModelo->estaNaSeccaoChefia($idAssociado)) {
-                $erros[] = 'Só um dirigente (associado na secção "Chefia") pode ser ligado a um utilizador do sistema.';
+                $erros[] = 'Só um dirigente (associado na divisão "Chefia") pode ser ligado a um utilizador do sistema.';
             }
 
             // Regra 2: um utilizador não-administrador (associado fora da

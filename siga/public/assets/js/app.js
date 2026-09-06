@@ -57,11 +57,11 @@ window.siga = {
     },
 
     /**
-     * Regra 27/36/39: reúne todas as dependências da secção escolhida no
+     * Regra 27/36/39: reúne todas as dependências da divisão escolhida no
      * formulário de associado — email associativo, o bloco inteiro de
      * dirigente (Chefia Nacional, órgãos, cargos, formador, insígnia de
      * madeira) e o cargo "Equipa Nacional de Clã" (exclusivo do Clã).
-     * Esconde e limpa cada bloco quando a secção escolhida não se aplica,
+     * Esconde e limpa cada bloco quando a divisão escolhida não se aplica,
      * para não sobrar uma selecção escondida a ser submetida por engano.
      */
     actualizarDependenciasSeccao(selectSecao) {
@@ -95,8 +95,8 @@ window.siga = {
 
     /**
      * Regra 27/36: o email associativo é obrigatório para associados na
-     * secção "Chefia" (dirigentes), e só pode ser preenchido nesse caso —
-     * por isso o campo fica desactivado (e é limpo) fora da secção "Chefia".
+     * divisão "Chefia" (dirigentes), e só pode ser preenchido nesse caso —
+     * por isso o campo fica desactivado (e é limpo) fora da divisão "Chefia".
      */
     actualizarObrigatoriedadeEmailAssociativo(selectSecao) {
         const campoEmail = document.getElementById('EmailAssociativo');

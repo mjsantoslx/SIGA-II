@@ -99,19 +99,19 @@
         <legend>Enquadramento na UEP</legend>
         <div class="grelha-formulario">
             <div class="campo">
-                <label for="IdSecao">Secção actual</label>
+                <label for="IdSecao">Divisão actual</label>
+                <small>Em uso normal só é possível avançar (ou saltar para a frente) na sequência Colónia → Alcateia → Tribo Júnior → Tribo Sénior → Clã → Chefia — nunca recuar. Para "Chefia", o associado já tem de ter um contacto "Email Associativo" (em "Gerir contactos").</small>
                 <select id="IdSecao" name="IdSecao" onchange="siga.actualizarDependenciasSeccao(this)">
-                    <option value="" data-designacao="<?= htmlspecialchars($secaoActual['Designacao'] ?? '') ?>">Manter secção actual</option>
+                    <option value="" data-designacao="<?= htmlspecialchars($secaoActual['Designacao'] ?? '') ?>">Manter divisão actual</option>
                     <?php foreach ($secoes as $s): ?>
                         <option value="<?= (int) $s['Id'] ?>" data-designacao="<?= htmlspecialchars($s['Designacao']) ?>" <?= isset($secaoActual['IdSecao']) && (int) $secaoActual['IdSecao'] === (int) $s['Id'] ? 'selected' : '' ?>><?= htmlspecialchars($s['Designacao']) ?></option>
                     <?php endforeach; ?>
                 </select>
-                <small>Em uso normal só é possível avançar (ou saltar para a frente) na sequência Colónia → Alcateia → Tribo Júnior → Tribo Sénior → Clã → Chefia — nunca recuar. Para "Chefia", o associado já tem de ter um contacto "Email Associativo" (em "Gerir contactos").</small>
             </div>
             <div class="campo campo-largo">
                 <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 600;">
                     <input type="checkbox" name="CorrecaoSecao" value="1" style="width: auto;">
-                    Isto é uma correcção (a mudança de secção pode representar um recuo)
+                    Isto é uma correcção (a mudança de divisão pode representar um recuo)
                 </label>
                 <small>Só assinale isto para corrigir um erro. A correcção fica sempre registada no histórico de eventos do associado.</small>
                 <input type="text" name="MotivoCorrecaoSecao" placeholder="Motivo da correcção (opcional, mas recomendado)" style="margin-top: 0.4rem;">
@@ -129,7 +129,7 @@
         </div>
 
         <?php
-        // "Equipa Nacional de Clã" é exclusivo da secção "Clã" — separa-se
+        // "Equipa Nacional de Clã" é exclusivo da divisão "Clã" — separa-se
         // dos restantes cargos, que são exclusivos de dirigentes (Chefia).
         $cargoCla = null;
         $outrosCargos = [];
@@ -145,7 +145,7 @@
         <?php if ($cargoCla): ?>
         <div class="campo" id="grupo-cla" style="margin-top: 1rem; display: none;">
             <label><input type="checkbox" name="Cargos[]" value="<?= (int) $cargoCla['Id'] ?>" <?= in_array((int) $cargoCla['Id'], $idsCargosActuais, true) ? 'checked' : '' ?>> <?= htmlspecialchars($cargoCla['Designacao']) ?></label>
-            <small>Exclusivo de associados na secção "Clã".</small>
+            <small>Exclusivo de associados na divisão "Clã".</small>
         </div>
         <?php endif; ?>
 

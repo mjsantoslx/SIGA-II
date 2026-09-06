@@ -134,13 +134,13 @@ class ContactosController extends Controller
         }
 
         // Regra 27: o email associativo é obrigatório enquanto o associado
-        // estiver na secção "Chefia" — não pode ser removido nesse caso.
+        // estiver na divisão "Chefia" — não pode ser removido nesse caso.
         $contacto = $contactoModelo->encontrarPorId($idContacto);
         $idTipoEmailAssociativo = $contactoModelo->idTipoPorDesignacao('Email Associativo');
         if ($contacto && $idTipoEmailAssociativo && (int) $contacto['IdTipoContacto'] === $idTipoEmailAssociativo) {
             $secaoActual = (new Associado())->secaoActual($idAssociado);
             if ($secaoActual && (new Secao())->ehChefia((int) $secaoActual['IdSecao'])) {
-                Sessao::guardarMensagem('erro', 'Não é possível remover o email associativo enquanto o associado estiver na secção "Chefia".');
+                Sessao::guardarMensagem('erro', 'Não é possível remover o email associativo enquanto o associado estiver na divisão "Chefia".');
                 $this->redirecionar('/associados/' . $idAssociado . '/contactos');
                 return;
             }

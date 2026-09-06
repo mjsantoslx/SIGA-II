@@ -129,27 +129,27 @@ class AssociadosController extends Controller
         $ehChefia = (new Secao())->ehChefia(!empty($dados['IdSecao']) ? (int) $dados['IdSecao'] : null);
         $ehCla = (new Secao())->ehCla(!empty($dados['IdSecao']) ? (int) $dados['IdSecao'] : null);
 
-        // Regra 27: email associativo obrigatório para a secção "Chefia" —
+        // Regra 27: email associativo obrigatório para a divisão "Chefia" —
         // e só pode ser preenchido nesse caso (regra 38).
         if ($ehChefia && trim($dados['EmailAssociativo'] ?? '') === '') {
-            $erros[] = 'O email associativo é obrigatório para associados na secção "Chefia".';
+            $erros[] = 'O email associativo é obrigatório para associados na divisão "Chefia".';
         }
         if (!$ehChefia && trim($dados['EmailAssociativo'] ?? '') !== '') {
-            $erros[] = 'O email associativo só pode ser preenchido para associados dirigentes (secção "Chefia").';
+            $erros[] = 'O email associativo só pode ser preenchido para associados dirigentes (divisão "Chefia").';
         }
 
-        // Regra 29: só um dirigente (associado na secção "Chefia") pode
+        // Regra 29: só um dirigente (associado na divisão "Chefia") pode
         // pertencer à Chefia Nacional.
         if (!empty($dados['ChefiaNacional']) && !$ehChefia) {
-            $erros[] = 'Só um dirigente (associado na secção "Chefia") pode pertencer à Chefia Nacional.';
+            $erros[] = 'Só um dirigente (associado na divisão "Chefia") pode pertencer à Chefia Nacional.';
         }
 
         // Regra 32: formador e insígnia de madeira são atributos de dirigentes.
         if (!empty($dados['Formador']) && !$ehChefia) {
-            $erros[] = 'Só um dirigente (associado na secção "Chefia") pode ser assinalado como formador.';
+            $erros[] = 'Só um dirigente (associado na divisão "Chefia") pode ser assinalado como formador.';
         }
         if (!empty($dados['InsigniaMadeira']) && !$ehChefia) {
-            $erros[] = 'Só um dirigente (associado na secção "Chefia") pode ter insígnia de madeira.';
+            $erros[] = 'Só um dirigente (associado na divisão "Chefia") pode ter insígnia de madeira.';
         }
 
         // Regra 40: um associado só pode ter um encarregado de educação.
@@ -159,7 +159,7 @@ class AssociadosController extends Controller
         }
 
         // Regra 34/39: cargos são de dirigentes, excepto "Equipa Nacional de
-        // Clã", exclusivo de associados na secção "Clã".
+        // Clã", exclusivo de associados na divisão "Clã".
         $erros = array_merge($erros, $this->validarCargos($dados['Cargos'] ?? [], $ehChefia, $ehCla));
 
         if ($erros) {
@@ -305,44 +305,44 @@ class AssociadosController extends Controller
         $correcaoManual = !empty($dados['CorrecaoSecao']);
 
         // Em uso normal só se pode avançar (ou saltar para a frente) na
-        // sequência de secções, nunca recuar. Um recuo só é permitido através
+        // sequência de divisões, nunca recuar. Um recuo só é permitido através
         // da correcção explícita, assinalada pelo utilizador.
         if (!empty($dados['IdSecao']) && !$correcaoManual) {
             if (!$secaoModelo->transicaoPermitida($idSecaoAtual ? (int) $idSecaoAtual : null, (int) $dados['IdSecao'])) {
-                $erros[] = 'Esta mudança de secção representaria um recuo, o que não é permitido em uso normal. Se for mesmo necessário (correcção de um erro), assinale a opção "Isto é uma correcção" no formulário.';
+                $erros[] = 'Esta mudança de divisão representaria um recuo, o que não é permitido em uso normal. Se for mesmo necessário (correcção de um erro), assinale a opção "Isto é uma correcção" no formulário.';
             }
         }
 
-        // Regra 27: ao mudar para a secção "Chefia", o associado já tem de ter
+        // Regra 27: ao mudar para a divisão "Chefia", o associado já tem de ter
         // um contacto "Email Associativo" registado (gerido em "Gerir contactos").
         if (!empty($dados['IdSecao']) && $secaoModelo->ehChefia((int) $dados['IdSecao'])) {
             $temEmailAssociativo = (new Contacto())->temTipo((int) $associadoExistente['IdPessoa'], 'Email Associativo');
             if (!$temEmailAssociativo) {
-                $erros[] = 'Para atribuir a secção "Chefia" é necessário que o associado já tenha um contacto "Email Associativo" — adicione-o primeiro em "Gerir contactos".';
+                $erros[] = 'Para atribuir a divisão "Chefia" é necessário que o associado já tenha um contacto "Email Associativo" — adicione-o primeiro em "Gerir contactos".';
             }
         }
 
-        // Regra 29: só um dirigente (associado na secção "Chefia") pode
-        // pertencer à Chefia Nacional — considera a secção efectiva após
+        // Regra 29: só um dirigente (associado na divisão "Chefia") pode
+        // pertencer à Chefia Nacional — considera a divisão efectiva após
         // esta gravação (a nova, se estiver a mudar, ou a actual).
         $idSecaoEfectiva = !empty($dados['IdSecao']) ? (int) $dados['IdSecao'] : ($idSecaoAtual ? (int) $idSecaoAtual : null);
         $seraDirigente = $secaoModelo->ehChefia($idSecaoEfectiva);
         $seraCla = $secaoModelo->ehCla($idSecaoEfectiva);
 
         if (!empty($dados['ChefiaNacional']) && !$seraDirigente) {
-            $erros[] = 'Só um dirigente (associado na secção "Chefia") pode pertencer à Chefia Nacional.';
+            $erros[] = 'Só um dirigente (associado na divisão "Chefia") pode pertencer à Chefia Nacional.';
         }
 
         // Regra 32: formador e insígnia de madeira são atributos de dirigentes.
         if (!empty($dados['Formador']) && !$seraDirigente) {
-            $erros[] = 'Só um dirigente (associado na secção "Chefia") pode ser assinalado como formador.';
+            $erros[] = 'Só um dirigente (associado na divisão "Chefia") pode ser assinalado como formador.';
         }
         if (!empty($dados['InsigniaMadeira']) && !$seraDirigente) {
-            $erros[] = 'Só um dirigente (associado na secção "Chefia") pode ter insígnia de madeira.';
+            $erros[] = 'Só um dirigente (associado na divisão "Chefia") pode ter insígnia de madeira.';
         }
 
         // Regra 34/39: cargos são de dirigentes, excepto "Equipa Nacional de
-        // Clã", exclusivo de associados na secção "Clã".
+        // Clã", exclusivo de associados na divisão "Clã".
         $erros = array_merge($erros, $this->validarCargos($dados['Cargos'] ?? [], $seraDirigente, $seraCla));
 
         if ($erros) {
@@ -365,8 +365,8 @@ class AssociadosController extends Controller
                     $designacaoNova = $secaoModelo->designacaoPorId((int) $dados['IdSecao']);
                     $motivo = trim($dados['MotivoCorrecaoSecao'] ?? '');
                     $observacoes = sprintf(
-                        'Correcção manual de secção: %s → %s.%s',
-                        $designacaoAnterior ?? '(sem secção anterior)',
+                        'Correcção manual de divisão: %s → %s.%s',
+                        $designacaoAnterior ?? '(sem divisão anterior)',
                         $designacaoNova ?? '(desconhecida)',
                         $motivo !== '' ? ' Motivo: ' . $motivo : ''
                     );
@@ -482,7 +482,7 @@ class AssociadosController extends Controller
      */
     /**
      * Regra 34/39: cada cargo tem a sua própria condição — "Equipa Nacional
-     * de Clã" exige a secção "Clã"; todos os outros exigem a secção
+     * de Clã" exige a divisão "Clã"; todos os outros exigem a divisão
      * "Chefia" (dirigentes).
      *
      * @param array $idsCargos
@@ -499,10 +499,10 @@ class AssociadosController extends Controller
             $designacao = $cargoModelo->designacaoPorId((int) $idCargo);
             if ($designacao === 'Equipa Nacional de Clã') {
                 if (!$ehCla) {
-                    $erros[] = 'O cargo "Equipa Nacional de Clã" é exclusivo de associados na secção "Clã".';
+                    $erros[] = 'O cargo "Equipa Nacional de Clã" é exclusivo de associados na divisão "Clã".';
                 }
             } elseif (!$ehChefia) {
-                $erros[] = 'Só um dirigente (associado na secção "Chefia") pode ter cargos atribuídos (excepto "Equipa Nacional de Clã", exclusivo da secção "Clã").';
+                $erros[] = 'Só um dirigente (associado na divisão "Chefia") pode ter cargos atribuídos (excepto "Equipa Nacional de Clã", exclusivo da divisão "Clã").';
             }
         }
 

@@ -285,6 +285,10 @@ server {
 Esta secção é actualizada a cada nova versão entregue, com as alterações
 feitas desde a versão anterior. Mais recente primeiro.
 
+### v01.35
+- Etiqueta "Secção" substituída por "Divisão" em toda a interface visível (rótulos, cabeçalhos, mensagens, filtros) — alteração só de apresentação, sem tocar na tabela/modelo internos (`secoes`/`Secao`).
+- No formulário de edição do associado, o texto de ajuda da divisão passou a aparecer antes da caixa de seleção.
+
 ### v01.34
 - Apenas documentação: esclarecido no documento de regras de negócio que um dirigente só deixa de estar na secção "Chefia" através da via de correcção explícita (nunca pela progressão normal entre secções) — sem alterações de código.
 
