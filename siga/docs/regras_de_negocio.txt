@@ -1149,3 +1149,30 @@ dentro de uma transaccao propria, por isso usa
 guardarComHistoricoSemTransacao() em vez disso — o PDO nao suporta
 transaccoes aninhadas. Qualquer novo ponto de chamada deve ter este
 cuidado em conta.
+50. Pendencias (por fazer, fora de ordem especifica)
+
+Lista viva de coisas identificadas ao longo do projecto como "fica
+para depois", para nao se perderem. Actualizar esta lista sempre que
+algum destes pontos for tratado (mover para uma regra fechada) ou
+algum novo for identificado.
+
+- Matriz de incompatibilidade entre cargos (regra 34/39): neste
+  momento e possivel marcar, por exemplo, "Chefe da Companhia" e
+  "Subchefe da Companhia" ao mesmo tempo. Falta decidir quais cargos
+  sao mutuamente exclusivos entre si.
+- Regra 31 (Chefia Nacional restrita a dirigentes) foi confirmada
+  explicitamente so para a Chefia Nacional — nao ficou confirmado se
+  a mesma restricao se aplica aos orgaos (regra 29). Por enquanto os
+  orgaos continuam sem essa restricao.
+- Permissoes por companhia ao nivel do utilizador
+  (utilizadores_companhias): existe no esquema, mas nao e usada — um
+  utilizador so esta ligado a uma companhia atraves do seu associado.
+- Exportacoes (ex.: listas de associados por companhia/divisao, em
+  CSV/PDF).
+- Testes automatizados.
+- Largura do Cartao de Cidadao (regra 6) ainda por confirmar — o
+  preenchimento automatico com zeros existe mas esta inactivo
+  (config/config.php -> documentos.largura_cc = null).
+- Backoffice (regra 48): reduzido a Tipos de Evento e Utilizadores; o
+  utilizador indicou que pode identificar mais tabelas a incluir mais
+  tarde.

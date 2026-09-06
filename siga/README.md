@@ -284,10 +284,25 @@ server {
 }
 ```
 
-## 7. Histórico de versões
+## 7. Pendências (fica para depois)
+
+Lista viva do que ficou identificado como "por fazer", sem ordem específica — ver secção 50 do `docs/regras_de_negocio.txt` para mais detalhe em cada ponto:
+
+- Matriz de incompatibilidade entre cargos.
+- Confirmar se a restrição "só dirigentes" também se aplica aos órgãos (confirmada só para a Chefia Nacional).
+- Permissões por companhia ao nível do utilizador (`utilizadores_companhias`, existe no esquema mas não é usada).
+- Exportações (CSV/PDF).
+- Testes automatizados.
+- Confirmar a largura do Cartão de Cidadão (o preenchimento com zeros está pronto mas inactivo).
+- Backoffice: reduzido a Tipos de Evento e Utilizadores — pode vir a crescer com mais tabelas, se fizer sentido.
+
+## 8. Histórico de versões
 
 Esta secção é actualizada a cada nova versão entregue, com as alterações
 feitas desde a versão anterior. Mais recente primeiro.
+
+### v01.43
+- Apenas documentação: nova secção de pendências (README e regras de negócio), consolidando tudo o que ficou identificado como "por fazer" — sem alterações de código.
 
 ### v01.42
 - Histórico de alterações à ficha de saúde (tabela `fichas_saude_historico`, já existente no schema, passa a ser escrita). Nova página "Gerir ficha de saúde", que também acrescenta a possibilidade de editar a ficha de saúde depois do registo do associado — antes só era possível na criação.
