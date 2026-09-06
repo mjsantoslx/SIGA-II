@@ -1026,8 +1026,17 @@ Isto foi implementado exactamente como pedido, mas fica aqui sinalizado
 para confirmacao — se causar confusao na pratica, pode ser necessario
 renomear os cargos ou reconsiderar a etiqueta.
 
-46. Texto de ajuda antes da caixa de escolha (fechada)
+46. Texto de ajuda antes da caixa de escolha (v01.35, revista na v01.37)
 
-No formulario de edicao do associado, o texto de ajuda da divisao (regras
-de progressao e requisito do email associativo) passou a aparecer antes
-da caixa de selecao, em vez de depois.
+Na v01.35, o texto de ajuda da divisao passou a aparecer ANTES da caixa
+de selecao (em vez de depois), ambos na mesma coluna (um por cima do
+outro).
+
+46.1 Revisao (v01.37): texto ao lado, nao por cima
+
+Corrigido: o texto de ajuda passou a aparecer ao LADO da caixa de
+selecao (na coluna seguinte da grelha), alinhado com ela — nao por
+cima nem por baixo. O rotulo "Divisão actual" tambem passou a fazer
+parte desse bloco lateral, em vez de ficar por cima da select (que
+passou a nao ter rotulo visivel proprio, mantendo apenas a associacao
+de acessibilidade via atributo for/id).

@@ -285,6 +285,9 @@ server {
 Esta secção é actualizada a cada nova versão entregue, com as alterações
 feitas desde a versão anterior. Mais recente primeiro.
 
+### v01.37
+- Corrigido o posicionamento introduzido na v01.35: o texto de ajuda da divisão passa a aparecer ao lado da caixa de seleção (na coluna seguinte, alinhado com ela), em vez de por cima.
+
 ### v01.35
 - Etiqueta "Secção" substituída por "Divisão" em toda a interface visível (rótulos, cabeçalhos, mensagens, filtros) — alteração só de apresentação, sem tocar na tabela/modelo internos (`secoes`/`Secao`).
 - No formulário de edição do associado, o texto de ajuda da divisão passou a aparecer antes da caixa de seleção.
