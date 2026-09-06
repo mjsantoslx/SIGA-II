@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Core\Model;
+use App\Core\Sessao;
 
 class Associado extends Model
 {
@@ -356,7 +357,14 @@ class Associado extends Model
 
             // 9. Ficha de saúde (opcional, mas exige NumUente se preenchida)
             if (!empty($dados['NumUente'])) {
-                $fichaSaude->criar($idAssociado, $dados);
+                $idUtilizadorActual = Sessao::utilizador()['Id'] ?? null;
+                if ($idUtilizadorActual) {
+                    $fichaSaude->guardarComHistoricoSemTransacao($idAssociado, $dados, (int) $idUtilizadorActual);
+                } else {
+                    // Salvaguarda: nunca deveria acontecer (criação exige sessão activa),
+                    // mas evita perder a ficha de saúde por falta de utilizador para o histórico.
+                    $fichaSaude->criar($idAssociado, $dados);
+                }
             }
 
             // 10. Consentimentos RGPD

@@ -12,6 +12,7 @@
     <div class="acoes-rapidas">
         <a href="/associados/<?= (int) $associado['Id'] ?>/editar" class="botao botao-secundario">Editar</a>
         <a href="/associados/<?= (int) $associado['Id'] ?>/contactos" class="botao botao-secundario">Gerir contactos</a>
+        <a href="/associados/<?= (int) $associado['Id'] ?>/ficha-saude" class="botao botao-secundario">Gerir ficha de saúde</a>
     </div>
 </div>
 

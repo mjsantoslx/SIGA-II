@@ -211,6 +211,8 @@ preservar:
 - **Gestão de companhias** (`/companhias/criar`, `/companhias/{id}/editar`, regra 41)
   — criação e edição dos dados base (designação, âmbito nacional/local, estado), restrita a administradores. Designação única; só pode existir uma companhia de âmbito nacional (Chefia Nacional) activa de cada vez. A gestão de morada mantém-se disponível a qualquer utilizador da própria companhia.
 
+- **Histórico da ficha de saúde** (regra 49) — nova página "Gerir ficha de saúde" (`/associados/{id}/ficha-saude`), que passa a permitir editar a ficha de saúde depois do registo do associado (só era possível defini-la na criação). Toda a criação/alteração fica registada em `fichas_saude_historico` — quem, quando, e o estado antes/depois. A interface mostra a lista de alterações (não o detalhe, por serem dados de saúde); o detalhe fica na base de dados.
+
 - **Backoffice** (`/admin`, regras 47-48) — acesso restrito a administradores. Reduzido, após revisão, a **tipos de evento** e a **utilizadores** (atalho); as restantes tabelas de referência (divisões, nacionalidades, estados civis, confissões religiosas, tipos de documento/contacto/relação, órgãos, cargos) foram removidas do backoffice — continuam só editáveis directamente por SQL. O mecanismo genérico de gestão de referências mantém-se no código, pronto a reactivar para outra tabela, se vier a fazer sentido.
 
 - **Ordenação em todas as listagens** (regra 42) — os cabeçalhos de coluna nas listagens de associados, companhias e utilizadores são clicáveis para ordenar (ascendente/descendente, com indicador visual), preservando os filtros activos. Qualquer listagem nova deve seguir o mesmo padrão (`App\Core\Tabela`).
@@ -286,6 +288,10 @@ server {
 
 Esta secção é actualizada a cada nova versão entregue, com as alterações
 feitas desde a versão anterior. Mais recente primeiro.
+
+### v01.42
+- Histórico de alterações à ficha de saúde (tabela `fichas_saude_historico`, já existente no schema, passa a ser escrita). Nova página "Gerir ficha de saúde", que também acrescenta a possibilidade de editar a ficha de saúde depois do registo do associado — antes só era possível na criação.
+- A interface mostra apenas quem/quando alterou, não o detalhe da alteração, por serem dados de saúde; o detalhe fica guardado na base de dados.
 
 ### v01.41
 - Backoffice reduzido, após revisão, a apenas Tipos de evento e Utilizadores. Removidos do `/admin`: divisões (controlador e vistas eliminados), nacionalidades, estados civis, confissões religiosas, tipos de documento/contacto/relação, órgãos, cargos, e o atalho para companhias — continuam só editáveis por SQL. A gestão de companhias em si (`/companhias`) não foi afectada.

@@ -10,6 +10,7 @@ use App\Controllers\AuthController;
 use App\Controllers\CompanhiasController;
 use App\Controllers\ContactosController;
 use App\Controllers\DashboardController;
+use App\Controllers\FichaSaudeController;
 use App\Controllers\MoradasController;
 use App\Controllers\ReferenciasController;
 use App\Controllers\UtilizadoresController;
@@ -58,6 +59,10 @@ $router->get('/associados/{id}/contactos', [ContactosController::class, 'gerir']
 $router->post('/associados/{id}/contactos/adicionar', [ContactosController::class, 'adicionar']);
 $router->post('/associados/{id}/contactos/{idContacto}/editar', [ContactosController::class, 'editar']);
 $router->post('/associados/{id}/contactos/{idContacto}/remover', [ContactosController::class, 'remover']);
+
+// Gestão da ficha de saúde do associado, com histórico
+$router->get('/associados/{id}/ficha-saude', [FichaSaudeController::class, 'gerir']);
+$router->post('/associados/{id}/ficha-saude', [FichaSaudeController::class, 'guardar']);
 
 // Companhias
 $router->get('/companhias', [CompanhiasController::class, 'index']);

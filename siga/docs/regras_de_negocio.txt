@@ -1107,3 +1107,45 @@ directamente por SQL.
 ⚠️ EM ABERTO: o utilizador indicou que pode identificar mais
 excepcoes a avisar mais tarde (ex.: alguma destas tabelas afinal
 tambem deve voltar a ficar no backoffice).
+49. Historico da ficha de saude (fechada)
+
+A tabela fichas_saude_historico ja existia no schema desde o inicio,
+mas nunca tinha sido escrita pela aplicacao (ver regra 25). Passou
+agora a ser usada:
+
+- Toda a criacao ou alteracao da ficha de saude de um associado fica
+  registada — quem fez (IdUtilizador), quando (DataHora), o tipo de
+  operacao (CRIACAO/ACTUALIZACAO), e o estado completo antes e depois
+  (em JSON, colunas DadosAnteriores/DadosNovos).
+- Isto aplica-se tanto a criacao inicial (no registo do associado,
+  quando ha NumUente preenchido) como a qualquer edicao posterior.
+- Nova pagina "Gerir ficha de saude"
+  (/associados/{id}/ficha-saude): antes so era possivel definir a
+  ficha de saude no momento do registo do associado — nao havia
+  nenhuma forma de a editar depois. Esta pagina resolve isso, e e' o
+  que torna o historico util na pratica.
+- Acesso: mesma regra 2 dos restantes ecrans de associado — restrito
+  a administradores ou a utilizadores da mesma companhia do
+  associado.
+
+49.1 Decisao de privacidade: nao mostrar o detalhe antes/depois no ecra
+
+A pagina de historico mostra apenas a lista de alteracoes (data/hora,
+tipo de operacao, utilizador que a fez) — NAO mostra o conteudo
+detalhado de cada alteracao (o que mudou exactamente), por se tratar
+de dados de saude. Esse detalhe fica guardado na base de dados (colunas
+DadosAnteriores/DadosNovos), disponivel para auditoria directa se
+necessario, mas nao exposto na interface. Isto foi uma decisao tomada
+sem confirmacao explicita — se for necessario ver o detalhe de cada
+alteracao directamente na aplicacao (ex.: para um responsavel de
+protecao de dados), isso pode ser acrescentado como um ecra à parte,
+com controlo de acesso mais apertado.
+
+49.2 Nota tecnica: transaccoes aninhadas
+
+FichaSaude::guardarComHistorico() abre a sua propria transaccao (para
+uso a partir de um controlador). Associado::criarCompleto() ja corre
+dentro de uma transaccao propria, por isso usa
+guardarComHistoricoSemTransacao() em vez disso — o PDO nao suporta
+transaccoes aninhadas. Qualquer novo ponto de chamada deve ter este
+cuidado em conta.
