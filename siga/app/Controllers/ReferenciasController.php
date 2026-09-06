@@ -11,45 +11,18 @@ use App\Models\ReferenciaGenerica;
  * administradores. O "tabela" que vem do URL é sempre validado contra
  * esta whitelist fixa antes de ser usado em qualquer consulta; nunca é
  * aceite directamente como nome de tabela/coluna SQL.
+ *
+ * Reduzida deliberadamente (a pedido) a apenas "tipos de evento" — depois
+ * de rever, concluiu-se que as restantes tabelas de referência não fazem
+ * sentido geridas num backoffice. O mecanismo genérico manteve-se, para
+ * ser fácil voltar a acrescentar alguma, se vier a fazer sentido.
  */
 class ReferenciasController extends Controller
 {
     private const CONFIGURACAO = [
-        'nacionalidades' => [
-            'tabela' => 'nacionalidades', 'coluna' => 'Nacionalidade', 'activo' => false,
-            'titulo' => 'Nacionalidades', 'singular' => 'nacionalidade',
-        ],
-        'estados-civis' => [
-            'tabela' => 'estados_civis', 'coluna' => 'Designacao', 'activo' => false,
-            'titulo' => 'Estados civis', 'singular' => 'estado civil',
-        ],
-        'confissoes-religiosas' => [
-            'tabela' => 'confissoes_religiosas', 'coluna' => 'Designacao', 'activo' => false,
-            'titulo' => 'Confissões religiosas', 'singular' => 'confissão religiosa',
-        ],
-        'tipos-documento' => [
-            'tabela' => 'tipos_documento_identificacao', 'coluna' => 'Designacao', 'activo' => false,
-            'titulo' => 'Tipos de documento de identificação', 'singular' => 'tipo de documento',
-        ],
-        'tipos-contacto' => [
-            'tabela' => 'tipos_contacto', 'coluna' => 'Designacao', 'activo' => false,
-            'titulo' => 'Tipos de contacto', 'singular' => 'tipo de contacto',
-        ],
-        'tipos-relacao' => [
-            'tabela' => 'tipos_relacao', 'coluna' => 'Designacao', 'activo' => false,
-            'titulo' => 'Tipos de relação', 'singular' => 'tipo de relação',
-        ],
         'tipos-evento' => [
             'tabela' => 'tipos_evento', 'coluna' => 'Designacao', 'activo' => false,
             'titulo' => 'Tipos de evento', 'singular' => 'tipo de evento',
-        ],
-        'orgaos' => [
-            'tabela' => 'orgaos', 'coluna' => 'Designacao', 'activo' => true,
-            'titulo' => 'Órgãos', 'singular' => 'órgão',
-        ],
-        'cargos' => [
-            'tabela' => 'cargos', 'coluna' => 'Designacao', 'activo' => true,
-            'titulo' => 'Cargos', 'singular' => 'cargo',
         ],
     ];
 

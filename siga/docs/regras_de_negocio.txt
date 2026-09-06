@@ -1078,3 +1078,32 @@ essas paginas, para ficarem todas acessiveis a partir do mesmo sitio.
 uma matriz de incompatibilidade entre cargos, o historico de alteracoes
 a ficha de saude, e a gestao de permissoes por companhia ao nivel do
 utilizador (utilizadores_companhias).
+48. Backoffice reduzido a Tipos de Evento e Utilizadores (fechada)
+
+Depois de rever a versao anterior (regra 47), foi decidido que, das
+tabelas ali incluidas, so faz sentido gerir num backoffice:
+
+- Tipos de evento (mantido, via mecanismo generico de referencias);
+- Utilizadores (ja existia antes da regra 47, mantido sem alteracoes).
+
+Removido do backoffice (/admin deixou de ter cartao para estes, e as
+rotas correspondentes deixaram de responder):
+- Divisoes (o controlador, as vistas e as rotas dedicadas foram
+  eliminados do projecto — nao ficaram so escondidos);
+- Nacionalidades, estados civis, confissoes religiosas, tipos de
+  documento de identificacao, tipos de contacto, tipos de relacao,
+  orgaos, cargos — removidos da whitelist do ReferenciasController;
+  o mecanismo generico (App\Models\ReferenciaGenerica) mantem-se no
+  codigo, para ser simples voltar a acrescentar alguma destas tabelas
+  no futuro, caso venha a fazer sentido;
+- O atalho para Companhias tambem foi removido do ecra /admin (a
+  gestao de companhias em si, em /companhias, nao foi afectada —
+  continua a existir e a funcionar como antes; so deixou de ter um
+  atalho a partir da pagina de administracao).
+
+Estas tabelas continuam, tal como antes da regra 47, so editaveis
+directamente por SQL.
+
+⚠️ EM ABERTO: o utilizador indicou que pode identificar mais
+excepcoes a avisar mais tarde (ex.: alguma destas tabelas afinal
+tambem deve voltar a ficar no backoffice).

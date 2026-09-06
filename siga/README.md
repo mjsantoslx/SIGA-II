@@ -211,7 +211,7 @@ preservar:
 - **Gestão de companhias** (`/companhias/criar`, `/companhias/{id}/editar`, regra 41)
   — criação e edição dos dados base (designação, âmbito nacional/local, estado), restrita a administradores. Designação única; só pode existir uma companhia de âmbito nacional (Chefia Nacional) activa de cada vez. A gestão de morada mantém-se disponível a qualquer utilizador da própria companhia.
 
-- **Backoffice de tabelas de referência** (`/admin`, regra 47) — acesso restrito a administradores. Gestão de divisões, nacionalidades, estados civis, confissões religiosas, tipos de documento/contacto/relação/evento, órgãos e cargos (listar, criar, editar, eliminar — com desactivação em vez de eliminação onde aplicável). A eliminação é sempre bloqueada se o registo estiver em uso.
+- **Backoffice** (`/admin`, regras 47-48) — acesso restrito a administradores. Reduzido, após revisão, a **tipos de evento** e a **utilizadores** (atalho); as restantes tabelas de referência (divisões, nacionalidades, estados civis, confissões religiosas, tipos de documento/contacto/relação, órgãos, cargos) foram removidas do backoffice — continuam só editáveis directamente por SQL. O mecanismo genérico de gestão de referências mantém-se no código, pronto a reactivar para outra tabela, se vier a fazer sentido.
 
 - **Ordenação em todas as listagens** (regra 42) — os cabeçalhos de coluna nas listagens de associados, companhias e utilizadores são clicáveis para ordenar (ascendente/descendente, com indicador visual), preservando os filtros activos. Qualquer listagem nova deve seguir o mesmo padrão (`App\Core\Tabela`).
 
@@ -286,6 +286,9 @@ server {
 
 Esta secção é actualizada a cada nova versão entregue, com as alterações
 feitas desde a versão anterior. Mais recente primeiro.
+
+### v01.41
+- Backoffice reduzido, após revisão, a apenas Tipos de evento e Utilizadores. Removidos do `/admin`: divisões (controlador e vistas eliminados), nacionalidades, estados civis, confissões religiosas, tipos de documento/contacto/relação, órgãos, cargos, e o atalho para companhias — continuam só editáveis por SQL. A gestão de companhias em si (`/companhias`) não foi afectada.
 
 ### v01.40
 - Nova página de administração (`/admin`), restrita a administradores: gestão de divisões, nacionalidades, estados civis, confissões religiosas, tipos de documento/contacto/relação/evento, órgãos e cargos — antes só editáveis directamente por SQL.

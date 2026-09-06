@@ -10,7 +10,6 @@ use App\Controllers\AuthController;
 use App\Controllers\CompanhiasController;
 use App\Controllers\ContactosController;
 use App\Controllers\DashboardController;
-use App\Controllers\DivisoesController;
 use App\Controllers\MoradasController;
 use App\Controllers\ReferenciasController;
 use App\Controllers\UtilizadoresController;
@@ -80,13 +79,6 @@ $router->post('/utilizadores/{id}/editar', [UtilizadoresController::class, 'atua
 
 // Administração (backoffice) — todas as rotas exigem administrador.
 $router->get('/admin', [AdminController::class, 'index']);
-
-$router->get('/admin/divisoes', [DivisoesController::class, 'index']);
-$router->get('/admin/divisoes/criar', [DivisoesController::class, 'criar']);
-$router->post('/admin/divisoes/criar', [DivisoesController::class, 'guardar']);
-$router->get('/admin/divisoes/{id}/editar', [DivisoesController::class, 'editar']);
-$router->post('/admin/divisoes/{id}/editar', [DivisoesController::class, 'atualizar']);
-$router->post('/admin/divisoes/{id}/eliminar', [DivisoesController::class, 'eliminar']);
 
 $router->get('/admin/referencias/{tabela}', [ReferenciasController::class, 'index']);
 $router->get('/admin/referencias/{tabela}/criar', [ReferenciasController::class, 'criar']);
