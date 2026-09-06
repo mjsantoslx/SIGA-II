@@ -172,6 +172,7 @@ legend { font-family: var(--fonte-arredondada); color: var(--verde-escoteiro); f
 .campo label { font-size: 0.8rem; font-weight: 600; color: var(--texto); }
 .campo small { color: var(--texto-suave); font-size: 0.74rem; }
 .campo-largo { grid-column: span 3; }
+.campo-ajuda-alinhada { grid-column: span 2; justify-content: center; }
 
 .grelha-checkboxes { display: flex; flex-wrap: wrap; gap: 1.2rem; margin: 0.8rem 0; }
 .grelha-checkboxes label { display: flex; align-items: center; gap: 0.4rem; font-size: 0.88rem; font-weight: 500; }
@@ -184,6 +185,7 @@ legend { font-family: var(--fonte-arredondada); color: var(--verde-escoteiro); f
 @media (max-width: 720px) {
     .grelha-formulario { grid-template-columns: 1fr; }
     .campo-largo { grid-column: span 1; }
+    .campo-ajuda-alinhada { grid-column: span 1; }
     .linha-repetivel { grid-template-columns: 1fr; }
 }
 
