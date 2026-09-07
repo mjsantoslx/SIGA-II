@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Core\Controller;
 use App\Core\Data;
 use App\Core\Sessao;
+use App\Core\Url;
 use App\Models\Associado;
 use App\Models\Companhia;
 use App\Models\Morada;
@@ -38,9 +39,9 @@ class MoradasController extends Controller
         $this->vista('moradas/editar', [
             'titulo'          => 'Morada — ' . $associado['Nome'],
             'tipoEntidade'    => 'associado',
-            'urlVoltar'       => '/associados/' . $idAssociado,
-            'urlCorrigir'     => '/associados/' . $idAssociado . '/morada/corrigir',
-            'urlSubstituir'   => '/associados/' . $idAssociado . '/morada/substituir',
+            'urlVoltar'       => Url::para('/associados/' . $idAssociado),
+            'urlCorrigir'     => Url::para('/associados/' . $idAssociado . '/morada/corrigir'),
+            'urlSubstituir'   => Url::para('/associados/' . $idAssociado . '/morada/substituir'),
             'ligacao'         => $ligacao,
             'partilhas'       => $ligacao ? $moradaModelo->contarLigacoesActivas((int) $ligacao['Id']) : 0,
             'hojePt'          => Data::hojePt(),
@@ -143,9 +144,9 @@ class MoradasController extends Controller
         $this->vista('moradas/editar', [
             'titulo'          => 'Morada — ' . $companhia['Designacao'],
             'tipoEntidade'    => 'companhia',
-            'urlVoltar'       => '/companhias/' . $idCompanhia,
-            'urlCorrigir'     => '/companhias/' . $idCompanhia . '/morada/corrigir',
-            'urlSubstituir'   => '/companhias/' . $idCompanhia . '/morada/substituir',
+            'urlVoltar'       => Url::para('/companhias/' . $idCompanhia),
+            'urlCorrigir'     => Url::para('/companhias/' . $idCompanhia . '/morada/corrigir'),
+            'urlSubstituir'   => Url::para('/companhias/' . $idCompanhia . '/morada/substituir'),
             'ligacao'         => $ligacao,
             'partilhas'       => $ligacao ? $moradaModelo->contarLigacoesActivas((int) $ligacao['Id']) : 0,
             'hojePt'          => Data::hojePt(),

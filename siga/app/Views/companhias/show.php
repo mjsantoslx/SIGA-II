@@ -13,9 +13,9 @@
     </div>
     <div class="acoes-rapidas">
         <?php if (\App\Core\Sessao::ehAdministrador()): ?>
-            <a href="/companhias/<?= (int) $companhia['Id'] ?>/editar" class="botao botao-secundario">Editar</a>
+            <a href="<?= \App\Core\Url::para() ?>/companhias/<?= (int) $companhia['Id'] ?>/editar" class="botao botao-secundario">Editar</a>
         <?php endif; ?>
-        <a href="/companhias/<?= (int) $companhia['Id'] ?>/morada/editar" class="botao botao-secundario">Gerir morada</a>
+        <a href="<?= \App\Core\Url::para() ?>/companhias/<?= (int) $companhia['Id'] ?>/morada/editar" class="botao botao-secundario">Gerir morada</a>
     </div>
 </div>
 
@@ -30,4 +30,4 @@
     <?php endif; ?>
 </section>
 
-<p style="margin-top: 1.5rem;"><a href="/companhias" class="botao botao-secundario">← Voltar às companhias</a></p>
+<p style="margin-top: 1.5rem;"><a href="<?= \App\Core\Url::para() ?>/companhias" class="botao botao-secundario">← Voltar às companhias</a></p>

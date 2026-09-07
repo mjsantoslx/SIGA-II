@@ -39,23 +39,24 @@ siga/
 
 ## 3. Instalação
 
-O projecto inclui **dois** scripts SQL, para dois cenários diferentes:
+O projecto inclui **um ou dois** scripts SQL, consoante a versão:
 
 - **`database/SIGA_Criacao_BD.sql`** — criação completa de raiz. Use este
   se está a instalar o SIGA pela primeira vez (base de dados nova).
-- **`database/SIGA_Migracao_v01.12_para_v01.13.sql`** — migra uma base de
-  dados já na v01.12 do SIGA para a v01.13, preservando os dados
-  existentes. Use este **em vez do** script de criação se já tem uma
-  instalação do SIGA na v01.12. **Faça sempre uma cópia de segurança
-  antes de correr este script** — as instruções estão no cabeçalho do
-  próprio ficheiro.
+- **`database/SIGA_Migracao_v*.sql`** (nome exacto varia — veja a pasta
+  `database/`) — presente apenas nas versões que alteraram o schema da
+  base de dados. Migra uma instalação já existente, na versão anterior
+  indicada no nome do ficheiro, preservando os dados. Use este **em vez
+  do** script de criação se já tem uma instalação do SIGA. **Faça sempre
+  uma cópia de segurança antes de correr este script** — as instruções
+  estão no cabeçalho do próprio ficheiro.
 
   > **Política de migrações**: cada nova versão com alterações de schema
   > traz apenas a migração do seu passo imediatamente anterior — nunca a
   > história completa acumulada. Se a sua base de dados estiver numa
-  > versão mais antiga (ex.: ainda no schema original, anterior a
-  > qualquer versão do SIGA), precisa dos scripts de migração das versões
-  > intermédias, que fizeram parte dos respectivos pacotes anteriores.
+  > versão mais antiga do que a que o ficheiro incluído assume, precisa
+  > dos scripts de migração das versões intermédias, que fizeram parte
+  > dos respectivos pacotes anteriores.
 
 ### 3.1 Instalação de raiz (base de dados nova)
 
@@ -99,26 +100,47 @@ O projecto inclui **dois** scripts SQL, para dois cenários diferentes:
 5. **Apontar o servidor web para `public/`** (ver secção 5) e aceder a
    `/login` com o utilizador `Administrador` e a palavra-passe definida.
 
-### 3.2 Migração de uma instalação existente (v01.12 → v01.13)
+### 3.2 Migração de uma instalação existente
 
-Se já tem uma base de dados SIGA na v01.12, com dados reais que quer
-preservar:
+Se já tem uma base de dados SIGA numa versão anterior, com dados reais que
+quer preservar:
 
 1. **Faça uma cópia de segurança** antes de mais nada:
    ```bash
-   mysqldump -u <utilizador> -p siga > backup_antes_da_v01.13.sql
+   mysqldump -u <utilizador> -p siga > backup_antes_da_migracao.sql
    ```
-2. **Corra o script de migração**:
+2. **Corra o script de migração incluído neste pacote** (veja o nome
+   exacto em `database/`):
    ```bash
-   mysql -u <utilizador> -p siga < database/SIGA_Migracao_v01.12_para_v01.13.sql
+   mysql -u <utilizador> -p siga < database/SIGA_Migracao_v*.sql
    ```
-3. Se a sua base de dados **não** estiver ainda na v01.12 (por exemplo,
-   ainda está no schema original, ou numa versão mais antiga), precisa
-   primeiro de aplicar os scripts de migração das versões intermédias
-   correspondentes, antes deste.
+3. Se a sua base de dados **não** estiver ainda na versão que o nome do
+   ficheiro assume como ponto de partida, precisa primeiro de aplicar os
+   scripts de migração das versões intermédias correspondentes, antes
+   deste.
 4. Configure `config/config.php` (ou variáveis de ambiente) e o utilizador
    de aplicação como nos passos 2-3 da secção 3.1, se ainda não estiverem
    definidos.
+
+### 3.3 Publicar num subcaminho (ex.: `http://www.uep.pt/siga`)
+
+Por omissão, a aplicação assume que fica na raiz do domínio. Se for
+publicada num subcaminho — por exemplo, porque o alojamento (cPanel ou
+outro) não permite escolher um "Document Root" diferente para um
+subdomínio, e por isso a pasta `siga/` fica dentro de `public_html/siga/`
+— defina isso em `config/config.php`:
+
+```php
+'base_url' => '/siga',   // sem barra final
+```
+
+Isto ajusta automaticamente todos os links, formulários, redireccionamentos
+e ficheiros estáticos (CSS/JS/imagens) gerados pela aplicação, através da
+classe `App\Core\Url`. Não é preciso mexer em mais nada — nem nos
+ficheiros `.htaccess` incluídos (já tratam do encaminhamento interno para
+`public/`, independentemente do subcaminho usado).
+
+Se a aplicação ficar na raiz do domínio, mantenha `'base_url' => '/'`.
 
 ## 4. Módulos incluídos até à v01.02
 
@@ -302,6 +324,10 @@ Lista viva do que ficou identificado como "por fazer", sem ordem específica —
 
 Esta secção é actualizada a cada nova versão entregue, com as alterações
 feitas desde a versão anterior. Mais recente primeiro.
+
+### v01.46
+- Suporte a publicação num subcaminho do domínio (ex.: `http://www.uep.pt/siga`), para alojamentos (cPanel) sem Document Root configurável: nova classe `App\Core\Url`, `Router` ajustado para remover o prefixo antes de encaminhar, e todos os links/formulários/ficheiros estáticos das vistas corrigidos para o respeitar. `config/config.php` → `app.base_url` definido como `/siga` para este deployment.
+- README atualizado com instruções específicas para este cenário (secção 3.3), e a descrição dos scripts de migração tornada genérica (deixou de referir uma versão específica desatualizada).
 
 ### v01.45
 - Removida a nota sobre membros honorários do subtítulo da página de Censos — desnecessária ali.

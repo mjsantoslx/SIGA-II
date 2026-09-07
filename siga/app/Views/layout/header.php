@@ -6,28 +6,28 @@
     <title><?= htmlspecialchars($titulo ?? $config['app']['nome']) ?> — SIGA</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="<?= \App\Core\Url::para() ?>/assets/css/style.css">
 </head>
 <body>
 <header class="cabecalho">
     <div class="cabecalho-marca">
-        <a href="/" class="cabecalho-logo-fundo"><img src="/assets/img/logo-header-uep.png" alt="União dos Escoteiros Portugueses" class="cabecalho-logo"></a>
+        <a href="<?= \App\Core\Url::para() ?>/" class="cabecalho-logo-fundo"><img src="<?= \App\Core\Url::para() ?>/assets/img/logo-header-uep.png" alt="União dos Escoteiros Portugueses" class="cabecalho-logo"></a>
     </div>
 
     <?php if ($utilizadorAutenticado): ?>
     <nav class="cabecalho-nav">
-        <a href="/">Painel</a>
-        <a href="/associados">Associados</a>
-        <a href="/companhias">Companhias</a>
-        <a href="/censos">Censos</a>
+        <a href="<?= \App\Core\Url::para() ?>/">Painel</a>
+        <a href="<?= \App\Core\Url::para() ?>/associados">Associados</a>
+        <a href="<?= \App\Core\Url::para() ?>/companhias">Companhias</a>
+        <a href="<?= \App\Core\Url::para() ?>/censos">Censos</a>
         <?php if (\App\Core\Sessao::ehAdministrador()): ?>
-            <a href="/utilizadores">Utilizadores</a>
-            <a href="/admin">Administração</a>
+            <a href="<?= \App\Core\Url::para() ?>/utilizadores">Utilizadores</a>
+            <a href="<?= \App\Core\Url::para() ?>/admin">Administração</a>
         <?php endif; ?>
     </nav>
     <div class="cabecalho-utilizador">
         <span><?= htmlspecialchars($utilizadorAutenticado['Nome']) ?></span>
-        <form action="/logout" method="post" class="forma-inline">
+        <form action="<?= \App\Core\Url::para() ?>/logout" method="post" class="forma-inline">
             <button type="submit" class="ligacao-botao">Sair</button>
         </form>
     </div>

@@ -18,12 +18,14 @@ use App\Controllers\ReferenciasController;
 use App\Controllers\UtilizadoresController;
 use App\Core\Router;
 use App\Core\Sessao;
+use App\Core\Url;
 
 $config = require __DIR__ . '/../config/config.php';
 
 date_default_timezone_set($config['app']['timezone']);
 mb_internal_encoding('UTF-8');
 
+Url::definirBase($config['app']['base_url']);
 Sessao::iniciar($config);
 
 // Cabeçalhos de segurança básicos.

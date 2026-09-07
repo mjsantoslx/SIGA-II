@@ -1239,3 +1239,44 @@ dos associados da sua propria companhia. Gestao dos valores anuais
 - Nao existe geracao em lote de linhas de Censo para todos os
   associados no inicio do ano — as linhas so sao criadas quando
   alguem marca um pagamento (ou anulacao) pela primeira vez.
+52. Suporte a publicacao num subcaminho (fechada)
+
+Foi pedido suporte para publicar a aplicacao num subcaminho do dominio
+(ex.: http://www.uep.pt/siga, em vez de http://www.uep.pt/) — caso
+tipico de alojamento partilhado (cPanel) sem possibilidade de apontar
+o Document Root directamente para public/.
+
+Problema identificado: a aplicacao tinha caminhos absolutos escritos
+directamente nas vistas (href, action de formularios, src de
+CSS/JS/imagens) e nalgumas construcoes de URL em controladores
+(MoradasController). Sem correccao, isto quebraria a navegacao assim
+que a aplicacao deixasse de estar na raiz do dominio — os
+redireccionamentos (Controller::redirecionar()) ja respeitavam a
+configuracao app.base_url desde o inicio, mas os links gerados nas
+vistas nao.
+
+Implementado:
+- Nova classe App\Core\Url, com base definida uma unica vez no
+  arranque (public/index.php) a partir de config/config.php ->
+  app.base_url;
+- Router::despachar() passa a remover o prefixo base do URI pedido
+  antes de o comparar com as rotas registadas (que continuam
+  definidas sem prefixo, ex.: "/associados");
+- Todas as vistas (href, action, src) e as construcoes de URL em
+  MoradasController passaram a usar App\Core\Url::para(), em vez de
+  caminhos absolutos fixos;
+- config/config.php -> app.base_url definido como "/siga" (sem barra
+  final) para este deployment especifico. Para uma instalacao na raiz
+  do dominio, o valor correcto e "/".
+
+Nao foi necessario alterar os ficheiros .htaccess incluidos — o
+encaminhamento interno para public/ e sempre relativo a pasta onde
+cada .htaccess esta, independentemente do subcaminho usado no
+dominio.
+
+⚠️ ATENCAO para desenvolvimento futuro: qualquer novo ecra que gere um
+caminho absoluto (href, action, src, ou uma string de URL construida
+num controlador para passar a uma vista) tem de usar
+App\Core\Url::para() — nao voltar a escrever caminhos fixos comecados
+por "/". Os redireccionamentos feitos com $this->redirecionar()
+continuam a funcionar sem alteracoes, ja respeitam isto.

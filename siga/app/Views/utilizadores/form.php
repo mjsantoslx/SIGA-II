@@ -3,7 +3,7 @@
 <h1><?= htmlspecialchars($titulo) ?></h1>
 <p class="subtitulo">Crie um novo acesso à aplicação, ligado a um associado.</p>
 
-<form action="/utilizadores/criar" method="post" class="formulario-associado">
+<form action="<?= \App\Core\Url::para() ?>/utilizadores/criar" method="post" class="formulario-associado">
     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
 
     <fieldset>
@@ -43,7 +43,7 @@
     </fieldset>
 
     <div class="acoes-formulario">
-        <a href="/utilizadores" class="botao botao-secundario">Cancelar</a>
+        <a href="<?= \App\Core\Url::para() ?>/utilizadores" class="botao botao-secundario">Cancelar</a>
         <button type="submit" class="botao botao-primario">Criar utilizador</button>
     </div>
 </form>

@@ -3,10 +3,10 @@
         <h1>Associados</h1>
         <p class="subtitulo">Consulte, pesquise e faça a gestão dos associados da UEP.</p>
     </div>
-    <a href="/associados/criar" class="botao botao-primario">+ Novo associado</a>
+    <a href="<?= \App\Core\Url::para() ?>/associados/criar" class="botao botao-primario">+ Novo associado</a>
 </div>
 
-<form action="/associados" method="get" class="formulario-filtros">
+<form action="<?= \App\Core\Url::para() ?>/associados" method="get" class="formulario-filtros">
     <input type="hidden" name="ordenar" value="<?= htmlspecialchars($ordenar) ?>">
     <input type="hidden" name="direcao" value="<?= htmlspecialchars($direcao) ?>">
     <input type="text" name="pesquisa" placeholder="Pesquisar por nome ou número de associado"
@@ -68,8 +68,8 @@ $parametrosOrdenacao = [
                         </span>
                     </td>
                     <td class="tabela-acoes">
-                        <a href="/associados/<?= (int) $associado['Id'] ?>">Ver</a>
-                        <a href="/associados/<?= (int) $associado['Id'] ?>/editar">Editar</a>
+                        <a href="<?= \App\Core\Url::para() ?>/associados/<?= (int) $associado['Id'] ?>">Ver</a>
+                        <a href="<?= \App\Core\Url::para() ?>/associados/<?= (int) $associado['Id'] ?>/editar">Editar</a>
                     </td>
                 </tr>
             <?php endforeach; ?>

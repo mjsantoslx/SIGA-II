@@ -3,7 +3,7 @@
         <h1>Contactos — <?= htmlspecialchars($associado['Nome']) ?></h1>
         <p class="subtitulo">Gestão de morada e contactos (telemóvel, telefone, email, ...).</p>
     </div>
-    <a href="/associados/<?= (int) $associado['Id'] ?>" class="botao botao-secundario">← Voltar à ficha</a>
+    <a href="<?= \App\Core\Url::para() ?>/associados/<?= (int) $associado['Id'] ?>" class="botao botao-secundario">← Voltar à ficha</a>
 </div>
 
 <section class="cartao-seccao" style="margin-bottom: 1.5rem;">
@@ -24,7 +24,7 @@
         <div class="cartao-seccao">
             <h3>Corrigir morada actual</h3>
             <p class="ajuda-fieldset">Para corrigir um erro (ex.: número de porta). Afecta todos os que partilham esta morada.</p>
-            <form action="/associados/<?= (int) $associado['Id'] ?>/morada/corrigir" method="post" class="formulario-morada">
+            <form action="<?= \App\Core\Url::para() ?>/associados/<?= (int) $associado['Id'] ?>/morada/corrigir" method="post" class="formulario-morada">
                 <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
                 <div class="campo">
                     <label for="MoradaCorrigir">Morada</label>
@@ -46,7 +46,7 @@
         <div class="cartao-seccao">
             <h3><?= $ligacaoMorada ? 'Substituir por morada nova' : 'Registar morada' ?></h3>
             <p class="ajuda-fieldset">Use isto quando o associado se mudou de facto de morada. A anterior fica preservada no histórico.</p>
-            <form action="/associados/<?= (int) $associado['Id'] ?>/morada/substituir" method="post" class="formulario-morada">
+            <form action="<?= \App\Core\Url::para() ?>/associados/<?= (int) $associado['Id'] ?>/morada/substituir" method="post" class="formulario-morada">
                 <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
                 <div class="campo">
                     <label for="MoradaNova">Morada</label>
@@ -79,7 +79,7 @@
         <div class="lista-contactos">
             <?php foreach ($contactos as $contacto): ?>
                 <div class="linha-contacto">
-                    <form action="/associados/<?= (int) $associado['Id'] ?>/contactos/<?= (int) $contacto['Id'] ?>/editar" method="post" class="linha-contacto-editar">
+                    <form action="<?= \App\Core\Url::para() ?>/associados/<?= (int) $associado['Id'] ?>/contactos/<?= (int) $contacto['Id'] ?>/editar" method="post" class="linha-contacto-editar">
                         <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
                         <select name="IdTipoContacto">
                             <?php foreach ($tiposContacto as $tc): ?>
@@ -91,7 +91,7 @@
                         <input type="text" name="Valor" value="<?= htmlspecialchars($contacto['Valor']) ?>" required>
                         <button type="submit" class="botao botao-secundario botao-pequeno">Guardar</button>
                     </form>
-                    <form action="/associados/<?= (int) $associado['Id'] ?>/contactos/<?= (int) $contacto['Id'] ?>/remover" method="post" onsubmit="return confirm('Remover este contacto?');">
+                    <form action="<?= \App\Core\Url::para() ?>/associados/<?= (int) $associado['Id'] ?>/contactos/<?= (int) $contacto['Id'] ?>/remover" method="post" onsubmit="return confirm('Remover este contacto?');">
                         <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
                         <button type="submit" class="botao botao-perigo botao-pequeno">Remover</button>
                     </form>
@@ -101,7 +101,7 @@
     <?php endif; ?>
 
     <h3>Adicionar contacto</h3>
-    <form action="/associados/<?= (int) $associado['Id'] ?>/contactos/adicionar" method="post" class="formulario-morada" style="flex-direction: row; align-items: flex-end; flex-wrap: wrap;">
+    <form action="<?= \App\Core\Url::para() ?>/associados/<?= (int) $associado['Id'] ?>/contactos/adicionar" method="post" class="formulario-morada" style="flex-direction: row; align-items: flex-end; flex-wrap: wrap;">
         <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
         <div class="campo">
             <label for="IdTipoContactoNovo">Tipo</label>

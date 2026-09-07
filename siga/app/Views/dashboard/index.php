@@ -42,6 +42,6 @@
 </section>
 
 <div class="acoes-rapidas">
-    <a href="/associados/criar" class="botao botao-primario">+ Novo associado</a>
-    <a href="/associados" class="botao botao-secundario">Ver todos os associados</a>
+    <a href="<?= \App\Core\Url::para() ?>/associados/criar" class="botao botao-primario">+ Novo associado</a>
+    <a href="<?= \App\Core\Url::para() ?>/associados" class="botao botao-secundario">Ver todos os associados</a>
 </div>

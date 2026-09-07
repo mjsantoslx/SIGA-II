@@ -24,6 +24,15 @@ class Router
     public function despachar(string $metodo, string $uri): void
     {
         $uri = parse_url($uri, PHP_URL_PATH);
+
+        // Se a aplicação corre num subcaminho (ex.: /siga), o pedido do
+        // browser inclui esse prefixo — remove-se aqui, para as rotas
+        // continuarem definidas sem ele (ex.: "/associados").
+        $base = Url::para();
+        if ($base !== '' && str_starts_with($uri, $base)) {
+            $uri = substr($uri, strlen($base));
+        }
+
         $uri = rtrim($uri, '/');
         if ($uri === '') {
             $uri = '/';

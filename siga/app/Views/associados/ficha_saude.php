@@ -5,10 +5,10 @@
         <h1>Ficha de saúde — <?= htmlspecialchars($associado['Nome']) ?></h1>
         <p class="subtitulo">Cada alteração fica registada no histórico, com quem a fez e quando.</p>
     </div>
-    <a href="/associados/<?= (int) $associado['Id'] ?>" class="botao botao-secundario">← Voltar à ficha</a>
+    <a href="<?= \App\Core\Url::para() ?>/associados/<?= (int) $associado['Id'] ?>" class="botao botao-secundario">← Voltar à ficha</a>
 </div>
 
-<form action="/associados/<?= (int) $associado['Id'] ?>/ficha-saude" method="post" class="formulario-associado">
+<form action="<?= \App\Core\Url::para() ?>/associados/<?= (int) $associado['Id'] ?>/ficha-saude" method="post" class="formulario-associado">
     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
 
     <fieldset>

@@ -1,7 +1,7 @@
 <?php $a = $ano ?? []; ?>
 
 <h1><?= htmlspecialchars($titulo) ?></h1>
-<p class="subtitulo"><a href="/admin/anos-escotistas">← Voltar aos anos escotistas</a></p>
+<p class="subtitulo"><a href="<?= \App\Core\Url::para() ?>/admin/anos-escotistas">← Voltar aos anos escotistas</a></p>
 
 <form action="<?= isset($a['Id']) ? '/admin/anos-escotistas/' . (int) $a['Id'] . '/editar' : '/admin/anos-escotistas/criar' ?>" method="post" class="formulario-associado">
     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
@@ -35,7 +35,7 @@
     </fieldset>
 
     <div class="acoes-formulario">
-        <a href="/admin/anos-escotistas" class="botao botao-secundario">Cancelar</a>
+        <a href="<?= \App\Core\Url::para() ?>/admin/anos-escotistas" class="botao botao-secundario">Cancelar</a>
         <button type="submit" class="botao botao-primario">Guardar</button>
     </div>
 </form>

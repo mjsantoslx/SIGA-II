@@ -1,9 +1,9 @@
 <div class="cabecalho-pagina">
     <div>
         <h1><?= htmlspecialchars($cfg['titulo']) ?></h1>
-        <p class="subtitulo"><a href="/admin">← Voltar à administração</a></p>
+        <p class="subtitulo"><a href="<?= \App\Core\Url::para() ?>/admin">← Voltar à administração</a></p>
     </div>
-    <a href="/admin/referencias/<?= htmlspecialchars($cfg['chave']) ?>/criar" class="botao botao-primario">+ Novo(a) <?= htmlspecialchars($cfg['singular']) ?></a>
+    <a href="<?= \App\Core\Url::para() ?>/admin/referencias/<?= htmlspecialchars($cfg['chave']) ?>/criar" class="botao botao-primario">+ Novo(a) <?= htmlspecialchars($cfg['singular']) ?></a>
 </div>
 
 <?php if (empty($registos)): ?>
@@ -30,8 +30,8 @@
                     </td>
                     <?php endif; ?>
                     <td class="tabela-acoes">
-                        <a href="/admin/referencias/<?= htmlspecialchars($cfg['chave']) ?>/<?= (int) $registo['Id'] ?>/editar">Editar</a>
-                        <form action="/admin/referencias/<?= htmlspecialchars($cfg['chave']) ?>/<?= (int) $registo['Id'] ?>/eliminar" method="post" class="forma-inline" onsubmit="return confirm('Eliminar este registo? Só é possível se não estiver em uso.');">
+                        <a href="<?= \App\Core\Url::para() ?>/admin/referencias/<?= htmlspecialchars($cfg['chave']) ?>/<?= (int) $registo['Id'] ?>/editar">Editar</a>
+                        <form action="<?= \App\Core\Url::para() ?>/admin/referencias/<?= htmlspecialchars($cfg['chave']) ?>/<?= (int) $registo['Id'] ?>/eliminar" method="post" class="forma-inline" onsubmit="return confirm('Eliminar este registo? Só é possível se não estiver em uso.');">
                             <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
                             <button type="submit" class="ligacao-botao ligacao-botao-perigo">Eliminar</button>
                         </form>

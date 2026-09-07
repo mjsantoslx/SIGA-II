@@ -4,7 +4,7 @@
         <p class="subtitulo">Inclui a Chefia Nacional.</p>
     </div>
     <?php if (\App\Core\Sessao::ehAdministrador()): ?>
-        <a href="/companhias/criar" class="botao botao-primario">+ Nova companhia</a>
+        <a href="<?= \App\Core\Url::para() ?>/companhias/criar" class="botao botao-primario">+ Nova companhia</a>
     <?php endif; ?>
 </div>
 
@@ -36,9 +36,9 @@
                     </td>
                     <?php endif; ?>
                     <td class="tabela-acoes">
-                        <a href="/companhias/<?= (int) $companhia['Id'] ?>">Ver</a>
+                        <a href="<?= \App\Core\Url::para() ?>/companhias/<?= (int) $companhia['Id'] ?>">Ver</a>
                         <?php if (\App\Core\Sessao::ehAdministrador()): ?>
-                            <a href="/companhias/<?= (int) $companhia['Id'] ?>/editar">Editar</a>
+                            <a href="<?= \App\Core\Url::para() ?>/companhias/<?= (int) $companhia['Id'] ?>/editar">Editar</a>
                         <?php endif; ?>
                     </td>
                 </tr>

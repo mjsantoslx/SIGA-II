@@ -9,11 +9,15 @@ return [
     'app' => [
         'nome'      => 'SIGA - Sistema Integrado de Gestão de Associados',
         'sigla'     => 'SIGA - UEP',
-        // Ajustar consoante a pasta/subdomínio onde o public/ for publicado.
-        'base_url'  => '/',
+        // Caminho onde a aplicação fica publicada, a partir da raiz do
+        // domínio. Use '/' se a aplicação ficar na raiz do domínio (ex.:
+        // http://www.exemplo.pt/). Use '/siga' se ficar num subcaminho
+        // (ex.: http://www.uep.pt/siga) — sem barra final. Afecta todos os
+        // links, formulários e redireccionamentos gerados pela aplicação.
+        'base_url'  => '/siga',
         'timezone'  => 'Europe/Lisbon',
         // Actualizado a cada nova versão entregue — aparece no rodapé.
-        'versao'    => 'v01.45',
+        'versao'    => 'v01.46',
     ],
 
     'db' => [

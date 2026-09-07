@@ -3,7 +3,7 @@
 <h1><?= htmlspecialchars($titulo) ?></h1>
 <p class="subtitulo">Preencha os dados abaixo para registar um novo associado na UEP. O número de sócio é atribuído automaticamente, de forma sequencial.</p>
 
-<form action="/associados/criar" method="post" class="formulario-associado">
+<form action="<?= \App\Core\Url::para() ?>/associados/criar" method="post" class="formulario-associado">
     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
 
     <fieldset>
@@ -333,7 +333,7 @@
     </fieldset>
 
     <div class="acoes-formulario">
-        <a href="/associados" class="botao botao-secundario">Cancelar</a>
+        <a href="<?= \App\Core\Url::para() ?>/associados" class="botao botao-secundario">Cancelar</a>
         <button type="submit" class="botao botao-primario">Guardar associado</button>
     </div>
 </form>

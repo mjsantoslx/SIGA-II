@@ -3,7 +3,7 @@
 <h1><?= htmlspecialchars($titulo) ?></h1>
 <p class="subtitulo">Edite os dados base do associado. Para alterar moradas, contactos ou encarregados de educação adicionais, contacte o backoffice.</p>
 
-<form action="/associados/<?= (int) $a['Id'] ?>/editar" method="post" class="formulario-associado">
+<form action="<?= \App\Core\Url::para() ?>/associados/<?= (int) $a['Id'] ?>/editar" method="post" class="formulario-associado">
     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
 
     <fieldset>
@@ -203,7 +203,7 @@
     </fieldset>
 
     <div class="acoes-formulario">
-        <a href="/associados/<?= (int) $a['Id'] ?>" class="botao botao-secundario">Cancelar</a>
+        <a href="<?= \App\Core\Url::para() ?>/associados/<?= (int) $a['Id'] ?>" class="botao botao-secundario">Cancelar</a>
         <button type="submit" class="botao botao-primario">Guardar alterações</button>
     </div>
 </form>

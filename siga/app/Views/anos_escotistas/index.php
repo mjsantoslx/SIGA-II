@@ -1,9 +1,9 @@
 <div class="cabecalho-pagina">
     <div>
         <h1>Anos escotistas</h1>
-        <p class="subtitulo">Valores do Censo (seguro escotista + quota UEP + quota WFIS), definidos no início de cada ano escotista (Outubro). <a href="/admin">← Voltar à administração</a></p>
+        <p class="subtitulo">Valores do Censo (seguro escotista + quota UEP + quota WFIS), definidos no início de cada ano escotista (Outubro). <a href="<?= \App\Core\Url::para() ?>/admin">← Voltar à administração</a></p>
     </div>
-    <a href="/admin/anos-escotistas/criar" class="botao botao-primario">+ Novo ano escotista</a>
+    <a href="<?= \App\Core\Url::para() ?>/admin/anos-escotistas/criar" class="botao botao-primario">+ Novo ano escotista</a>
 </div>
 
 <?php if (empty($anos)): ?>
@@ -37,7 +37,7 @@
                         </span>
                     </td>
                     <td class="tabela-acoes">
-                        <a href="/admin/anos-escotistas/<?= (int) $ano['Id'] ?>/editar">Editar</a>
+                        <a href="<?= \App\Core\Url::para() ?>/admin/anos-escotistas/<?= (int) $ano['Id'] ?>/editar">Editar</a>
                     </td>
                 </tr>
             <?php endforeach; ?>

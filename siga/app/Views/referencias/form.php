@@ -1,7 +1,7 @@
 <?php $r = $registo ?? []; ?>
 
 <h1><?= htmlspecialchars($titulo) ?></h1>
-<p class="subtitulo"><a href="/admin/referencias/<?= htmlspecialchars($cfg['chave']) ?>">← Voltar a <?= htmlspecialchars(strtolower($cfg['titulo'])) ?></a></p>
+<p class="subtitulo"><a href="<?= \App\Core\Url::para() ?>/admin/referencias/<?= htmlspecialchars($cfg['chave']) ?>">← Voltar a <?= htmlspecialchars(strtolower($cfg['titulo'])) ?></a></p>
 
 <form action="<?= isset($r['Id']) ? '/admin/referencias/' . htmlspecialchars($cfg['chave']) . '/' . (int) $r['Id'] . '/editar' : '/admin/referencias/' . htmlspecialchars($cfg['chave']) . '/criar' ?>" method="post" class="formulario-associado">
     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
@@ -22,7 +22,7 @@
     </fieldset>
 
     <div class="acoes-formulario">
-        <a href="/admin/referencias/<?= htmlspecialchars($cfg['chave']) ?>" class="botao botao-secundario">Cancelar</a>
+        <a href="<?= \App\Core\Url::para() ?>/admin/referencias/<?= htmlspecialchars($cfg['chave']) ?>" class="botao botao-secundario">Cancelar</a>
         <button type="submit" class="botao botao-primario">Guardar</button>
     </div>
 </form>

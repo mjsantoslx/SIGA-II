@@ -6,12 +6,12 @@
     <title>Entrar — SIGA</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="<?= \App\Core\Url::para() ?>/assets/css/style.css">
 </head>
 <body class="pagina-login">
     <div class="painel-login">
         <div class="painel-login-marca">
-            <img src="/assets/img/logo-siga-uep.png" alt="SIGA — Sistema Integrado de Gestão de Associados — União dos Escoteiros Portugueses" class="painel-login-logo">
+            <img src="<?= \App\Core\Url::para() ?>/assets/img/logo-siga-uep.png" alt="SIGA — Sistema Integrado de Gestão de Associados — União dos Escoteiros Portugueses" class="painel-login-logo">
         </div>
 
         <?php foreach (\App\Core\Sessao::obterMensagens() as $mensagem): ?>
@@ -20,7 +20,7 @@
             </div>
         <?php endforeach; ?>
 
-        <form action="/login" method="post" class="formulario-login">
+        <form action="<?= \App\Core\Url::para() ?>/login" method="post" class="formulario-login">
             <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
 
             <label for="nome_utilizador">Utilizador</label>

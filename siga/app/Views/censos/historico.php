@@ -3,7 +3,7 @@
         <h1>Histórico do Censo — <?= htmlspecialchars($associado['Nome']) ?></h1>
         <p class="subtitulo">Ano escotista <?= (int) $ano['AnoInicio'] ?>/<?= (int) $ano['AnoInicio'] + 1 ?></p>
     </div>
-    <a href="/censos?ano=<?= (int) $ano['Id'] ?>" class="botao botao-secundario">← Voltar aos Censos</a>
+    <a href="<?= \App\Core\Url::para() ?>/censos?ano=<?= (int) $ano['Id'] ?>" class="botao botao-secundario">← Voltar aos Censos</a>
 </div>
 
 <?php if (empty($historico)): ?>

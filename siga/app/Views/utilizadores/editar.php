@@ -11,7 +11,7 @@
     </div>
 <?php endif; ?>
 
-<form action="/utilizadores/<?= (int) $u['Id'] ?>/editar" method="post" class="formulario-associado">
+<form action="<?= \App\Core\Url::para() ?>/utilizadores/<?= (int) $u['Id'] ?>/editar" method="post" class="formulario-associado">
     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
 
     <fieldset>
@@ -67,7 +67,7 @@
     </fieldset>
 
     <div class="acoes-formulario">
-        <a href="/utilizadores" class="botao botao-secundario">Cancelar</a>
+        <a href="<?= \App\Core\Url::para() ?>/utilizadores" class="botao botao-secundario">Cancelar</a>
         <button type="submit" class="botao botao-primario">Guardar alterações</button>
     </div>
 </form>

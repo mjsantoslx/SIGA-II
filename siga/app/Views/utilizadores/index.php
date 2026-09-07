@@ -3,7 +3,7 @@
         <h1>Utilizadores</h1>
         <p class="subtitulo">Gestão de acessos à aplicação. Só administradores podem aceder a esta página.</p>
     </div>
-    <a href="/utilizadores/criar" class="botao botao-primario">+ Novo utilizador</a>
+    <a href="<?= \App\Core\Url::para() ?>/utilizadores/criar" class="botao botao-primario">+ Novo utilizador</a>
 </div>
 
 <div class="tabela-envolvente">
@@ -31,7 +31,7 @@
                         </span>
                     </td>
                     <td class="tabela-acoes">
-                        <a href="/utilizadores/<?= (int) $utilizador['Id'] ?>/editar">Editar</a>
+                        <a href="<?= \App\Core\Url::para() ?>/utilizadores/<?= (int) $utilizador['Id'] ?>/editar">Editar</a>
                     </td>
                 </tr>
             <?php endforeach; ?>
