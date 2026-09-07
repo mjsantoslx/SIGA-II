@@ -1,7 +1,7 @@
 <div class="cabecalho-pagina">
     <div>
         <h1>Censos</h1>
-        <p class="subtitulo">Seguro escotista + quota UEP + quota WFIS. Membros honorários não aparecem aqui — não pagam Censo.</p>
+        <p class="subtitulo">Seguro escotista + quota UEP + quota WFIS.</p>
     </div>
     <?php if (\App\Core\Sessao::ehAdministrador()): ?>
         <a href="/admin/anos-escotistas" class="botao botao-secundario">Gerir valores anuais</a>

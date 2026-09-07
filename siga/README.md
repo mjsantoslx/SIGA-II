@@ -303,6 +303,9 @@ Lista viva do que ficou identificado como "por fazer", sem ordem específica —
 Esta secção é actualizada a cada nova versão entregue, com as alterações
 feitas desde a versão anterior. Mais recente primeiro.
 
+### v01.45
+- Removida a nota sobre membros honorários do subtítulo da página de Censos — desnecessária ali.
+
 ### v01.44
 - Novo módulo de Censos: quota anual (seguro escotista + quota UEP + quota WFIS), definida por ano escotista, com registo de pagamento por associado e histórico completo de cada acção (marcar pago/anular).
 - Novo atributo "Membro Honorário" no associado (aplicável a qualquer associado, não só dirigentes) — isento de Censo e de seguro escotista, e excluído do efectivo nas estatísticas do painel principal.
