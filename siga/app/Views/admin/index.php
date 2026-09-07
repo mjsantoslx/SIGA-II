@@ -10,4 +10,8 @@
         <strong>Utilizadores</strong>
         <span>Gestão de acessos à aplicação.</span>
     </a>
+    <a href="/admin/anos-escotistas" class="cartao-admin">
+        <strong>Anos escotistas (Censos)</strong>
+        <span>Valores anuais do Censo: seguro escotista, quota UEP, quota WFIS.</span>
+    </a>
 </div>

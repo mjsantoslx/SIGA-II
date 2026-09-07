@@ -173,6 +173,9 @@ class AssociadosController extends Controller
             if (!empty($dados['InsigniaMadeira'])) {
                 $dados['DataInsigniaMadeira'] = Data::paraApresentacao($dados['DataInsigniaMadeira'] ?? null) ?: ($dados['DataInsigniaMadeira'] ?? '');
             }
+            if (!empty($dados['MembroHonorario'])) {
+                $dados['DataInicioHonorario'] = Data::paraApresentacao($dados['DataInicioHonorario'] ?? null) ?: ($dados['DataInicioHonorario'] ?? '');
+            }
             $this->vista('associados/form', [
                 'titulo'    => 'Novo associado',
                 'modo'      => 'criar',
@@ -197,6 +200,9 @@ class AssociadosController extends Controller
             $dados['DataInscricao']  = Data::paraApresentacao($dados['DataInscricao'] ?? null);
             if (!empty($dados['InsigniaMadeira'])) {
                 $dados['DataInsigniaMadeira'] = Data::paraApresentacao($dados['DataInsigniaMadeira'] ?? null);
+            }
+            if (!empty($dados['MembroHonorario'])) {
+                $dados['DataInicioHonorario'] = Data::paraApresentacao($dados['DataInicioHonorario'] ?? null);
             }
             $this->vista('associados/form', [
                 'titulo'    => 'Novo associado',
@@ -263,6 +269,9 @@ class AssociadosController extends Controller
         $associado['DataNascimento'] = Data::paraApresentacao($associado['DataNascimento']);
         if (!empty($associado['DataInsigniaMadeira'])) {
             $associado['DataInsigniaMadeira'] = Data::paraApresentacao($associado['DataInsigniaMadeira']);
+        }
+        if (!empty($associado['DataInicioHonorario'])) {
+            $associado['DataInicioHonorario'] = Data::paraApresentacao($associado['DataInicioHonorario']);
         }
 
         $this->vista('associados/editar', [
@@ -559,6 +568,19 @@ class AssociadosController extends Controller
                 $erros[] = 'A data de atribuição da insígnia de madeira não pode ser futura.';
             } else {
                 $dados['DataInsigniaMadeira'] = $dataInsigniaBd;
+            }
+        }
+
+        // Regra 51: membro honorário — se marcado, a data de início é
+        // obrigatória, válida e não pode ser futura.
+        if (!empty($dados['MembroHonorario'])) {
+            $dataHonorarioBd = Data::paraBd($dados['DataInicioHonorario'] ?? '');
+            if ($dataHonorarioBd === null) {
+                $erros[] = 'A data de início como membro honorário é obrigatória (dd/mm/aaaa) quando esta condição é assinalada.';
+            } elseif (Data::eFutura($dataHonorarioBd)) {
+                $erros[] = 'A data de início como membro honorário não pode ser futura.';
+            } else {
+                $dados['DataInicioHonorario'] = $dataHonorarioBd;
             }
         }
 

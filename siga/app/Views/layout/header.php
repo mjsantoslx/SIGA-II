@@ -19,6 +19,7 @@
         <a href="/">Painel</a>
         <a href="/associados">Associados</a>
         <a href="/companhias">Companhias</a>
+        <a href="/censos">Censos</a>
         <?php if (\App\Core\Sessao::ehAdministrador()): ?>
             <a href="/utilizadores">Utilizadores</a>
             <a href="/admin">Administração</a>

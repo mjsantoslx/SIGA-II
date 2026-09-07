@@ -5,8 +5,10 @@ declare(strict_types=1);
 require_once __DIR__ . '/../app/autoload.php';
 
 use App\Controllers\AdminController;
+use App\Controllers\AnosEscotistasController;
 use App\Controllers\AssociadosController;
 use App\Controllers\AuthController;
+use App\Controllers\CensosController;
 use App\Controllers\CompanhiasController;
 use App\Controllers\ContactosController;
 use App\Controllers\DashboardController;
@@ -84,6 +86,17 @@ $router->post('/utilizadores/{id}/editar', [UtilizadoresController::class, 'atua
 
 // Administração (backoffice) — todas as rotas exigem administrador.
 $router->get('/admin', [AdminController::class, 'index']);
+
+$router->get('/admin/anos-escotistas', [AnosEscotistasController::class, 'index']);
+$router->get('/admin/anos-escotistas/criar', [AnosEscotistasController::class, 'criar']);
+$router->post('/admin/anos-escotistas/criar', [AnosEscotistasController::class, 'guardar']);
+$router->get('/admin/anos-escotistas/{id}/editar', [AnosEscotistasController::class, 'editar']);
+$router->post('/admin/anos-escotistas/{id}/editar', [AnosEscotistasController::class, 'atualizar']);
+
+$router->get('/censos', [CensosController::class, 'index']);
+$router->post('/censos/{idAssociado}/{idAnoEscotista}/pago', [CensosController::class, 'marcarPago']);
+$router->post('/censos/{idAssociado}/{idAnoEscotista}/nao-pago', [CensosController::class, 'marcarNaoPago']);
+$router->get('/censos/{idAssociado}/{idAnoEscotista}/historico', [CensosController::class, 'historico']);
 
 $router->get('/admin/referencias/{tabela}', [ReferenciasController::class, 'index']);
 $router->get('/admin/referencias/{tabela}/criar', [ReferenciasController::class, 'criar']);

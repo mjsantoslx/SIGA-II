@@ -249,6 +249,8 @@ class Associado extends Model
                 'Formador'                         => !empty($dados['Formador']) ? 1 : 0,
                 'InsigniaMadeira'                  => !empty($dados['InsigniaMadeira']) ? 1 : 0,
                 'DataInsigniaMadeira'              => !empty($dados['InsigniaMadeira']) ? $dados['DataInsigniaMadeira'] : null,
+                'MembroHonorario'                  => !empty($dados['MembroHonorario']) ? 1 : 0,
+                'DataInicioHonorario'              => !empty($dados['MembroHonorario']) ? $dados['DataInicioHonorario'] : null,
             ]);
 
             // 5. Secção inicial
@@ -386,11 +388,17 @@ class Associado extends Model
 
     /**
      * Actualiza os dados base do associado e o nome da pessoa associada.
+     * Regista um evento "Membro Honorário" sempre que esse estatuto mudar
+     * (regra 51) — para ficar rasto de quando e por quem foi alterado.
      */
     public function actualizarDadosBase(int $idAssociado, int $idPessoa, array $dados): bool
     {
         $this->bd->beginTransaction();
         try {
+            $associadoAntes = $this->encontrarPorId($idAssociado);
+            $eraHonorarioAntes = $associadoAntes && (bool) $associadoAntes['MembroHonorario'];
+            $seraHonorarioAgora = !empty($dados['MembroHonorario']);
+
             (new Pessoa())->actualizarNome($idPessoa, $dados['Nome']);
 
             $this->actualizar('associados', [
@@ -408,7 +416,22 @@ class Associado extends Model
                 'Formador'                         => !empty($dados['Formador']) ? 1 : 0,
                 'InsigniaMadeira'                  => !empty($dados['InsigniaMadeira']) ? 1 : 0,
                 'DataInsigniaMadeira'              => !empty($dados['InsigniaMadeira']) ? $dados['DataInsigniaMadeira'] : null,
+                'MembroHonorario'                  => $seraHonorarioAgora ? 1 : 0,
+                'DataInicioHonorario'              => $seraHonorarioAgora ? ($dados['DataInicioHonorario'] ?: null) : null,
             ], 'Id', $idAssociado);
+
+            if ($eraHonorarioAntes !== $seraHonorarioAgora) {
+                $idTipoEvento = (new EventoAssociado())->idTipoEventoPorDesignacao('Membro Honorário');
+                if ($idTipoEvento) {
+                    $dataEvento = $seraHonorarioAgora && !empty($dados['DataInicioHonorario'])
+                        ? $dados['DataInicioHonorario']
+                        : date('Y-m-d');
+                    $observacoes = $seraHonorarioAgora
+                        ? 'Associado passou a membro honorário — deixa de pagar Censo, deixa de estar coberto pelo seguro escotista e deixa de contar para o efectivo.'
+                        : 'Associado deixou de ser membro honorário.';
+                    (new EventoAssociado())->registar($idAssociado, $idTipoEvento, $dataEvento, $observacoes);
+                }
+            }
 
             $this->bd->commit();
             return true;
@@ -566,19 +589,23 @@ class Associado extends Model
 
     public function contarPorEstado(?int $idCompanhiaRestricao = null): array
     {
-        $sql = "SELECT a.Activo, COUNT(*) AS Total FROM associados a";
+        $sql = "SELECT a.Activo, a.MembroHonorario, COUNT(*) AS Total FROM associados a";
         $parametros = [];
         if ($idCompanhiaRestricao !== null) {
             $sql .= " INNER JOIN associados_companhias ac ON ac.IdAssociado = a.Id AND ac.Activo = 1 AND ac.IdCompanhia = :idCompanhia";
             $parametros['idCompanhia'] = $idCompanhiaRestricao;
         }
-        $sql .= " GROUP BY a.Activo";
+        $sql .= " GROUP BY a.Activo, a.MembroHonorario";
         $stmt = $this->bd->prepare($sql);
         $stmt->execute($parametros);
         $linhas = $stmt->fetchAll();
-        $resultado = ['ativos' => 0, 'inativos' => 0];
+        // Regra 51: membros honorários não contam para o efectivo — por
+        // isso "ativos" exclui-os, ficando à parte em "honorarios".
+        $resultado = ['ativos' => 0, 'inativos' => 0, 'honorarios' => 0];
         foreach ($linhas as $linha) {
-            if ((int) $linha['Activo'] === 1) {
+            if ((int) $linha['MembroHonorario'] === 1) {
+                $resultado['honorarios'] += (int) $linha['Total'];
+            } elseif ((int) $linha['Activo'] === 1) {
                 $resultado['ativos'] = (int) $linha['Total'];
             } else {
                 $resultado['inativos'] = (int) $linha['Total'];
@@ -593,6 +620,7 @@ class Associado extends Model
             SELECT sec.Designacao, COUNT(*) AS Total
             FROM associados_secoes asec
             INNER JOIN secoes sec ON sec.Id = asec.IdSecao
+            INNER JOIN associados a ON a.Id = asec.IdAssociado AND a.MembroHonorario = 0
         ";
         $parametros = [];
         if ($idCompanhiaRestricao !== null) {

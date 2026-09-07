@@ -54,6 +54,11 @@ window.siga = {
         if (checkboxInsignia) {
             this.actualizarObrigatoriedadeDataInsignia(checkboxInsignia);
         }
+
+        const checkboxHonorario = document.getElementById('MembroHonorario');
+        if (checkboxHonorario) {
+            this.actualizarObrigatoriedadeDataHonorario(checkboxHonorario);
+        }
     },
 
     /**
@@ -124,6 +129,23 @@ window.siga = {
     actualizarObrigatoriedadeDataInsignia(checkbox) {
         const grupo = document.getElementById('grupo-data-insignia');
         const campoData = document.getElementById('DataInsigniaMadeira');
+        if (!grupo || !campoData) return;
+
+        grupo.style.display = checkbox.checked ? 'block' : 'none';
+        campoData.required = checkbox.checked;
+        if (!checkbox.checked) {
+            campoData.value = '';
+        }
+    },
+
+    /**
+     * Regra 51: mostra/exige a data de início apenas quando "É membro
+     * honorário" está marcado. Aplicável a qualquer associado — não
+     * depende da divisão escolhida.
+     */
+    actualizarObrigatoriedadeDataHonorario(checkbox) {
+        const grupo = document.getElementById('grupo-data-honorario');
+        const campoData = document.getElementById('DataInicioHonorario');
         if (!grupo || !campoData) return;
 
         grupo.style.display = checkbox.checked ? 'block' : 'none';

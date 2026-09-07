@@ -210,6 +210,10 @@ CREATE TABLE associados (
     Formador TINYINT(1) NOT NULL DEFAULT 0,
     InsigniaMadeira TINYINT(1) NOT NULL DEFAULT 0,
     DataInsigniaMadeira DATE NULL,
+    -- Regra 51: um membro honorário deixa de pagar Censos, deixa de estar
+    -- coberto pelo seguro escotista, e não conta para o efectivo da UEP.
+    MembroHonorario TINYINT(1) NOT NULL DEFAULT 0,
+    DataInicioHonorario DATE NULL,
     PRIMARY KEY (Id),
     UNIQUE KEY uk_associados_pessoa (IdPessoa),
     UNIQUE KEY uk_associados_numero (NumeroAssociado),
@@ -421,6 +425,57 @@ VALUES
     ('Chefe Nacional'),
     ('Chefe Nacional Adjunto'),
     ('Equipa Nacional de Clã');
+
+-- ============================================================================
+-- CENSOS
+-- Os Censos englobam o seguro escotista, a quota da UEP e a quota da WFIS,
+-- definidos no início de cada ano escotista (Outubro). Todos os associados
+-- pagam o mesmo valor, excepto os membros honorários (regra 51), que não
+-- pagam, não estão cobertos pelo seguro, e não contam para o efectivo.
+-- ============================================================================
+
+CREATE TABLE anos_escotistas (
+    Id INT NOT NULL AUTO_INCREMENT,
+    AnoInicio SMALLINT NOT NULL COMMENT 'Ano civil em que o ano escotista começa (Outubro). Ex.: 2026 = ano escotista 2026/2027.',
+    ValorSeguroEscotista DECIMAL(8,2) NOT NULL,
+    ValorQuotaUEP DECIMAL(8,2) NOT NULL,
+    ValorQuotaWFIS DECIMAL(8,2) NOT NULL,
+    Activo TINYINT(1) NOT NULL DEFAULT 1,
+    PRIMARY KEY (Id),
+    UNIQUE KEY uk_anos_escotistas_ano (AnoInicio)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
+
+CREATE TABLE censos_associados (
+    Id INT NOT NULL AUTO_INCREMENT,
+    IdAssociado INT NOT NULL,
+    IdAnoEscotista INT NOT NULL,
+    Pago TINYINT(1) NOT NULL DEFAULT 0,
+    DataPagamento DATE NULL,
+    PRIMARY KEY (Id),
+    UNIQUE KEY uk_censos_associado_ano (IdAssociado, IdAnoEscotista),
+    KEY ix_censos_ano (IdAnoEscotista),
+    CONSTRAINT fk_censos_associado FOREIGN KEY (IdAssociado) REFERENCES associados(Id),
+    CONSTRAINT fk_censos_ano FOREIGN KEY (IdAnoEscotista) REFERENCES anos_escotistas(Id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
+
+-- Histórico de pagamentos: cada acção (marcar pago / anular) fica registada,
+-- em vez de só se sobrepor ao estado actual em censos_associados.
+CREATE TABLE censos_historico (
+    Id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    IdCenso INT NOT NULL,
+    IdAssociado INT NOT NULL,
+    IdAnoEscotista INT NOT NULL,
+    IdUtilizador INT NOT NULL,
+    DataHora DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    Operacao VARCHAR(20) NOT NULL COMMENT 'PAGAMENTO ou ANULACAO',
+    DataPagamento DATE NULL,
+    PRIMARY KEY (Id),
+    KEY idx_ch_associado_ano (IdAssociado, IdAnoEscotista),
+    CONSTRAINT fk_ch_censo FOREIGN KEY (IdCenso) REFERENCES censos_associados(Id),
+    CONSTRAINT fk_ch_associado FOREIGN KEY (IdAssociado) REFERENCES associados(Id),
+    CONSTRAINT fk_ch_ano FOREIGN KEY (IdAnoEscotista) REFERENCES anos_escotistas(Id),
+    CONSTRAINT fk_ch_utilizador FOREIGN KEY (IdUtilizador) REFERENCES utilizadores(Id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
 
 -- ============================================================================
 -- EVENTOS DOS ASSOCIADOS
@@ -729,6 +784,7 @@ INSERT INTO tipos_evento (Designacao) VALUES ('Admissão');
 INSERT INTO tipos_evento (Designacao) VALUES ('Desactivação');
 INSERT INTO tipos_evento (Designacao) VALUES ('Reactivação');
 INSERT INTO tipos_evento (Designacao) VALUES ('Correcção de secção');
+INSERT INTO tipos_evento (Designacao) VALUES ('Membro Honorário');
 
 
 

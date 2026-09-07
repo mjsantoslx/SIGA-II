@@ -1176,3 +1176,66 @@ algum novo for identificado.
 - Backoffice (regra 48): reduzido a Tipos de Evento e Utilizadores; o
   utilizador indicou que pode identificar mais tabelas a incluir mais
   tarde.
+51. Modulo de Censos (fechada, com historico)
+
+Os Censos sao a quota anual, definida no inicio de cada ano escotista
+(Outubro), e englobam tres componentes: o seguro escotista, a quota da
+UEP e a quota da WFIS. Todos os associados pagam o mesmo valor total
+(soma dos tres), excepto os membros honorarios.
+
+51.1 Membro honorario (novo atributo do associado)
+
+Um associado pode, a partir de certa altura, tornar-se membro
+honorario. A partir desse momento:
+- deixa de pagar Censo;
+- deixa de estar coberto pelo seguro escotista;
+- deixa de contar para o efectivo da UEP (excluido das estatisticas
+  de "activos"/"por divisao" do painel principal, que passam a ter
+  uma categoria separada "honorarios").
+
+Implementado como duas colunas novas em associados: MembroHonorario
+(sim/nao) e DataInicioHonorario (obrigatoria quando marcado, nunca
+futura). Aplicavel a QUALQUER associado — nao restrito a dirigentes,
+ao contrario de Formador/InsigniaMadeira. Mudar este estatuto regista
+sempre um evento ("Membro Honorario") no historico do associado.
+
+51.2 Anos escotistas (valores anuais)
+
+Nova tabela anos_escotistas: AnoInicio (ano civil em que comeca, ex.
+2026 = ano escotista 2026/2027), e os tres valores (seguro escotista,
+quota UEP, quota WFIS). Geridos numa pagina propria
+(/admin/anos-escotistas), restrita a administradores. O valor total e
+sempre a soma dos tres — nao e guardado, e calculado.
+
+51.3 Registo de pagamento, com historico
+
+Nova tabela censos_associados: um registo por associado/ano escotista,
+com Pago (sim/nao) e DataPagamento. Um associado sem linha aparece
+como nao pago (nao e preciso gerar linhas antecipadamente para todos).
+
+Foi pedido explicitamente que o registo do pagamento pressupusesse um
+HISTORICO — por isso cada accao (marcar pago / anular) fica tambem
+registada em censos_historico, com quem fez, quando, e a data de
+pagamento indicada nessa accao. censos_associados guarda so o ESTADO
+actual (para consultas rapidas); censos_historico guarda TODAS as
+accoes (para auditoria). Pagina propria de historico por
+associado/ano (/censos/{idAssociado}/{idAnoEscotista}/historico).
+
+51.4 Acesso
+
+Pagina /censos: acesso a qualquer utilizador autenticado, mas
+restrito pela regra 2 — um nao-administrador so ve/regista pagamentos
+dos associados da sua propria companhia. Gestao dos valores anuais
+(/admin/anos-escotistas): so administradores.
+
+⚠️ ASSUNCOES POR CONFIRMAR (nao foram explicitamente validadas):
+- Todos os nao-honorarios pagam o MESMO valor total (nao varia por
+  divisao, companhia, ou idade).
+- O pagamento e registado como um unico "pago/nao pago" por ano —
+  nao ha registo separado de qual dos tres componentes (seguro/UEP/
+  WFIS) foi pago.
+- Associados inactivos nao aparecem na lista de Censos a pagar (so
+  "activos e nao honorarios").
+- Nao existe geracao em lote de linhas de Censo para todos os
+  associados no inicio do ano — as linhas so sao criadas quando
+  alguem marca um pagamento (ou anulacao) pela primeira vez.

@@ -4,20 +4,25 @@
 <div class="grelha-cartoes">
     <div class="cartao cartao-destaque">
         <span class="cartao-numero"><?= (int) $estados['ativos'] ?></span>
-        <span class="cartao-legenda">Associados activos</span>
+        <span class="cartao-legenda">Efectivo (activos, sem honorários)</span>
     </div>
     <div class="cartao">
         <span class="cartao-numero"><?= (int) $estados['inativos'] ?></span>
         <span class="cartao-legenda">Associados inactivos</span>
     </div>
     <div class="cartao">
-        <span class="cartao-numero"><?= (int) $estados['ativos'] + (int) $estados['inativos'] ?></span>
+        <span class="cartao-numero"><?= (int) $estados['honorarios'] ?></span>
+        <span class="cartao-legenda">Membros honorários</span>
+    </div>
+    <div class="cartao">
+        <span class="cartao-numero"><?= (int) $estados['ativos'] + (int) $estados['inativos'] + (int) $estados['honorarios'] ?></span>
         <span class="cartao-legenda">Total registado</span>
     </div>
 </div>
 
 <section class="seccao">
-    <h2>Associados por divisão</h2>
+    <h2>Efectivo por divisão</h2>
+    <p class="ajuda-fieldset" style="margin-top: -0.6rem;">Não inclui membros honorários — não contam para o efectivo.</p>
     <?php if (empty($porSecao)): ?>
         <p class="texto-vazio">Ainda não existem associados atribuídos a divisões.</p>
     <?php else: ?>

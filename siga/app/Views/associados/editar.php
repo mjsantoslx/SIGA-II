@@ -190,6 +190,16 @@
                 <input type="text" id="DataInsigniaMadeira" name="DataInsigniaMadeira" class="campo-data" placeholder="dd/mm/aaaa" maxlength="10" inputmode="numeric" value="<?= htmlspecialchars($a['DataInsigniaMadeira'] ?? '') ?>">
             </div>
         </div>
+
+        <p class="rotulo-subseccao" style="margin-top: 1rem;">Membro Honorário</p>
+        <p class="ajuda-fieldset">Aplicável a qualquer associado. Um membro honorário deixa de pagar Censo, deixa de estar coberto pelo seguro escotista, e deixa de contar para o efectivo da UEP.</p>
+        <div class="grelha-checkboxes" style="margin-top: 0.4rem;">
+            <label><input type="checkbox" id="MembroHonorario" name="MembroHonorario" value="1" <?= !empty($a['MembroHonorario']) ? 'checked' : '' ?> onchange="siga.actualizarObrigatoriedadeDataHonorario(this)"> É membro honorário</label>
+        </div>
+        <div class="campo" id="grupo-data-honorario" style="margin-top: 0.6rem; max-width: 220px; <?= !empty($a['MembroHonorario']) ? '' : 'display:none' ?>">
+            <label for="DataInicioHonorario">Data de início *</label>
+            <input type="text" id="DataInicioHonorario" name="DataInicioHonorario" class="campo-data" placeholder="dd/mm/aaaa" maxlength="10" inputmode="numeric" value="<?= htmlspecialchars($a['DataInicioHonorario'] ?? '') ?>">
+        </div>
     </fieldset>
 
     <div class="acoes-formulario">

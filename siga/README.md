@@ -213,6 +213,8 @@ preservar:
 
 - **Histórico da ficha de saúde** (regra 49) — nova página "Gerir ficha de saúde" (`/associados/{id}/ficha-saude`), que passa a permitir editar a ficha de saúde depois do registo do associado (só era possível defini-la na criação). Toda a criação/alteração fica registada em `fichas_saude_historico` — quem, quando, e o estado antes/depois. A interface mostra a lista de alterações (não o detalhe, por serem dados de saúde); o detalhe fica na base de dados.
 
+- **Censos** (`/censos`, `/admin/anos-escotistas`, regra 51) — quota anual (seguro escotista + quota UEP + quota WFIS), definida por ano escotista (Outubro). Todos os associados pagam o mesmo valor, excepto **membros honorários** — novo atributo do associado (com data de início), que deixam de pagar Censo, deixam de estar cobertos pelo seguro escotista, e deixam de contar para o efectivo (painel principal ajustado em conformidade). Cada pagamento/anulação fica registado num histórico próprio (`censos_historico`), não só como estado actual. Acesso: qualquer utilizador para a sua própria companhia (regra 2); valores anuais só por administradores.
+
 - **Backoffice** (`/admin`, regras 47-48) — acesso restrito a administradores. Reduzido, após revisão, a **tipos de evento** e a **utilizadores** (atalho); as restantes tabelas de referência (divisões, nacionalidades, estados civis, confissões religiosas, tipos de documento/contacto/relação, órgãos, cargos) foram removidas do backoffice — continuam só editáveis directamente por SQL. O mecanismo genérico de gestão de referências mantém-se no código, pronto a reactivar para outra tabela, se vier a fazer sentido.
 
 - **Ordenação em todas as listagens** (regra 42) — os cabeçalhos de coluna nas listagens de associados, companhias e utilizadores são clicáveis para ordenar (ascendente/descendente, com indicador visual), preservando os filtros activos. Qualquer listagem nova deve seguir o mesmo padrão (`App\Core\Tabela`).
@@ -300,6 +302,11 @@ Lista viva do que ficou identificado como "por fazer", sem ordem específica —
 
 Esta secção é actualizada a cada nova versão entregue, com as alterações
 feitas desde a versão anterior. Mais recente primeiro.
+
+### v01.44
+- Novo módulo de Censos: quota anual (seguro escotista + quota UEP + quota WFIS), definida por ano escotista, com registo de pagamento por associado e histórico completo de cada acção (marcar pago/anular).
+- Novo atributo "Membro Honorário" no associado (aplicável a qualquer associado, não só dirigentes) — isento de Censo e de seguro escotista, e excluído do efectivo nas estatísticas do painel principal.
+- Nova página "Anos escotistas" (admin) para definir os valores anuais; nova página "Censos" para gerir pagamentos, com a mesma restrição por companhia das restantes páginas de associado.
 
 ### v01.43
 - Apenas documentação: nova secção de pendências (README e regras de negócio), consolidando tudo o que ficou identificado como "por fazer" — sem alterações de código.
