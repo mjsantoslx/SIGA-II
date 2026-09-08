@@ -3,7 +3,7 @@
         'name' => 'uep/siga',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '42cc6eb74777dc4866202e6a25dc10f5449be562',
+        'reference' => 'b4821a9b0876df8bed02ca9429f51892e70ccfb3',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'uep/siga' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '42cc6eb74777dc4866202e6a25dc10f5449be562',
+            'reference' => 'b4821a9b0876df8bed02ca9429f51892e70ccfb3',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
