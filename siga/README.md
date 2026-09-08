@@ -329,6 +329,9 @@ Lista viva do que ficou identificado como "por fazer", sem ordem específica —
 Esta secção é actualizada a cada nova versão entregue, com as alterações
 feitas desde a versão anterior. Mais recente primeiro.
 
+### v01.50
+- Apenas alinhamento de numeração: sem alterações de código. O número de versão mostrado na aplicação passa a corresponder sempre ao nome do ficheiro .zip entregue.
+
 ### v01.49
 - Número de versão passa a aparecer também no ecrã de login (discreto, por baixo do painel) — até agora só aparecia no rodapé das páginas autenticadas.
 
