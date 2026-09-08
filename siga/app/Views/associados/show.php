@@ -62,6 +62,7 @@
             <dt>Nome da mãe</dt><dd><?= htmlspecialchars($associado['NomeMae'] ?? '—') ?></dd>
             <dt>Documento</dt><dd><?= htmlspecialchars($associado['NumeroDocumentoIdentificacao'] ?? '—') ?></dd>
             <dt>Nº utente saúde</dt><dd><?= htmlspecialchars($associado['NumeroCartaoUtente'] ?? '—') ?></dd>
+            <dt>NIF</dt><dd><?= htmlspecialchars($associado['NIF'] ?? '—') ?></dd>
             <dt>Formador</dt><dd><?= $associado['Formador'] ? 'Sim' : 'Não' ?></dd>
             <dt>Insígnia de madeira</dt>
             <dd>

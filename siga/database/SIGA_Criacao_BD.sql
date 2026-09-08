@@ -200,6 +200,7 @@ CREATE TABLE associados (
     IdTipoDocumentoIdentificacao INT NULL,
     NumeroDocumentoIdentificacao VARCHAR(50) NULL,
     NumeroCartaoUtente CHAR(9) NULL,
+    NIF CHAR(9) NULL,
     NominativoOutro VARCHAR(100) NULL,
     NomePai VARCHAR(150) NULL,
     NomeMae VARCHAR(150) NULL,
@@ -240,6 +241,11 @@ CREATE TABLE associados (
         CHECK (
             NumeroCartaoUtente IS NULL
             OR NumeroCartaoUtente REGEXP '^[0-9]{9}$'
+        ),
+    CONSTRAINT chk_associados_nif
+        CHECK (
+            NIF IS NULL
+            OR NIF REGEXP '^[0-9]{9}$'
         )
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
 

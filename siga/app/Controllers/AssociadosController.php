@@ -557,6 +557,9 @@ class AssociadosController extends Controller
         if (!empty($dados['NumeroCartaoUtente']) && !preg_match('/^\d{9}$/', $dados['NumeroCartaoUtente'])) {
             $erros[] = 'O número de utente de saúde deve ter exactamente 9 dígitos.';
         }
+        if (!empty($dados['NIF']) && !preg_match('/^\d{9}$/', $dados['NIF'])) {
+            $erros[] = 'O NIF deve ter exactamente 9 dígitos.';
+        }
 
         // Insígnia de madeira: se marcada, a data de atribuição é obrigatória,
         // válida e não pode ser futura.

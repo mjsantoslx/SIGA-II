@@ -243,6 +243,10 @@ Se a aplicação ficar na raiz do domínio, mantenha `'base_url' => '/'`.
 
 - **Secções de dirigente/Clã escondidas por defeito** (regra 43) — no formulário de associado, o bloco de Chefia Nacional/órgãos/cargos/formador/insígnia só aparece quando a secção escolhida é "Chefia"; o cargo "Equipa Nacional de Clã" só aparece quando é "Clã".
 
+### Nota sobre o NIF
+
+O NIF (9 dígitos) segue o mesmo tratamento do número de utente de saúde: guardado e validado sempre como texto, nunca como número (para não perder zeros à esquerda). Só se valida o formato (9 dígitos) — não o dígito de controlo do algoritmo oficial português.
+
 ### Nota sobre o número de documento (Cartão de Cidadão)
 
 O número é sempre tratado como texto (nunca convertido para inteiro), mas o
@@ -324,6 +328,9 @@ Lista viva do que ficou identificado como "por fazer", sem ordem específica —
 
 Esta secção é actualizada a cada nova versão entregue, com as alterações
 feitas desde a versão anterior. Mais recente primeiro.
+
+### v01.47
+- Novo campo NIF (9 dígitos) na ficha do associado — tratado sempre como texto, com validação de formato no servidor e na base de dados. Mesmo padrão já usado para o número de utente de saúde.
 
 ### v01.46
 - Suporte a publicação num subcaminho do domínio (ex.: `http://www.uep.pt/siga`), para alojamentos (cPanel) sem Document Root configurável: nova classe `App\Core\Url`, `Router` ajustado para remover o prefixo antes de encaminhar, e todos os links/formulários/ficheiros estáticos das vistas corrigidos para o respeitar. `config/config.php` → `app.base_url` definido como `/siga` para este deployment.

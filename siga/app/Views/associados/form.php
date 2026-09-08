@@ -111,6 +111,10 @@
                 <label for="NumeroCartaoUtente">Número de utente de saúde (9 dígitos)</label>
                 <input type="text" id="NumeroCartaoUtente" name="NumeroCartaoUtente" pattern="\d{9}" maxlength="9" value="<?= htmlspecialchars($a['NumeroCartaoUtente'] ?? '') ?>">
             </div>
+            <div class="campo">
+                <label for="NIF">NIF (9 dígitos)</label>
+                <input type="text" id="NIF" name="NIF" pattern="\d{9}" maxlength="9" value="<?= htmlspecialchars($a['NIF'] ?? '') ?>">
+            </div>
         </div>
     </fieldset>
 

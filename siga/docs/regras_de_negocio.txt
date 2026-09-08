@@ -1280,3 +1280,23 @@ num controlador para passar a uma vista) tem de usar
 App\Core\Url::para() — nao voltar a escrever caminhos fixos comecados
 por "/". Os redireccionamentos feitos com $this->redirecionar()
 continuam a funcionar sem alteracoes, ja respeitam isto.
+53. NIF do associado (fechada)
+
+Acrescentado o NIF (Numero de Identificacao Fiscal) a ficha do
+associado — 9 digitos, sempre tratado como texto (nunca como numero
+inteiro, para nao perder zeros a esquerda), seguindo exactamente o
+mesmo padrao ja usado para o numero de utente de saude (regra 7):
+coluna CHAR(9) NULL, validado por formato (9 digitos) tanto no
+servidor como na base de dados (CHECK constraint), sem obrigar a
+unicidade (o numero de utente de saude tambem nao a tem, seguiu-se a
+mesma decisao ja tomada).
+
+Campo disponivel na seccao "Documento de identificacao" do formulario
+de associado (registo e edicao), e mostrado na ficha de detalhe.
+
+⚠️ NAO IMPLEMENTADO: validacao do digito de controlo do NIF (o
+algoritmo oficial portugues verifica se o NIF e valido, nao so se tem
+9 digitos). Por agora so se valida o formato (9 digitos), tal como o
+numero de utente de saude. Se for necessario validar o digito de
+controlo, e uma alteracao pequena e isolada ao validar() do
+AssociadosController.
