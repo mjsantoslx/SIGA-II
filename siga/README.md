@@ -245,7 +245,7 @@ Se a aplicação ficar na raiz do domínio, mantenha `'base_url' => '/'`.
 
 ### Nota sobre o NIF
 
-O NIF (9 dígitos) segue o mesmo tratamento do número de utente de saúde: guardado e validado sempre como texto, nunca como número (para não perder zeros à esquerda). Só se valida o formato (9 dígitos) — não o dígito de controlo do algoritmo oficial português.
+O NIF (9 dígitos) segue o mesmo tratamento do número de utente de saúde: guardado e validado sempre como texto, nunca como número (para não perder zeros à esquerda). Além do formato, valida-se também o **dígito de controlo** pelo algoritmo oficial (módulo 11 — `App\Core\Nif::valido()`), sem restringir o primeiro dígito a uma categoria específica.
 
 ### Nota sobre o número de documento (Cartão de Cidadão)
 
@@ -328,6 +328,9 @@ Lista viva do que ficou identificado como "por fazer", sem ordem específica —
 
 Esta secção é actualizada a cada nova versão entregue, com as alterações
 feitas desde a versão anterior. Mais recente primeiro.
+
+### v01.48
+- NIF passa a ser validado com o dígito de controlo oficial (algoritmo módulo 11), não só o formato de 9 dígitos. Nova classe `App\Core\Nif`, reutilizável.
 
 ### v01.47
 - Novo campo NIF (9 dígitos) na ficha do associado — tratado sempre como texto, com validação de formato no servidor e na base de dados. Mesmo padrão já usado para o número de utente de saúde.

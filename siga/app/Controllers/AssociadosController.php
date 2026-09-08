@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Core\Controller;
 use App\Core\Data;
 use App\Core\Documentos;
+use App\Core\Nif;
 use App\Core\Sessao;
 use App\Core\Tabela;
 use App\Models\Associado;
@@ -557,8 +558,12 @@ class AssociadosController extends Controller
         if (!empty($dados['NumeroCartaoUtente']) && !preg_match('/^\d{9}$/', $dados['NumeroCartaoUtente'])) {
             $erros[] = 'O número de utente de saúde deve ter exactamente 9 dígitos.';
         }
-        if (!empty($dados['NIF']) && !preg_match('/^\d{9}$/', $dados['NIF'])) {
-            $erros[] = 'O NIF deve ter exactamente 9 dígitos.';
+        if (!empty($dados['NIF'])) {
+            if (!preg_match('/^\d{9}$/', $dados['NIF'])) {
+                $erros[] = 'O NIF deve ter exactamente 9 dígitos.';
+            } elseif (!Nif::valido($dados['NIF'])) {
+                $erros[] = 'O NIF indicado não é válido (dígito de controlo incorrecto). Verifique se não há nenhum algarismo trocado.';
+            }
         }
 
         // Insígnia de madeira: se marcada, a data de atribuição é obrigatória,

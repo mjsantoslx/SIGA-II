@@ -1294,9 +1294,15 @@ mesma decisao ja tomada).
 Campo disponivel na seccao "Documento de identificacao" do formulario
 de associado (registo e edicao), e mostrado na ficha de detalhe.
 
-⚠️ NAO IMPLEMENTADO: validacao do digito de controlo do NIF (o
-algoritmo oficial portugues verifica se o NIF e valido, nao so se tem
-9 digitos). Por agora so se valida o formato (9 digitos), tal como o
-numero de utente de saude. Se for necessario validar o digito de
-controlo, e uma alteracao pequena e isolada ao validar() do
-AssociadosController.
+53.1 Validacao do digito de controlo (fechada, v01.48)
+
+Pedido explicitamente e implementado: o NIF passou a ser validado com
+o algoritmo oficial de digito de controlo (modulo 11), nao so o
+formato (9 digitos). Nova classe App\Core\Nif::valido(), reutilizavel.
+
+Decisao deliberada: NAO se restringe o primeiro digito a uma
+categoria especifica (pessoa singular vs colectiva vs nao residente,
+etc.) — so se confirma que o digito de controlo e matematicamente
+consistente com os primeiros 8 digitos. Isto evita rejeitar NIFs
+legitimos de categorias menos comuns que a aplicacao nao tem forma
+de distinguir com confianca.
