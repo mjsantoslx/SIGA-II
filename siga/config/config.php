@@ -17,15 +17,15 @@ return [
         'base_url'  => '/siga',
         'timezone'  => 'Europe/Lisbon',
         // Actualizado a cada nova versão entregue — aparece no rodapé.
-        'versao'    => 'v01.50',
+        'versao'    => 'v02.00',
     ],
 
     'db' => [
         'host'    => getenv('SIGA_DB_HOST') ?: '127.0.0.1',
         'port'    => getenv('SIGA_DB_PORT') ?: '3306',
-        'name'    => getenv('SIGA_DB_NAME') ?: 'siga',
-        'user'    => getenv('SIGA_DB_USER') ?: 'usrSiga',
-        'pass'    => getenv('SIGA_DB_PASS') ?: 'sigaUsr',
+        'name'    => getenv('SIGA_DB_NAME') ?: 'vtjeuyhh_siga',
+        'user'    => getenv('SIGA_DB_USER') ?: 'vtjeuyhh_usrSiga',
+        'pass'    => getenv('SIGA_DB_PASS') ?: 'sigaUsr@2026!',
         'charset' => 'utf8mb4',
     ],
 
