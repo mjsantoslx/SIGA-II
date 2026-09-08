@@ -329,6 +329,9 @@ Lista viva do que ficou identificado como "por fazer", sem ordem específica —
 Esta secção é actualizada a cada nova versão entregue, com as alterações
 feitas desde a versão anterior. Mais recente primeiro.
 
+### v02.01
+- Corrigido: o número de versão do ecrã de login aparecia ao lado do cartão (quase invisível), em vez de por baixo dele — faltava `flex-direction: column` em `.pagina-login`, que só tinha sido pensada para um único elemento centrado.
+
 ### v02.00
 - Apenas alinhamento de numeração (sem alterações de código): confirmado que a versão mostrada na aplicação (rodapé e login) e o nome do ficheiro .zip correspondem sempre um ao outro. Se o número mostrado no seu site não bater certo com o do zip mais recente, é sinal de que essa versão ainda não foi publicada — não um erro na aplicação.
 
