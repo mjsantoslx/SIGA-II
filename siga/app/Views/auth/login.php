@@ -32,5 +32,7 @@
             <button type="submit" class="botao botao-primario botao-largo">Entrar</button>
         </form>
     </div>
+
+    <p class="painel-login-versao"><?= htmlspecialchars($versao ?? '') ?></p>
 </body>
 </html>

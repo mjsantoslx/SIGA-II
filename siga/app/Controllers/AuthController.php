@@ -18,6 +18,7 @@ class AuthController extends Controller
 
         $this->vista('auth/login', [
             'titulo' => 'Entrar',
+            'versao' => $this->config['app']['versao'] ?? '',
         ], comLayout: false);
     }
 
