@@ -164,10 +164,11 @@ a { color: var(--verde-medio); }
 
 /* ---------- Formulários ---------- */
 
-input, select, textarea {
+input:not([type="checkbox"]):not([type="radio"]), select, textarea {
     font: inherit; padding: 0.55rem 0.7rem; border: 1px solid var(--borda);
     border-radius: 7px; background: var(--papel); color: var(--texto); width: 100%;
 }
+input[type="checkbox"], input[type="radio"] { width: auto; }
 input:focus, select:focus, textarea:focus {
     outline: 2px solid var(--verde-claro); outline-offset: 1px; border-color: var(--verde-claro);
 }

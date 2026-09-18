@@ -1419,3 +1419,20 @@ por cima da designacao, em vez de a frente. Corrigido com
 "display: inline-flex" explicito no rotulo, garantindo o
 alinhamento horizontal independentemente de qualquer
 particularidade do CSS circundante.
+58.2 Causa real encontrada: checkboxes esticadas fora de
+grelha-checkboxes (fechada)
+
+A correcção da 58.1 (inline-flex no rotulo) nao resolveu — a causa
+real era outra: a regra genérica "input, select, textarea { width:
+100%; padding: ...; border: ...; }" aplicava-se tambem a checkboxes,
+esticando-as. So estava corrigido dentro de .grelha-checkboxes ("input
+{ width: auto; }"); a checkbox de "Equipa Nacional de Cla" esta fora
+desse contentor (num .campo simples), por isso ficava esticada e sem
+forma.
+
+Corrigido universalmente: a regra generica passou a excluir
+checkboxes e radios ("input:not([type=checkbox]):not([type=radio])"),
+com uma regra propria "input[type=checkbox], input[type=radio] {
+width: auto; }" a repor o tamanho natural em qualquer sitio da
+aplicacao, nao so neste caso especifico — evita o mesmo problema
+aparecer noutra checkbox fora de .grelha-checkboxes no futuro.

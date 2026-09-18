@@ -339,6 +339,9 @@ Lista viva do que ficou identificado como "por fazer", sem ordem específica —
 Esta secção é actualizada a cada nova versão entregue, com as alterações
 feitas desde a versão anterior. Mais recente primeiro.
 
+### v02.06
+- Corrigida a causa real da checkbox esticada de "Equipa Nacional de Clã": a regra genérica de estilo de campos aplicava-se também a checkboxes/radios. Corrigido universalmente em todo o CSS, não só neste caso.
+
 ### v02.05
 - Corrigido: a opção "Órgãos" no selector de companhia já não pode ser escolhida fora da divisão "Chefia" (formulário e servidor).
 - Corrigido: a caixa de escolha de "Equipa Nacional de Clã" fica alinhada à frente da designação, não por cima.
