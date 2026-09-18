@@ -148,6 +148,12 @@ class AssociadosController extends Controller
             $erros[] = 'O email associativo só pode ser preenchido para associados dirigentes (divisão "Chefia").';
         }
 
+        // Regra 57: "Órgãos" no selector de companhia só faz sentido para
+        // a divisão "Chefia" — é lá que se escolhem os órgãos em si.
+        if ($eraOrgaos && !$ehChefia) {
+            $erros[] = 'A opção "Órgãos" só está disponível para associados na divisão "Chefia".';
+        }
+
         // Regra 29: só um dirigente (associado na divisão "Chefia") pode
         // pertencer à Chefia Nacional.
         if (!empty($dados['ChefiaNacional']) && !$ehChefia) {
@@ -367,6 +373,11 @@ class AssociadosController extends Controller
 
         if (!empty($dados['ChefiaNacional']) && !$seraDirigente) {
             $erros[] = 'Só um dirigente (associado na divisão "Chefia") pode pertencer à Chefia Nacional.';
+        }
+        // Regra 57: "Órgãos" no selector de companhia só faz sentido para
+        // a divisão "Chefia".
+        if ((($dados['IdCompanhia'] ?? '') === 'orgaos') && !$seraDirigente) {
+            $erros[] = 'A opção "Órgãos" só está disponível para associados na divisão "Chefia".';
         }
         // Regra 55: só um administrador pode atribuir um associado à
         // Chefia Nacional ou a órgãos.

@@ -1397,3 +1397,25 @@ $ehHonorario), chamado tanto no registo como na edicao. No lado do
 cliente, marcar "E membro honorario" desmarca imediatamente todos os
 cargos seleccionados (incluindo "Equipa Nacional de Cla"), para nao
 sobrar uma seleccao invalida a espera de ser submetida.
+57.1 Correccao: "Orgaos" so disponivel na divisao "Chefia" (fechada)
+
+Reportado: era possivel escolher "Orgaos" no selector de companhia
+mesmo para divisoes diferentes de "Chefia" (ex.: "Cla"), o que nao
+fazia sentido — as checkboxes de orgaos em si so aparecem para a
+divisao "Chefia" (regra 43), por isso escolher "Orgaos" nessas
+condicoes deixava o associado sem companhia e sem forma de escolher
+um orgao.
+
+Corrigido nos dois lados: no formulario, a opcao "Orgaos" fica
+desactivada (e a seleccao e limpa) sempre que a divisao escolhida nao
+for "Chefia"; no servidor, validado o mesmo (registo e edicao,
+considerando a divisao efectiva apos a gravacao).
+
+58.1 Correccao visual: caixa de escolha do Cla alinhada com o texto
+(fechada)
+
+Reportado: a caixa de escolha de "Equipa Nacional de Cla" aparecia
+por cima da designacao, em vez de a frente. Corrigido com
+"display: inline-flex" explicito no rotulo, garantindo o
+alinhamento horizontal independentemente de qualquer
+particularidade do CSS circundante.

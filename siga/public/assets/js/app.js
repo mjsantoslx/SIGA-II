@@ -96,6 +96,18 @@ window.siga = {
                 grupoCla.querySelectorAll('input[type="checkbox"]').forEach((cb) => { cb.checked = false; });
             }
         }
+
+        // Regra 57: a opção "Órgãos" no selector de companhia só faz
+        // sentido para a divisão "Chefia" (é lá que se escolhem os
+        // órgãos) — desactiva-a e limpa a selecção fora dessa divisão.
+        const opcaoOrgaos = document.querySelector('#IdCompanhia option[value="orgaos"]');
+        if (opcaoOrgaos) {
+            const eChefiaParaOrgaos = designacao === 'Chefia';
+            opcaoOrgaos.disabled = !eChefiaParaOrgaos;
+            if (!eChefiaParaOrgaos && opcaoOrgaos.selected) {
+                document.getElementById('IdCompanhia').value = '';
+            }
+        }
     },
 
     /**

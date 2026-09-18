@@ -156,7 +156,7 @@
 
         <?php if ($cargoCla): ?>
         <div class="campo" id="grupo-cla" style="margin-top: 1rem; display: none;">
-            <label><input type="checkbox" name="Cargos[]" value="<?= (int) $cargoCla['Id'] ?>" <?= in_array((int) $cargoCla['Id'], $idsCargosActuais, true) ? 'checked' : '' ?>> <?= htmlspecialchars($cargoCla['Designacao']) ?></label>
+            <label style="display: inline-flex; align-items: center; gap: 0.5rem;"><input type="checkbox" name="Cargos[]" value="<?= (int) $cargoCla['Id'] ?>" <?= in_array((int) $cargoCla['Id'], $idsCargosActuais, true) ? 'checked' : '' ?>> <?= htmlspecialchars($cargoCla['Designacao']) ?></label>
             <small>Exclusivo de associados na divisão "Clã", não honorários.</small>
         </div>
         <?php endif; ?>

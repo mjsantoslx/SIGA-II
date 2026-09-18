@@ -339,6 +339,10 @@ Lista viva do que ficou identificado como "por fazer", sem ordem específica —
 Esta secção é actualizada a cada nova versão entregue, com as alterações
 feitas desde a versão anterior. Mais recente primeiro.
 
+### v02.05
+- Corrigido: a opção "Órgãos" no selector de companhia já não pode ser escolhida fora da divisão "Chefia" (formulário e servidor).
+- Corrigido: a caixa de escolha de "Equipa Nacional de Clã" fica alinhada à frente da designação, não por cima.
+
 ### v02.04
 - Um membro honorário não pode ter cargos atribuídos (nenhum, incluindo "Equipa Nacional de Clã") — validado no servidor no registo e na edição, com desmarcação automática no formulário.
 
