@@ -237,6 +237,12 @@ Se a aplicação ficar na raiz do domínio, mantenha `'base_url' => '/'`.
 
 - **Censos** (`/censos`, `/admin/anos-escotistas`, regra 51) — quota anual (seguro escotista + quota UEP + quota WFIS), definida por ano escotista (Outubro). Todos os associados pagam o mesmo valor, excepto **membros honorários** — novo atributo do associado (com data de início), que deixam de pagar Censo, deixam de estar cobertos pelo seguro escotista, e deixam de contar para o efectivo (painel principal ajustado em conformidade). Cada pagamento/anulação fica registado num histórico próprio (`censos_historico`), não só como estado actual. Acesso: qualquer utilizador para a sua própria companhia (regra 2); valores anuais só por administradores.
 
+- **Parentescos exclusivos de contactos de emergência** (regra 54) — "Filho", "Filha", "Enteado" e "Enteada" só aparecem na lista de parentescos de contactos de emergência, nunca na de encarregado de educação.
+
+- **Atribuição organizacional restrita a administradores** (regra 55) — só um administrador pode mudar a companhia local de um associado, ou atribuí-lo à Chefia Nacional ou a órgãos. Um não-administrador continua a poder editar os restantes dados de um associado da sua própria companhia.
+
+- **Nome da Chefia Nacional imutável** (regra 56) — a designação da companhia de âmbito global nunca pode ser alterada.
+
 - **Backoffice** (`/admin`, regras 47-48) — acesso restrito a administradores. Reduzido, após revisão, a **tipos de evento** e a **utilizadores** (atalho); as restantes tabelas de referência (divisões, nacionalidades, estados civis, confissões religiosas, tipos de documento/contacto/relação, órgãos, cargos) foram removidas do backoffice — continuam só editáveis directamente por SQL. O mecanismo genérico de gestão de referências mantém-se no código, pronto a reactivar para outra tabela, se vier a fazer sentido.
 
 - **Ordenação em todas as listagens** (regra 42) — os cabeçalhos de coluna nas listagens de associados, companhias e utilizadores são clicáveis para ordenar (ascendente/descendente, com indicador visual), preservando os filtros activos. Qualquer listagem nova deve seguir o mesmo padrão (`App\Core\Tabela`).
@@ -328,6 +334,11 @@ Lista viva do que ficou identificado como "por fazer", sem ordem específica —
 
 Esta secção é actualizada a cada nova versão entregue, com as alterações
 feitas desde a versão anterior. Mais recente primeiro.
+
+### v02.02
+- Novos parentescos "Filho", "Filha", "Enteado" e "Enteada", exclusivos de contactos de emergência (nunca aparecem em encarregado de educação).
+- Só administradores podem mudar a companhia local de um associado, ou atribuí-lo à Chefia Nacional ou a órgãos — incluindo agora a edição de associados existentes (só a criação já estava protegida).
+- Confirmado e documentado: o nome da Chefia Nacional é imutável (protecção já existente, agora registada nas regras de negócio).
 
 ### v02.01
 - Corrigido: o número de versão do ecrã de login aparecia ao lado do cartão (quase invisível), em vez de por baixo dele — faltava `flex-direction: column` em `.pagina-login`, que só tinha sido pensada para um único elemento centrado.

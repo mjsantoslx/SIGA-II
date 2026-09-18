@@ -40,4 +40,17 @@ class Lookup
         $stmt = Database::ligacao()->query("SELECT Id, {$coluna} AS Designacao FROM {$tabela} {$ordem}");
         return $stmt->fetchAll();
     }
+
+    /**
+     * Regra 54: alguns parentescos (ex.: Filho, Filha, Enteado, Enteada)
+     * só fazem sentido para contactos de emergência — ficam de fora desta
+     * lista, usada para o parentesco do encarregado de educação.
+     */
+    public static function listarTiposRelacaoParaEncarregado(): array
+    {
+        $stmt = Database::ligacao()->query(
+            "SELECT Id, Designacao FROM tipos_relacao WHERE AplicavelEncarregadoEducacao = 1 ORDER BY Designacao"
+        );
+        return $stmt->fetchAll();
+    }
 }

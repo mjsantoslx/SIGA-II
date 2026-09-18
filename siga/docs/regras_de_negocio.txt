@@ -1306,3 +1306,52 @@ etc.) — so se confirma que o digito de controlo e matematicamente
 consistente com os primeiros 8 digitos. Isto evita rejeitar NIFs
 legitimos de categorias menos comuns que a aplicacao nao tem forma
 de distinguir com confianca.
+54. Parentescos exclusivos de contactos de emergencia (fechada)
+
+Acrescentados os parentescos "Filho", "Filha", "Enteado" e "Enteada"
+a tipos_relacao, mas exclusivos de contactos de emergencia — nunca
+aparecem na lista de parentescos de encarregado de educacao (nao faz
+sentido um associado ser encarregado de educacao do proprio filho no
+papel inverso).
+
+Implementado com uma coluna nova em tipos_relacao,
+AplicavelEncarregadoEducacao (por omissao 1, para nao alterar o
+comportamento dos parentescos ja existentes). Os quatro novos ficam a
+0. Lookup::listarTiposRelacaoParaEncarregado() filtra por esta coluna;
+a lista para contactos de emergencia continua a usar Lookup::listar
+('tipos_relacao'), sem filtro (todos aparecem).
+
+Nota: contactos de emergencia so podem ser definidos no registo do
+associado (nao ha ainda pagina para os editar depois — ver secao 50,
+pendencias) — por isso esta regra so tem efeito pratico no formulario
+de registo, nao na edicao.
+
+55. Companhia, Chefia Nacional e orgaos: atribuicao so por
+administradores (fechada)
+
+So um administrador pode:
+- atribuir ou mudar a companhia local de um associado (registo e
+  edicao — um nao-administrador so podia ja criar associados na sua
+  propria companhia (regra 35.2), mas na EDICAO podia livremente mudar
+  a companhia de um associado existente para qualquer outra; essa
+  falha foi agora fechada);
+- atribuir um associado a Chefia Nacional;
+- atribuir um associado a orgaos.
+
+Implementado nos dois sentidos: nas vistas (campo desactivado/
+escondido para nao-administradores, com nota explicativa) e no
+servidor (valor ignorado/validado mesmo que o pedido seja
+manipulado). Um nao-administrador continua a poder editar os
+restantes dados de um associado da sua propria companhia — so estes
+tres campos de atribuicao organizacional ficam reservados a
+administradores.
+
+56. Nome da Chefia Nacional imutavel (fechada)
+
+Complementa a regra 41: a designacao da companhia de ambito global
+("Chefia Nacional") nunca pode ser alterada, nem por administradores.
+Campo bloqueado no formulario de edicao (so-leitura, com nota
+explicativa) e forcado sempre ao valor existente no servidor,
+independentemente do que vier no pedido. As restantes propriedades da
+Chefia Nacional (estado activo, e o proprio "ambito global" que a
+define) continuam editaveis.

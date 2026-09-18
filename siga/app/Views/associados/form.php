@@ -208,14 +208,15 @@
         <?php endif; ?>
 
         <div id="grupo-dirigente" style="display: none;">
-            <?php if ($chefiaNacional): ?>
+            <?php if ($chefiaNacional && \App\Core\Sessao::ehAdministrador()): ?>
             <div class="grelha-checkboxes" style="margin-top: 1rem;">
                 <input type="hidden" name="IdCompanhiaChefiaNacional" value="<?= (int) $chefiaNacional['Id'] ?>">
                 <label><input type="checkbox" name="ChefiaNacional" value="1" <?= !empty($a['ChefiaNacional']) ? 'checked' : '' ?>> Pertence também à Chefia Nacional</label>
             </div>
+            <small>Só um administrador pode atribuir um associado à Chefia Nacional.</small>
             <?php endif; ?>
 
-            <?php if (!empty($orgaos)): ?>
+            <?php if (!empty($orgaos) && \App\Core\Sessao::ehAdministrador()): ?>
             <div class="campo" style="margin-top: 1rem;">
                 <label>Órgãos (pode seleccionar vários)</label>
                 <div class="grelha-checkboxes">
@@ -223,6 +224,7 @@
                         <label><input type="checkbox" name="Orgaos[]" value="<?= (int) $orgao['Id'] ?>"> <?= htmlspecialchars($orgao['Designacao']) ?></label>
                     <?php endforeach; ?>
                 </div>
+                <small>Só um administrador pode atribuir associados a órgãos.</small>
             </div>
             <?php endif; ?>
 
@@ -266,7 +268,7 @@
             <input type="text" name="EncarregadosNome[]" placeholder="Nome completo">
             <select name="EncarregadosRelacao[]">
                 <option value="">Relação…</option>
-                <?php foreach ($tiposRelacao as $tr): ?>
+                <?php foreach ($tiposRelacaoEncarregado as $tr): ?>
                     <option value="<?= (int) $tr['Id'] ?>"><?= htmlspecialchars($tr['Designacao']) ?></option>
                 <?php endforeach; ?>
             </select>
@@ -282,7 +284,7 @@
                 <input type="text" name="EmergenciaNome[]" placeholder="Nome completo">
                 <select name="EmergenciaRelacao[]">
                     <option value="">Relação…</option>
-                    <?php foreach ($tiposRelacao as $tr): ?>
+                    <?php foreach ($tiposRelacaoEmergencia as $tr): ?>
                         <option value="<?= (int) $tr['Id'] ?>"><?= htmlspecialchars($tr['Designacao']) ?></option>
                     <?php endforeach; ?>
                 </select>

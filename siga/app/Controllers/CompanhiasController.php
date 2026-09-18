@@ -130,8 +130,9 @@ class CompanhiasController extends Controller
         }
 
         $this->vista('companhias/editar', [
-            'titulo'    => 'Editar — ' . $companhia['Designacao'],
-            'companhia' => $companhia,
+            'titulo'          => 'Editar — ' . $companhia['Designacao'],
+            'companhia'       => $companhia,
+            'ehChefiaNacional' => (bool) $companhia['ambito_global'],
         ]);
     }
 
@@ -151,6 +152,15 @@ class CompanhiasController extends Controller
         }
 
         $dados = $_POST;
+
+        // Regra: o nome da Chefia Nacional (companhia de âmbito global)
+        // nunca pode ser alterado — força-se sempre o valor já existente,
+        // ignorando o que vier no formulário.
+        $ehChefiaNacional = (bool) $companhiaExistente['ambito_global'];
+        if ($ehChefiaNacional) {
+            $dados['Designacao'] = $companhiaExistente['Designacao'];
+        }
+
         $erros = $this->validarDados($dados, $idCompanhia);
 
         if ($erros) {

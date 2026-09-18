@@ -4,7 +4,10 @@
         <p class="subtitulo">Inclui a Chefia Nacional.</p>
     </div>
     <?php if (\App\Core\Sessao::ehAdministrador()): ?>
-        <a href="<?= \App\Core\Url::para() ?>/companhias/criar" class="botao botao-primario">+ Nova companhia</a>
+        <div class="acoes-rapidas">
+            <a href="<?= \App\Core\Url::para() ?>/admin/referencias/orgaos" class="botao botao-secundario">Órgãos</a>
+            <a href="<?= \App\Core\Url::para() ?>/companhias/criar" class="botao botao-primario">+ Nova companhia</a>
+        </div>
     <?php endif; ?>
 </div>
 

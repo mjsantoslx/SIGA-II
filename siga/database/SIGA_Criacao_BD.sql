@@ -48,6 +48,9 @@ CREATE TABLE tipos_contacto (
 CREATE TABLE tipos_relacao (
     Id INT NOT NULL AUTO_INCREMENT,
     Designacao VARCHAR(50) NOT NULL,
+    -- Regra 54: alguns parentescos (ex.: Filho, Filha) só fazem sentido
+    -- para contactos de emergência, nunca para encarregados de educação.
+    AplicavelEncarregadoEducacao TINYINT(1) NOT NULL DEFAULT 1,
     PRIMARY KEY (Id),
     UNIQUE KEY uk_tipos_relacao_designacao (Designacao)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
@@ -518,8 +521,7 @@ VALUES
     ('Clã', 'Caminheiro', 'Caminheira'),
     ('Chefia', 'Escoteiro Chefe', 'Escoteira Chefe');
 
-INSERT INTO tipos_relacao (Designacao)
-VALUES
+INSERT INTO tipos_relacao (Designacao) VALUES
     ('Pai'),
     ('Mãe'),
     ('Padrasto'),
@@ -539,6 +541,14 @@ VALUES
     ('Colega'),
     ('O Próprio'),
     ('Outro');
+
+-- Regra 54: exclusivos de contactos de emergência — não aparecem na
+-- lista de parentescos de encarregado de educação.
+INSERT INTO tipos_relacao (Designacao, AplicavelEncarregadoEducacao) VALUES
+    ('Filho', 0),
+    ('Filha', 0),
+    ('Enteado', 0),
+    ('Enteada', 0);
 
 INSERT INTO estados_civis (Designacao)
 VALUES

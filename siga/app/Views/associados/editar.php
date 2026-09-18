@@ -124,13 +124,18 @@
             </div>
             <div class="campo">
                 <label for="IdCompanhia">Companhia local actual</label>
-                <select id="IdCompanhia" name="IdCompanhia">
-                    <option value="">Manter companhia local actual</option>
-                    <?php foreach ($companhias as $c): ?>
-                        <option value="<?= (int) $c['Id'] ?>" <?= isset($companhiaActual['IdCompanhia']) && (int) $companhiaActual['IdCompanhia'] === (int) $c['Id'] ? 'selected' : '' ?>><?= htmlspecialchars($c['Designacao']) ?></option>
-                    <?php endforeach; ?>
-                </select>
-                <small>Pode coexistir com a Chefia Nacional e com órgãos, abaixo.</small>
+                <?php if (\App\Core\Sessao::ehAdministrador()): ?>
+                    <select id="IdCompanhia" name="IdCompanhia">
+                        <option value="">Manter companhia local actual</option>
+                        <?php foreach ($companhias as $c): ?>
+                            <option value="<?= (int) $c['Id'] ?>" <?= isset($companhiaActual['IdCompanhia']) && (int) $companhiaActual['IdCompanhia'] === (int) $c['Id'] ? 'selected' : '' ?>><?= htmlspecialchars($c['Designacao']) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    <small>Pode coexistir com a Chefia Nacional e com órgãos, abaixo.</small>
+                <?php else: ?>
+                    <input type="text" value="<?= htmlspecialchars($companhiaActual['Designacao'] ?? '—') ?>" disabled>
+                    <small>Só um administrador pode mudar a companhia de um associado.</small>
+                <?php endif; ?>
             </div>
         </div>
 
@@ -156,13 +161,14 @@
         <?php endif; ?>
 
         <div id="grupo-dirigente" style="display: none;">
-            <?php if ($chefiaNacional): ?>
+            <?php if ($chefiaNacional && \App\Core\Sessao::ehAdministrador()): ?>
             <div class="grelha-checkboxes" style="margin-top: 1rem;">
                 <label><input type="checkbox" name="ChefiaNacional" value="1" <?= $naChefiaNacional ? 'checked' : '' ?>> Pertence à Chefia Nacional</label>
             </div>
+            <small>Só um administrador pode atribuir um associado à Chefia Nacional.</small>
             <?php endif; ?>
 
-            <?php if (!empty($orgaos)): ?>
+            <?php if (!empty($orgaos) && \App\Core\Sessao::ehAdministrador()): ?>
             <div class="campo" style="margin-top: 1rem;">
                 <label>Órgãos (pode seleccionar vários)</label>
                 <div class="grelha-checkboxes">
@@ -170,6 +176,7 @@
                         <label><input type="checkbox" name="Orgaos[]" value="<?= (int) $orgao['Id'] ?>" <?= in_array((int) $orgao['Id'], $idsOrgaosActuais, true) ? 'checked' : '' ?>> <?= htmlspecialchars($orgao['Designacao']) ?></label>
                     <?php endforeach; ?>
                 </div>
+                <small>Só um administrador pode atribuir associados a órgãos.</small>
             </div>
             <?php endif; ?>
 

@@ -144,6 +144,14 @@ class AssociadosController extends Controller
         if (!empty($dados['ChefiaNacional']) && !$ehChefia) {
             $erros[] = 'Só um dirigente (associado na divisão "Chefia") pode pertencer à Chefia Nacional.';
         }
+        // Regra 55: só um administrador pode atribuir um associado à
+        // Chefia Nacional ou a órgãos.
+        if (!empty($dados['ChefiaNacional']) && !Sessao::ehAdministrador()) {
+            $erros[] = 'Só um administrador pode atribuir um associado à Chefia Nacional.';
+        }
+        if (!empty($dados['Orgaos']) && !Sessao::ehAdministrador()) {
+            $erros[] = 'Só um administrador pode atribuir associados a órgãos.';
+        }
 
         // Regra 32: formador e insígnia de madeira são atributos de dirigentes.
         if (!empty($dados['Formador']) && !$ehChefia) {
@@ -305,6 +313,12 @@ class AssociadosController extends Controller
         }
 
         $dados = $_POST;
+        // Regra 55: só um administrador pode mudar a companhia local de um
+        // associado — um não-administrador nunca pode "mover" associados
+        // entre companhias, mesmo que manipule o pedido.
+        if (!Sessao::ehAdministrador()) {
+            unset($dados['IdCompanhia']);
+        }
         // Na edição não se altera a data de inscrição — só validamos a de nascimento.
         $dados['DataInscricao'] = Data::paraApresentacao($associadoExistente['DataInscricao']);
         $erros = $this->validarDadosAssociado($dados, validarInscricao: false);
@@ -341,6 +355,14 @@ class AssociadosController extends Controller
 
         if (!empty($dados['ChefiaNacional']) && !$seraDirigente) {
             $erros[] = 'Só um dirigente (associado na divisão "Chefia") pode pertencer à Chefia Nacional.';
+        }
+        // Regra 55: só um administrador pode atribuir um associado à
+        // Chefia Nacional ou a órgãos.
+        if (!empty($dados['ChefiaNacional']) && !Sessao::ehAdministrador()) {
+            $erros[] = 'Só um administrador pode atribuir um associado à Chefia Nacional.';
+        }
+        if (!empty($dados['Orgaos']) && !Sessao::ehAdministrador()) {
+            $erros[] = 'Só um administrador pode atribuir associados a órgãos.';
         }
 
         // Regra 32: formador e insígnia de madeira são atributos de dirigentes.
@@ -607,16 +629,17 @@ class AssociadosController extends Controller
     private function dadosListasFormulario(): array
     {
         return [
-            'nacionalidades' => Lookup::listar('nacionalidades'),
-            'estadosCivis'   => Lookup::listar('estados_civis'),
-            'confissoes'     => Lookup::listar('confissoes_religiosas'),
-            'tiposDocumento' => Lookup::listar('tipos_documento_identificacao'),
-            'tiposRelacao'   => Lookup::listar('tipos_relacao'),
-            'secoes'         => (new Secao())->listarTodas(),
-            'companhias'     => (new Companhia())->listarLocais(),
-            'chefiaNacional' => (new Companhia())->chefiaNacional(),
-            'orgaos'         => (new Orgao())->listarAtivos(),
-            'cargos'         => (new Cargo())->listarAtivos(),
+            'nacionalidades'          => Lookup::listar('nacionalidades'),
+            'estadosCivis'            => Lookup::listar('estados_civis'),
+            'confissoes'              => Lookup::listar('confissoes_religiosas'),
+            'tiposDocumento'          => Lookup::listar('tipos_documento_identificacao'),
+            'tiposRelacaoEncarregado' => Lookup::listarTiposRelacaoParaEncarregado(),
+            'tiposRelacaoEmergencia'  => Lookup::listar('tipos_relacao'),
+            'secoes'                  => (new Secao())->listarTodas(),
+            'companhias'              => (new Companhia())->listarLocais(),
+            'chefiaNacional'          => (new Companhia())->chefiaNacional(),
+            'orgaos'                  => (new Orgao())->listarAtivos(),
+            'cargos'                  => (new Cargo())->listarAtivos(),
         ];
     }
 }

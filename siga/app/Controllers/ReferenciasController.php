@@ -24,6 +24,10 @@ class ReferenciasController extends Controller
             'tabela' => 'tipos_evento', 'coluna' => 'Designacao', 'activo' => false,
             'titulo' => 'Tipos de evento', 'singular' => 'tipo de evento',
         ],
+        'orgaos' => [
+            'tabela' => 'orgaos', 'coluna' => 'Designacao', 'activo' => true,
+            'titulo' => 'Órgãos', 'singular' => 'órgão',
+        ],
     ];
 
     private function configOuFalhar(string $chave): ?array

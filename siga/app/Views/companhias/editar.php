@@ -11,7 +11,12 @@
         <div class="grelha-formulario">
             <div class="campo campo-largo">
                 <label for="Designacao">Designação *</label>
-                <input type="text" id="Designacao" name="Designacao" required value="<?= htmlspecialchars($c['Designacao']) ?>">
+                <?php if ($ehChefiaNacional): ?>
+                    <input type="text" value="<?= htmlspecialchars($c['Designacao']) ?>" readonly disabled>
+                    <small>O nome da Chefia Nacional não pode ser alterado.</small>
+                <?php else: ?>
+                    <input type="text" id="Designacao" name="Designacao" required value="<?= htmlspecialchars($c['Designacao']) ?>">
+                <?php endif; ?>
             </div>
         </div>
         <div class="grelha-checkboxes" style="margin-top: 1rem;">
