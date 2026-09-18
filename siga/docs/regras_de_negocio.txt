@@ -1355,3 +1355,32 @@ explicativa) e forcado sempre ao valor existente no servidor,
 independentemente do que vier no pedido. As restantes propriedades da
 Chefia Nacional (estado activo, e o proprio "ambito global" que a
 define) continuam editaveis.
+57. Associado ligado apenas a Orgaos, sem companhia local (fechada)
+
+Esclarecido: um associado pode nao estar ligado a nenhuma companhia
+local, apenas a orgaos nacionais. A companhia local ja era opcional
+(nao havia validacao a torna-la obrigatoria) — o que faltava era uma
+forma explicita e clara de o expressar na interface, em vez de
+depender de deixar o campo em branco sem indicacao.
+
+Implementado: o selector de "Companhia (local)" (registo e edicao)
+passou a ter uma opcao "Orgaos (sem companhia local)". Ao ser
+escolhida:
+- No registo, o associado e criado sem nenhuma companhia local;
+- Na edicao, a ligacao a companhia local existente e removida
+  (Associado::removerCompanhiaLocal(), que desactiva a ligacao actual
+  em associados_companhias, tal como sairDaChefiaNacional());
+- Em qualquer dos casos, isto NAO atribui automaticamente nenhum
+  orgao — so retira a companhia local. A atribuicao aos orgaos em si
+  continua a ser feita separadamente, nas checkboxes de orgaos
+  (visiveis quando a divisao e "Chefia" — regra 43 — e restritas a
+  administradores — regra 55). Ha uma nota de ajuda no formulario a
+  lembrar isto.
+- Esta opcao so aparece a administradores, ja que a escolha de
+  companhia em si ja e restrita a administradores (regra 55) — um
+  nao-administrador nao ve de todo este selector.
+
+⚠️ NAO IMPLEMENTADO: nenhuma validacao impede escolher "Orgaos" com
+uma divisao diferente de "Chefia" — so ha uma nota de ajuda a
+sugerir. Se isto se revelar confuso na pratica, pode ser necessario
+impedir explicitamente essa combinacao.

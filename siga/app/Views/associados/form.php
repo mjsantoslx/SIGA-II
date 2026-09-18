@@ -176,12 +176,14 @@
                 <?php else: ?>
                     <select id="IdCompanhia" name="IdCompanhia">
                         <option value="">Seleccionar…</option>
+                        <option value="orgaos" <?= (($a['IdCompanhia'] ?? '') === 'orgaos') ? 'selected' : '' ?>>Órgãos (sem companhia local)</option>
                         <?php foreach ($companhias as $c): ?>
                             <option value="<?= (int) $c['Id'] ?>" <?= (string) ($a['IdCompanhia'] ?? '') === (string) $c['Id'] ? 'selected' : '' ?>>
                                 <?= htmlspecialchars($c['Designacao']) ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
+                    <small>Escolha "Órgãos" para um associado que não pertence a nenhuma companhia local, apenas a órgãos nacionais (defina a divisão como "Chefia" e escolha o(s) órgão(s) mais abaixo).</small>
                 <?php endif; ?>
             </div>
         </div>

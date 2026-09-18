@@ -125,6 +125,15 @@ class AssociadosController extends Controller
             $dados['IdCompanhia'] = $companhiaRestrita['IdCompanhia'];
         }
 
+        // Regra 57: "Órgãos" no selector de companhia significa que o
+        // associado não tem companhia local nenhuma — equivale a não
+        // seleccionar nada. Guarda-se a intenção original para repor no
+        // formulário, se este tiver de ser reexibido por outro erro.
+        $eraOrgaos = (($dados['IdCompanhia'] ?? '') === 'orgaos');
+        if ($eraOrgaos) {
+            $dados['IdCompanhia'] = '';
+        }
+
         $erros = $this->validarDadosAssociado($dados);
 
         $ehChefia = (new Secao())->ehChefia(!empty($dados['IdSecao']) ? (int) $dados['IdSecao'] : null);
@@ -184,6 +193,9 @@ class AssociadosController extends Controller
             }
             if (!empty($dados['MembroHonorario'])) {
                 $dados['DataInicioHonorario'] = Data::paraApresentacao($dados['DataInicioHonorario'] ?? null) ?: ($dados['DataInicioHonorario'] ?? '');
+            }
+            if ($eraOrgaos) {
+                $dados['IdCompanhia'] = 'orgaos';
             }
             $this->vista('associados/form', [
                 'titulo'    => 'Novo associado',
@@ -408,7 +420,12 @@ class AssociadosController extends Controller
                     }
                 }
             }
-            if (!empty($dados['IdCompanhia'])) {
+            if (($dados['IdCompanhia'] ?? '') === 'orgaos') {
+                // Regra 57: "Órgãos" no selector significa remover a
+                // companhia local — o associado passa a estar ligado
+                // apenas a órgãos nacionais.
+                $associadoModelo->removerCompanhiaLocal($idAssociado, $hoje);
+            } elseif (!empty($dados['IdCompanhia'])) {
                 $associadoModelo->atribuirCompanhia($idAssociado, (int) $dados['IdCompanhia'], $hoje);
             }
 

@@ -127,11 +127,12 @@
                 <?php if (\App\Core\Sessao::ehAdministrador()): ?>
                     <select id="IdCompanhia" name="IdCompanhia">
                         <option value="">Manter companhia local actual</option>
+                        <option value="orgaos">Órgãos (remover a companhia local)</option>
                         <?php foreach ($companhias as $c): ?>
                             <option value="<?= (int) $c['Id'] ?>" <?= isset($companhiaActual['IdCompanhia']) && (int) $companhiaActual['IdCompanhia'] === (int) $c['Id'] ? 'selected' : '' ?>><?= htmlspecialchars($c['Designacao']) ?></option>
                         <?php endforeach; ?>
                     </select>
-                    <small>Pode coexistir com a Chefia Nacional e com órgãos, abaixo.</small>
+                    <small>Pode coexistir com a Chefia Nacional e com órgãos, abaixo. Escolha "Órgãos" para retirar a companhia local a um associado que passa a estar ligado apenas a órgãos nacionais.</small>
                 <?php else: ?>
                     <input type="text" value="<?= htmlspecialchars($companhiaActual['Designacao'] ?? '—') ?>" disabled>
                     <small>Só um administrador pode mudar a companhia de um associado.</small>

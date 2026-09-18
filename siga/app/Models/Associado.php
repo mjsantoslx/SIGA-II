@@ -511,6 +511,24 @@ class Associado extends Model
         $this->sincronizarAdministradorPorChefiaNacional($idAssociado, true);
     }
 
+    /**
+     * Remove a ligação à companhia local (sem a substituir por outra) —
+     * usado quando um associado passa a estar ligado apenas a órgãos
+     * nacionais, sem nenhuma companhia local.
+     */
+    public function removerCompanhiaLocal(int $idAssociado, string $dataFim): void
+    {
+        $actual = $this->companhiaActual($idAssociado);
+        if (!$actual) {
+            return;
+        }
+
+        $stmt = $this->bd->prepare(
+            "UPDATE associados_companhias SET Activo = 0, DataFim = :dataFim WHERE Id = :id"
+        );
+        $stmt->execute(['dataFim' => $dataFim, 'id' => $actual['Id']]);
+    }
+
     public function sairDaChefiaNacional(int $idAssociado, string $dataFim): void
     {
         $actual = $this->chefiaNacionalActual($idAssociado);
