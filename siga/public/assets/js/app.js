@@ -153,6 +153,13 @@ window.siga = {
         if (!checkbox.checked) {
             campoData.value = '';
         }
+
+        // Regra 58: um membro honorário não pode ter cargos (nenhum,
+        // incluindo "Equipa Nacional de Clã") — desmarcam-se logo, para
+        // não sobrar uma selecção inválida a ser submetida.
+        if (checkbox.checked) {
+            document.querySelectorAll('input[name="Cargos[]"]').forEach((cb) => { cb.checked = false; });
+        }
     },
 };
 

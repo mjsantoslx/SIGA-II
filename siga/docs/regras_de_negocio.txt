@@ -1384,3 +1384,16 @@ escolhida:
 uma divisao diferente de "Chefia" — so ha uma nota de ajuda a
 sugerir. Se isto se revelar confuso na pratica, pode ser necessario
 impedir explicitamente essa combinacao.
+58. Membros honorarios nao podem ter cargos (fechada)
+
+Complementa as regras 34/39: alem de exigir divisao "Chefia" (ou
+"Cla", para "Equipa Nacional de Cla"), nenhum cargo pode ser
+atribuido a um membro honorario (regra 51) — nem os cargos normais,
+nem "Equipa Nacional de Cla". Um membro honorario nao ocupa cargos de
+nenhum tipo.
+
+Implementado em AssociadosController::validarCargos() (novo parametro
+$ehHonorario), chamado tanto no registo como na edicao. No lado do
+cliente, marcar "E membro honorario" desmarca imediatamente todos os
+cargos seleccionados (incluindo "Equipa Nacional de Cla"), para nao
+sobrar uma seleccao invalida a espera de ser submetida.

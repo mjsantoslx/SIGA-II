@@ -176,9 +176,9 @@ class AssociadosController extends Controller
             $erros[] = 'Um associado só pode ter um encarregado de educação.';
         }
 
-        // Regra 34/39: cargos são de dirigentes, excepto "Equipa Nacional de
-        // Clã", exclusivo de associados na divisão "Clã".
-        $erros = array_merge($erros, $this->validarCargos($dados['Cargos'] ?? [], $ehChefia, $ehCla));
+        // Regra 34/39/58: cargos são de dirigentes não honorários, excepto
+        // "Equipa Nacional de Clã", exclusivo de associados na divisão "Clã".
+        $erros = array_merge($erros, $this->validarCargos($dados['Cargos'] ?? [], $ehChefia, $ehCla, !empty($dados['MembroHonorario'])));
 
         if ($erros) {
             Sessao::guardarMensagem('erro', implode(' ', $erros));
@@ -387,7 +387,7 @@ class AssociadosController extends Controller
 
         // Regra 34/39: cargos são de dirigentes, excepto "Equipa Nacional de
         // Clã", exclusivo de associados na divisão "Clã".
-        $erros = array_merge($erros, $this->validarCargos($dados['Cargos'] ?? [], $seraDirigente, $seraCla));
+        $erros = array_merge($erros, $this->validarCargos($dados['Cargos'] ?? [], $seraDirigente, $seraCla, !empty($dados['MembroHonorario'])));
 
         if ($erros) {
             Sessao::guardarMensagem('erro', implode(' ', $erros));
@@ -536,7 +536,12 @@ class AssociadosController extends Controller
      *
      * @param array $idsCargos
      */
-    private function validarCargos(array $idsCargos, bool $ehChefia, bool $ehCla): array
+    /**
+     * Regra 34/39/58: cargos são de dirigentes (divisão "Chefia") não
+     * honorários, excepto "Equipa Nacional de Clã", exclusivo de
+     * associados na divisão "Clã" (também não honorários).
+     */
+    private function validarCargos(array $idsCargos, bool $ehChefia, bool $ehCla, bool $ehHonorario): array
     {
         $erros = [];
         if (empty($idsCargos)) {
@@ -549,9 +554,13 @@ class AssociadosController extends Controller
             if ($designacao === 'Equipa Nacional de Clã') {
                 if (!$ehCla) {
                     $erros[] = 'O cargo "Equipa Nacional de Clã" é exclusivo de associados na divisão "Clã".';
+                } elseif ($ehHonorario) {
+                    $erros[] = 'Um membro honorário não pode ter o cargo "Equipa Nacional de Clã".';
                 }
             } elseif (!$ehChefia) {
                 $erros[] = 'Só um dirigente (associado na divisão "Chefia") pode ter cargos atribuídos (excepto "Equipa Nacional de Clã", exclusivo da divisão "Clã").';
+            } elseif ($ehHonorario) {
+                $erros[] = 'Um membro honorário não pode ter cargos atribuídos.';
             }
         }
 

@@ -245,6 +245,8 @@ Se a aplicação ficar na raiz do domínio, mantenha `'base_url' => '/'`.
 
 - **Associado ligado apenas a Órgãos, sem companhia local** (regra 57) — o selector de companhia (registo e edição, só visível a administradores) passou a ter uma opção explícita "Órgãos (sem companhia local)", que remove/omite a companhia local em vez de depender de deixar o campo em branco.
 
+- **Membros honorários não podem ter cargos** (regra 58) — nem cargos normais, nem "Equipa Nacional de Clã"; desmarcados automaticamente ao assinalar "É membro honorário".
+
 - **Backoffice** (`/admin`, regras 47-48) — acesso restrito a administradores. Reduzido, após revisão, a **tipos de evento** e a **utilizadores** (atalho); as restantes tabelas de referência (divisões, nacionalidades, estados civis, confissões religiosas, tipos de documento/contacto/relação, órgãos, cargos) foram removidas do backoffice — continuam só editáveis directamente por SQL. O mecanismo genérico de gestão de referências mantém-se no código, pronto a reactivar para outra tabela, se vier a fazer sentido.
 
 - **Ordenação em todas as listagens** (regra 42) — os cabeçalhos de coluna nas listagens de associados, companhias e utilizadores são clicáveis para ordenar (ascendente/descendente, com indicador visual), preservando os filtros activos. Qualquer listagem nova deve seguir o mesmo padrão (`App\Core\Tabela`).
@@ -336,6 +338,9 @@ Lista viva do que ficou identificado como "por fazer", sem ordem específica —
 
 Esta secção é actualizada a cada nova versão entregue, com as alterações
 feitas desde a versão anterior. Mais recente primeiro.
+
+### v02.04
+- Um membro honorário não pode ter cargos atribuídos (nenhum, incluindo "Equipa Nacional de Clã") — validado no servidor no registo e na edição, com desmarcação automática no formulário.
 
 ### v02.03
 - Novo valor "Órgãos (sem companhia local)" no selector de companhia do associado (registo e edição, admin) — associados podem agora ficar ligados só a órgãos nacionais, sem nenhuma companhia local, de forma explícita.

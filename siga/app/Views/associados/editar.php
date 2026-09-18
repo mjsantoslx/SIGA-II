@@ -157,7 +157,7 @@
         <?php if ($cargoCla): ?>
         <div class="campo" id="grupo-cla" style="margin-top: 1rem; display: none;">
             <label><input type="checkbox" name="Cargos[]" value="<?= (int) $cargoCla['Id'] ?>" <?= in_array((int) $cargoCla['Id'], $idsCargosActuais, true) ? 'checked' : '' ?>> <?= htmlspecialchars($cargoCla['Designacao']) ?></label>
-            <small>Exclusivo de associados na divisão "Clã".</small>
+            <small>Exclusivo de associados na divisão "Clã", não honorários.</small>
         </div>
         <?php endif; ?>
 
@@ -184,6 +184,7 @@
             <?php if (!empty($outrosCargos)): ?>
             <div class="campo" style="margin-top: 1rem;">
                 <label>Cargos (pode seleccionar vários — alguns acumulam)</label>
+                <small>Aplicável apenas a dirigentes (divisão "Chefia"), não honorários.</small>
                 <div class="grelha-checkboxes">
                     <?php foreach ($outrosCargos as $cargo): ?>
                         <label><input type="checkbox" name="Cargos[]" value="<?= (int) $cargo['Id'] ?>" <?= in_array((int) $cargo['Id'], $idsCargosActuais, true) ? 'checked' : '' ?>> <?= htmlspecialchars($cargo['Designacao']) ?></label>
