@@ -85,6 +85,10 @@ window.siga = {
                 if (campoDataInsignia) campoDataInsignia.value = '';
                 const grupoDataInsignia = document.getElementById('grupo-data-insignia');
                 if (grupoDataInsignia) grupoDataInsignia.style.display = 'none';
+                const campoDataHonorario = document.getElementById('DataInicioHonorario');
+                if (campoDataHonorario) campoDataHonorario.value = '';
+                const grupoDataHonorario = document.getElementById('grupo-data-honorario');
+                if (grupoDataHonorario) grupoDataHonorario.style.display = 'none';
             }
         }
 

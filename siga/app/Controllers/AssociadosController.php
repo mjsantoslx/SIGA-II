@@ -159,6 +159,11 @@ class AssociadosController extends Controller
         if (!empty($dados['ChefiaNacional']) && !$ehChefia) {
             $erros[] = 'Só um dirigente (associado na divisão "Chefia") pode pertencer à Chefia Nacional.';
         }
+        // Regra 51.1: só um dirigente (associado na divisão "Chefia") pode
+        // ser membro honorário.
+        if (!empty($dados['MembroHonorario']) && !$ehChefia) {
+            $erros[] = 'Só um dirigente (associado na divisão "Chefia") pode ser membro honorário.';
+        }
         // Regra 55: só um administrador pode atribuir um associado à
         // Chefia Nacional ou a órgãos.
         if (!empty($dados['ChefiaNacional']) && !Sessao::ehAdministrador()) {
@@ -373,6 +378,11 @@ class AssociadosController extends Controller
 
         if (!empty($dados['ChefiaNacional']) && !$seraDirigente) {
             $erros[] = 'Só um dirigente (associado na divisão "Chefia") pode pertencer à Chefia Nacional.';
+        }
+        // Regra 51.1: só um dirigente (associado na divisão "Chefia") pode
+        // ser membro honorário.
+        if (!empty($dados['MembroHonorario']) && !$seraDirigente) {
+            $erros[] = 'Só um dirigente (associado na divisão "Chefia") pode ser membro honorário.';
         }
         // Regra 57: "Órgãos" no selector de companhia só faz sentido para
         // a divisão "Chefia".

@@ -339,6 +339,9 @@ Lista viva do que ficou identificado como "por fazer", sem ordem específica —
 Esta secção é actualizada a cada nova versão entregue, com as alterações
 feitas desde a versão anterior. Mais recente primeiro.
 
+### v02.07
+- Membro honorário passa a ser restrito a associados na divisão "Chefia" — validado no registo e na edição, e o campo só aparece no formulário para essa divisão (antes estava disponível para qualquer associado).
+
 ### v02.06
 - Corrigida a causa real da checkbox esticada de "Equipa Nacional de Clã": a regra genérica de estilo de campos aplicava-se também a checkboxes/radios. Corrigido universalmente em todo o CSS, não só neste caso.
 

@@ -1436,3 +1436,17 @@ com uma regra propria "input[type=checkbox], input[type=radio] {
 width: auto; }" a repor o tamanho natural em qualquer sitio da
 aplicacao, nao so neste caso especifico — evita o mesmo problema
 aparecer noutra checkbox fora de .grelha-checkboxes no futuro.
+51.5 Correccao: membro honorario restrito a dirigentes (fechada)
+
+Confirmado explicitamente: so um associado na divisao "Chefia" pode
+ser membro honorario — dificilmente um elemento de outra divisao tera
+feitos suficientemente extraordinarios para essa distincao. Antes, o
+campo estava disponivel para qualquer associado, sem restricao de
+divisao.
+
+Implementado: validado no servidor (registo e edicao, com a divisao
+efectiva apos a gravacao, tal como Chefia Nacional/orgaos/cargos) e
+movido no formulario para dentro do grupo escondido "so dirigentes"
+(regra 43) — deixa de aparecer para associados noutra divisao,
+consistente com Formador/Insignia de Madeira/Chefia Nacional/orgaos/
+cargos, que ja seguiam essa logica.
