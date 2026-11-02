@@ -339,6 +339,9 @@ Lista viva do que ficou identificado como "por fazer", sem ordem específica —
 Esta secção é actualizada a cada nova versão entregue, com as alterações
 feitas desde a versão anterior. Mais recente primeiro.
 
+### v02.08
+- Corrigido 404 ao submeter os formulários "Novo ano escotista" e "Nova referência" (ex.: Tipos de Evento) quando a aplicação está publicada num subcaminho (ex.: /siga): o "action" destes dois formulários era construído por uma expressão PHP com caminho literal, sem passar pelo mecanismo de subcaminho (`Url::para()`), ao contrário de todos os outros formulários/links da aplicação. Verificada toda a árvore de vistas para confirmar que não há mais nenhum caso igual.
+
 ### v02.07
 - Membro honorário passa a ser restrito a associados na divisão "Chefia" — validado no registo e na edição, e o campo só aparece no formulário para essa divisão (antes estava disponível para qualquer associado).
 

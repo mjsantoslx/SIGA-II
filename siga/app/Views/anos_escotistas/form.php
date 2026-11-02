@@ -3,7 +3,7 @@
 <h1><?= htmlspecialchars($titulo) ?></h1>
 <p class="subtitulo"><a href="<?= \App\Core\Url::para() ?>/admin/anos-escotistas">← Voltar aos anos escotistas</a></p>
 
-<form action="<?= isset($a['Id']) ? '/admin/anos-escotistas/' . (int) $a['Id'] . '/editar' : '/admin/anos-escotistas/criar' ?>" method="post" class="formulario-associado">
+<form action="<?= \App\Core\Url::para() ?><?= isset($a['Id']) ? '/admin/anos-escotistas/' . (int) $a['Id'] . '/editar' : '/admin/anos-escotistas/criar' ?>" method="post" class="formulario-associado">
     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
 
     <fieldset>

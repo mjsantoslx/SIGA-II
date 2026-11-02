@@ -1450,3 +1450,35 @@ movido no formulario para dentro do grupo escondido "so dirigentes"
 (regra 43) — deixa de aparecer para associados noutra divisao,
 consistente com Formador/Insignia de Madeira/Chefia Nacional/orgaos/
 cargos, que ja seguiam essa logica.
+52.1 Correccao: formularios com accao gerada por expressao PHP sem
+prefixo /siga (404 ao submeter) (fechada)
+
+Reportado: 404 ao submeter o formulario "Novo ano escotista"
+(http://www.uep.pt/admin/anos-escotistas/criar), apesar de
+config/config.php -> app.base_url ja estar correctamente definido
+como "/siga" no servidor.
+
+Causa real: a correccao da regra 52 foi feita com uma substituicao em
+massa que so apanhava o padrao literal action="/...", href="/..." e
+src="/...". Dois formularios geram o seu proprio "action" a partir de
+uma expressao PHP (ternario, para decidir entre criar/editar) com
+caminhos escritos directamente como texto (sem passar por
+App\Core\Url::para()):
+- app/Views/anos_escotistas/form.php ("Novo ano escotista" / editar
+  ano escotista);
+- app/Views/referencias/form.php (criar/editar qualquer registo de
+  referencia generica, ex.: Tipos de Evento).
+
+Por nao passarem pelo filtro da regra 52, estes dois formularios
+submetiam sempre para o caminho sem o prefixo "/siga", resultando em
+404 sempre que a aplicacao esta publicada num subcaminho.
+
+Corrigido: ambos os ficheiros passaram a prefixar o resultado da
+expressao com <?= App\Core\Url::para() ?>, tal como todos os
+restantes href/action/src da aplicacao.
+
+Verificacao feita a toda a arvore app/Views/ (e a app/Controllers/ e
+app/Models/) para confirmar que nao existe mais nenhum caso do mesmo
+padrao (action/href/src construido por expressao PHP com caminho
+literal, sem passar por Url::para()) — todos os restantes ja estavam
+correctos.
