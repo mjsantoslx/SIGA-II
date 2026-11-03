@@ -1482,3 +1482,49 @@ app/Models/) para confirmar que nao existe mais nenhum caso do mesmo
 padrao (action/href/src construido por expressao PHP com caminho
 literal, sem passar por Url::para()) — todos os restantes ja estavam
 correctos.
+
+59. Registo de actividade (fechada)
+
+Pedido: um registo de tudo o que e feito, por quem e a que horas.
+
+Decisoes confirmadas: registar inicios/fins de sessao (incluindo
+tentativas falhadas) e todas as alteracoes de dados; consulta numa
+pagina de administracao com filtros; cada linha com um resumo legivel
+(sem valores antes/depois).
+
+Implementado:
+- Nova tabela registo_actividade (data/hora, utilizador, accao,
+  descricao, resultado, endereco IP). So se acrescentam linhas — a
+  aplicacao nao tem qualquer funcao para alterar ou apagar o registo.
+  Sem chave estrangeira, para o registo sobreviver a tudo.
+- Registo automatico no Router: todo o POST de uma rota mapeada em
+  App\Core\Actividade (criar/editar/desactivar/reactivar/eliminar
+  associados, contactos, moradas, ficha de saude, companhias,
+  utilizadores, anos escotistas, Censos e tabelas de referencia) fica
+  registado no fim do pedido, sem alterar cada controlador. Uma rota
+  nova so aparece no registo se for acrescentada ao mapa ROTAS.
+- Resultado: um pedido que termine com mensagem de erro (validacao,
+  permissao, CSRF, erro do servidor) fica registado como "Nao
+  concluido", com o texto do erro, em vez de parecer uma alteracao
+  feita.
+- AuthController regista inicio de sessao, fim de sessao e tentativas
+  falhadas. Se o nome tentado nao existir, o nome NAO e guardado (evita
+  gravar uma palavra-passe escrita no campo errado).
+- Nunca se guardam valores submetidos (palavras-passe, dados de saude,
+  etc.): so um resumo, ex.: "Editou o associado n.o 12 (Maria Silva)".
+- Pagina /admin/registo-actividade (so administradores), com filtros
+  por utilizador, accao, resultado, intervalo de datas e pesquisa de
+  texto; 50 linhas por pagina, mais recentes primeiro.
+- Uma falha ao gravar o registo nunca impede a aplicacao de funcionar
+  (fica no log de erros do servidor).
+
+Pressupostos a confirmar:
+- Consultas (abrir fichas/listagens) NAO sao registadas.
+- Pedidos POST sem sessao iniciada (ex.: bloqueados antes do login) nao
+  sao registados, para nao encher o registo com pedidos anonimos.
+- O endereco IP (dado pessoal) e guardado a partir de REMOTE_ADDR; atras
+  de um proxy/CDN pode ser o do proxy. Nao ha prazo de conservacao nem
+  limpeza automatica — a definir se for preciso (RGPD).
+- Dados anteriores a v02.09 nao constam (o registo comeca nesta versao);
+  os eventos dos associados e o historico de Censos/ficha de saude
+  continuam a existir a parte.

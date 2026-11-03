@@ -44,6 +44,15 @@ class Router
             $parametros = $this->corresponde($padrao, $uri);
             if ($parametros !== null) {
                 [$classe, $metodoAccao] = $accao;
+
+                // Regista (no fim do pedido) as alterações de dados — regra 59.
+                preg_match_all('/\{([a-zA-Z_]+)\}/', $padrao, $nomes);
+                Actividade::acompanharPedido(
+                    $metodo,
+                    $padrao,
+                    count($nomes[1]) === count($parametros) ? array_combine($nomes[1], $parametros) : []
+                );
+
                 $controlador = new $classe();
                 call_user_func_array([$controlador, $metodoAccao], $parametros);
                 return;

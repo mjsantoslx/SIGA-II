@@ -235,6 +235,7 @@ Se a aplicação ficar na raiz do domínio, mantenha `'base_url' => '/'`.
 
 - **Histórico da ficha de saúde** (regra 49) — nova página "Gerir ficha de saúde" (`/associados/{id}/ficha-saude`), que passa a permitir editar a ficha de saúde depois do registo do associado (só era possível defini-la na criação). Toda a criação/alteração fica registada em `fichas_saude_historico` — quem, quando, e o estado antes/depois. A interface mostra a lista de alterações (não o detalhe, por serem dados de saúde); o detalhe fica na base de dados.
 
+- **Registo de actividade** (`/admin/registo-actividade`, regra 59) — registo imutável de inícios de sessão e alterações de dados (quem, o quê, quando, resultado, IP), consultável só por administradores, com filtros.
 - **Censos** (`/censos`, `/admin/anos-escotistas`, regra 51) — quota anual (seguro escotista + quota UEP + quota WFIS), definida por ano escotista (Outubro). Todos os associados pagam o mesmo valor, excepto **membros honorários** — novo atributo do associado (com data de início), que deixam de pagar Censo, deixam de estar cobertos pelo seguro escotista, e deixam de contar para o efectivo (painel principal ajustado em conformidade). Cada pagamento/anulação fica registado num histórico próprio (`censos_historico`), não só como estado actual. Acesso: qualquer utilizador para a sua própria companhia (regra 2); valores anuais só por administradores.
 
 - **Parentescos exclusivos de contactos de emergência** (regra 54) — "Filho", "Filha", "Enteado" e "Enteada" só aparecem na lista de parentescos de contactos de emergência, nunca na de encarregado de educação.
@@ -329,7 +330,8 @@ Lista viva do que ficou identificado como "por fazer", sem ordem específica —
 - Matriz de incompatibilidade entre cargos.
 - Confirmar se a restrição "só dirigentes" também se aplica aos órgãos (confirmada só para a Chefia Nacional).
 - Permissões por companhia ao nível do utilizador (`utilizadores_companhias`, existe no esquema mas não é usada).
-- Exportações (CSV/PDF).
+- Exportações (CSV/PDF) — incluindo o registo de actividade.
+- Registo de actividade: definir prazo de conservação/limpeza (RGPD) e se as consultas também devem ser registadas.
 - Testes automatizados.
 - Confirmar a largura do Cartão de Cidadão (o preenchimento com zeros está pronto mas inactivo).
 - Backoffice: reduzido a Tipos de Evento e Utilizadores — pode vir a crescer com mais tabelas, se fizer sentido.
@@ -338,6 +340,9 @@ Lista viva do que ficou identificado como "por fazer", sem ordem específica —
 
 Esta secção é actualizada a cada nova versão entregue, com as alterações
 feitas desde a versão anterior. Mais recente primeiro.
+
+### v02.09
+- **Registo de actividade** (`/admin/registo-actividade`, regra 59, só administradores): quem fez o quê e quando — inícios/fins de sessão (incluindo tentativas falhadas) e todas as alterações de dados, com resumo legível, resultado (concluído / não concluído), IP e filtros por utilizador, acção, resultado, datas e texto. O registo não pode ser alterado nem apagado. **Requer migração de BD:** `database/SIGA_Migracao_v02.08_para_v02.09.sql`.
 
 ### v02.08
 - Corrigido 404 ao submeter os formulários "Novo ano escotista" e "Nova referência" (ex.: Tipos de Evento) quando a aplicação está publicada num subcaminho (ex.: /siga): o "action" destes dois formulários era construído por uma expressão PHP com caminho literal, sem passar pelo mecanismo de subcaminho (`Url::para()`), ao contrário de todos os outros formulários/links da aplicação. Verificada toda a árvore de vistas para confirmar que não há mais nenhum caso igual.

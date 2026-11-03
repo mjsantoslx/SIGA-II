@@ -176,6 +176,8 @@ input:focus, select:focus, textarea:focus {
 .formulario-filtros { display: flex; gap: 0.7rem; margin-bottom: 1.4rem; flex-wrap: wrap; }
 .formulario-filtros input[type="text"] { flex: 1; min-width: 220px; }
 .formulario-filtros select { width: auto; }
+.formulario-filtros label { display: flex; align-items: center; gap: 0.4rem; font-size: 0.9rem; }
+.formulario-filtros input[type="date"] { width: auto; }
 
 fieldset { border: 1px solid var(--borda); border-radius: var(--raio); padding: 1.2rem 1.4rem; margin-bottom: 1.2rem; background: var(--papel); }
 legend { font-family: var(--fonte-arredondada); color: var(--verde-escoteiro); font-weight: 600; padding: 0 0.5rem; }

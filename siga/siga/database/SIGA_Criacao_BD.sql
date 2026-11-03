@@ -891,6 +891,27 @@ CREATE TABLE fichas_saude_historico (
     CONSTRAINT fk_fsh_utilizador FOREIGN KEY (IdUtilizador) REFERENCES utilizadores(Id) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
 
+-- ============================================================================
+-- REGISTO DE ACTIVIDADE (regra 59)
+-- Quem fez o quê e quando. Só se acrescentam linhas — nunca se alteram nem
+-- eliminam. Sem chave estrangeira de propósito: o registo sobrevive a tudo.
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS registo_actividade (
+    Id BIGINT NOT NULL AUTO_INCREMENT,
+    DataHora DATETIME NOT NULL,
+    IdUtilizador INT NULL,
+    NomeUtilizador VARCHAR(100) NULL,
+    Accao VARCHAR(30) NOT NULL,
+    Descricao VARCHAR(500) NOT NULL,
+    Resultado VARCHAR(10) NOT NULL DEFAULT 'sucesso',
+    EnderecoIP VARCHAR(45) NULL,
+    PRIMARY KEY (Id),
+    KEY ix_registo_datahora (DataHora),
+    KEY ix_registo_utilizador (IdUtilizador, DataHora),
+    KEY ix_registo_accao (Accao, DataHora)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
+
 -- Utilizador inicial necessário para o primeiro login.
 -- Password inicial: admin@ueo2026 (deve ser alterada após o primeiro acesso).
 INSERT INTO utilizadores (Nome, Email, Password, Administrador, Activo)

@@ -15,6 +15,7 @@ use App\Controllers\DashboardController;
 use App\Controllers\FichaSaudeController;
 use App\Controllers\MoradasController;
 use App\Controllers\ReferenciasController;
+use App\Controllers\RegistoActividadeController;
 use App\Controllers\UtilizadoresController;
 use App\Core\Router;
 use App\Core\Sessao;
@@ -88,6 +89,8 @@ $router->post('/utilizadores/{id}/editar', [UtilizadoresController::class, 'atua
 
 // Administração (backoffice) — todas as rotas exigem administrador.
 $router->get('/admin', [AdminController::class, 'index']);
+
+$router->get('/admin/registo-actividade', [RegistoActividadeController::class, 'index']);
 
 $router->get('/admin/anos-escotistas', [AnosEscotistasController::class, 'index']);
 $router->get('/admin/anos-escotistas/criar', [AnosEscotistasController::class, 'criar']);
