@@ -20,6 +20,7 @@
         <a href="<?= \App\Core\Url::para() ?>/associados">Associados</a>
         <a href="<?= \App\Core\Url::para() ?>/companhias">Companhias</a>
         <a href="<?= \App\Core\Url::para() ?>/censos">Censos</a>
+        <a href="<?= \App\Core\Url::para() ?>/relatorios">Relatórios</a>
         <?php if (\App\Core\Sessao::ehAdministrador()): ?>
             <a href="<?= \App\Core\Url::para() ?>/utilizadores">Utilizadores</a>
             <a href="<?= \App\Core\Url::para() ?>/admin">Administração</a>

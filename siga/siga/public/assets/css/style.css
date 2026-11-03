@@ -290,3 +290,5 @@ legend { font-family: var(--fonte-arredondada); color: var(--verde-escoteiro); f
 .pagina-erro { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--verde-escoteiro); }
 .cartao-erro { background: var(--papel); padding: 2.5rem 3rem; border-radius: 16px; text-align: center; }
 .cartao-erro h1 { font-size: 3rem; }
+.resumo-relatorio { list-style: none; padding: 0; margin: 0 0 1.2rem; display: flex; flex-wrap: wrap; gap: 0.4rem 1.6rem; }
+.tabela tfoot th { background: #E7ECF2; border-top: 2px solid #C9D3DF; }

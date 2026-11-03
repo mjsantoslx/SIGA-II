@@ -29,6 +29,7 @@ class Actividade
         'reativar'      => 'Reactivação',
         'eliminar'      => 'Eliminação',
         'censo'         => 'Censo',
+        'exportar'      => 'Exportação',
     ];
 
     /**

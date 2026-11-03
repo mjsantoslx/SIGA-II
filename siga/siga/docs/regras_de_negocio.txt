@@ -1547,3 +1547,57 @@ da conta, que nunca pode ser alterado (regra 1). Sem alteracao de BD.
 Pressuposto: "utilizador Administrador" interpretado como a conta com
 esse nome, e nao como "qualquer administrador". Se afinal for esta a
 intencao, basta trocar para exigirAdministrador().
+
+60. Relatorios com exportacao para Excel (fechada)
+
+Pedido: relatorios visiveis no browser e exportaveis para .xlsx
+(versao v03.01).
+
+Decisoes confirmadas: quatro relatorios; acesso como o resto da
+aplicacao (regra 2); exportacao com gerador de .xlsx proprio, sem
+Composer. (Foi pedida inicialmente a biblioteca PhpSpreadsheet via
+Composer, mas o servidor de pacotes e inacessivel no ambiente de
+desenvolvimento, pelo que nao a poderia testar; o utilizador escolheu
+o gerador proprio.)
+
+Relatorios (/relatorios):
+- Listagem de associados — filtros: companhia (so administradores),
+  divisao, estado (activos/inactivos/todos) e membros honorarios
+  (incluir/excluir/so). Colunas: n.o, nome, divisao, companhia, estado,
+  honorario, data de nascimento, NIF, telemovel, email, email
+  associativo (primeiro contacto de cada tipo).
+- Efectivo por companhia e divisao — associados activos, sem
+  honorarios (regra 51), em matriz companhias x divisoes, com totais.
+  Mostra tambem as companhias sem associados e uma linha para
+  associados sem companhia local (Chefia Nacional / orgaos).
+- Censos: pagos e em divida — por ano escotista, com filtros de
+  companhia e estado. Valor por associado = seguro + quota UEP + quota
+  WFIS do ano. O resumo (abrangidos, pagos, em divida, em euros) refere-se
+  a todos os abrangidos, independentemente do filtro de estado.
+- Dirigentes, cargos e orgaos — cargos e orgaos actuais de associados
+  activos; um associado aparece uma vez por cada cargo/orgao.
+
+Acesso (regra 2): administradores veem tudo e podem filtrar por
+companhia; os restantes ficam fixos na sua companhia, o filtro nao lhes
+e apresentado e qualquer valor de companhia no endereco e ignorado.
+
+Exportacao: o botao "Exportar para Excel" descarrega o mesmo relatorio,
+com os mesmos filtros, em .xlsx (titulo, quem/quando gerou, resumo e
+filtros usados, cabecalho com filtro e painel congelado, datas e
+valores em euros formatados, linha de totais). Texto de celulas e
+sempre tratado como texto (nunca como formula). Precisa da extensao PHP
+"zip" no servidor; se faltar, mostra uma mensagem de erro clara.
+
+Registo de actividade (regra 59): cada exportacao para Excel fica
+registada ("Exportou para Excel o relatorio ..."), por ser a saida de
+dados em massa (incluindo NIF e contactos). Ver o relatorio no ecra
+nao e registado. Nova accao "Exportacao" nos filtros do registo.
+
+Sem alteracoes de base de dados.
+
+Pressupostos a confirmar:
+- Relatorios acessiveis a qualquer utilizador autenticado, incluindo a
+  coluna NIF (mesmo acesso que a ficha do associado).
+- "Companhia" e sempre a companhia local actual; a Chefia Nacional
+  aparece na coluna propria do relatorio de dirigentes.
+- Exportacao de uma folha por ficheiro, sem graficos.

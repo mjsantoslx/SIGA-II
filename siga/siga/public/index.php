@@ -16,6 +16,7 @@ use App\Controllers\FichaSaudeController;
 use App\Controllers\MoradasController;
 use App\Controllers\ReferenciasController;
 use App\Controllers\RegistoActividadeController;
+use App\Controllers\RelatoriosController;
 use App\Controllers\UtilizadoresController;
 use App\Core\Router;
 use App\Core\Sessao;
@@ -102,6 +103,12 @@ $router->get('/censos', [CensosController::class, 'index']);
 $router->post('/censos/{idAssociado}/{idAnoEscotista}/pago', [CensosController::class, 'marcarPago']);
 $router->post('/censos/{idAssociado}/{idAnoEscotista}/nao-pago', [CensosController::class, 'marcarNaoPago']);
 $router->get('/censos/{idAssociado}/{idAnoEscotista}/historico', [CensosController::class, 'historico']);
+
+$router->get('/relatorios', [RelatoriosController::class, 'index']);
+$router->get('/relatorios/associados', [RelatoriosController::class, 'associados']);
+$router->get('/relatorios/efectivo', [RelatoriosController::class, 'efectivo']);
+$router->get('/relatorios/censos', [RelatoriosController::class, 'censos']);
+$router->get('/relatorios/dirigentes', [RelatoriosController::class, 'dirigentes']);
 
 $router->get('/admin/referencias/{tabela}', [ReferenciasController::class, 'index']);
 $router->get('/admin/referencias/{tabela}/criar', [ReferenciasController::class, 'criar']);

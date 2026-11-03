@@ -235,6 +235,7 @@ Se a aplicação ficar na raiz do domínio, mantenha `'base_url' => '/'`.
 
 - **Histórico da ficha de saúde** (regra 49) — nova página "Gerir ficha de saúde" (`/associados/{id}/ficha-saude`), que passa a permitir editar a ficha de saúde depois do registo do associado (só era possível defini-la na criação). Toda a criação/alteração fica registada em `fichas_saude_historico` — quem, quando, e o estado antes/depois. A interface mostra a lista de alterações (não o detalhe, por serem dados de saúde); o detalhe fica na base de dados.
 
+- **Relatórios** (`/relatorios`, regra 60) — quatro relatórios com filtros, em ecrã e em Excel (.xlsx), respeitando a restrição por companhia.
 - **Registo de actividade** (`/admin/registo-actividade`, regra 59) — registo imutável de inícios de sessão e alterações de dados (quem, o quê, quando, resultado, IP), consultável só pelo utilizador "Administrador", com filtros.
 - **Censos** (`/censos`, `/admin/anos-escotistas`, regra 51) — quota anual (seguro escotista + quota UEP + quota WFIS), definida por ano escotista (Outubro). Todos os associados pagam o mesmo valor, excepto **membros honorários** — novo atributo do associado (com data de início), que deixam de pagar Censo, deixam de estar cobertos pelo seguro escotista, e deixam de contar para o efectivo (painel principal ajustado em conformidade). Cada pagamento/anulação fica registado num histórico próprio (`censos_historico`), não só como estado actual. Acesso: qualquer utilizador para a sua própria companhia (regra 2); valores anuais só por administradores.
 
@@ -330,7 +331,7 @@ Lista viva do que ficou identificado como "por fazer", sem ordem específica —
 - Matriz de incompatibilidade entre cargos.
 - Confirmar se a restrição "só dirigentes" também se aplica aos órgãos (confirmada só para a Chefia Nacional).
 - Permissões por companhia ao nível do utilizador (`utilizadores_companhias`, existe no esquema mas não é usada).
-- Exportações (CSV/PDF) — incluindo o registo de actividade.
+- Exportações em PDF/CSV, e exportação do registo de actividade (os relatórios já exportam para Excel).
 - Registo de actividade: definir prazo de conservação/limpeza (RGPD) e se as consultas também devem ser registadas.
 - Testes automatizados.
 - Confirmar a largura do Cartão de Cidadão (o preenchimento com zeros está pronto mas inactivo).
@@ -340,6 +341,9 @@ Lista viva do que ficou identificado como "por fazer", sem ordem específica —
 
 Esta secção é actualizada a cada nova versão entregue, com as alterações
 feitas desde a versão anterior. Mais recente primeiro.
+
+### v03.01
+- **Relatórios** (`/relatorios`, regra 60): listagem de associados, efectivo por companhia e divisão, Censos pagos/em dívida e dirigentes/cargos/órgãos. Vistos no browser, com filtros, e exportáveis para **Excel (.xlsx)** pelo botão "Exportar para Excel". Respeitam a regra 2 (cada utilizador só vê a sua companhia; administradores veem tudo). Cada exportação fica no registo de actividade. Gerador de .xlsx próprio (sem Composer) — **requer a extensão PHP `zip`** no servidor. Sem alterações de BD.
 
 ### v02.10
 - O registo de actividade passa a ser acessível **apenas ao utilizador "Administrador"** (a conta de sistema), e não a todos os administradores: o cartão só aparece para essa conta e o endereço está bloqueado para os restantes (regra 59.1). Sem alterações de BD.
