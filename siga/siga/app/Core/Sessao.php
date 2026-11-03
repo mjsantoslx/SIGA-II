@@ -63,6 +63,16 @@ class Sessao
         return self::autenticado() && !empty($_SESSION['utilizador']['Administrador']);
     }
 
+    /**
+     * Só o utilizador "Administrador" (a conta de sistema, regra 1) — não
+     * qualquer utilizador com estatuto de administrador. Usado no registo
+     * de actividade (regra 59.1).
+     */
+    public static function ehSuperAdministrador(): bool
+    {
+        return self::autenticado() && ($_SESSION['utilizador']['Nome'] ?? '') === 'Administrador';
+    }
+
     public static function idAssociado(): ?int
     {
         return $_SESSION['utilizador']['IdAssociado'] ?? null;

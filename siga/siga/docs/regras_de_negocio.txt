@@ -1528,3 +1528,22 @@ Pressupostos a confirmar:
 - Dados anteriores a v02.09 nao constam (o registo comeca nesta versao);
   os eventos dos associados e o historico de Censos/ficha de saude
   continuam a existir a parte.
+
+59.1 Registo de actividade restrito ao utilizador "Administrador"
+(fechada)
+
+Pedido: a consulta do registo de actividade deve ficar acessivel apenas
+ao utilizador "Administrador".
+
+Antes (v02.09), bastava ser administrador (estatuto derivado da Chefia
+Nacional, regra 3) — ou seja, qualquer membro da Chefia Nacional com
+utilizador a podia ver. Agora so a conta de sistema "Administrador"
+(regra 1) acede: o cartao deixa de aparecer em Administracao para os
+restantes e o endereco /admin/registo-actividade redirecciona-os para o
+painel com mensagem de erro. Novo Sessao::ehSuperAdministrador() e
+Controller::exigirSuperAdministrador(). A restricao e feita pelo nome
+da conta, que nunca pode ser alterado (regra 1). Sem alteracao de BD.
+
+Pressuposto: "utilizador Administrador" interpretado como a conta com
+esse nome, e nao como "qualquer administrador". Se afinal for esta a
+intencao, basta trocar para exigirAdministrador().

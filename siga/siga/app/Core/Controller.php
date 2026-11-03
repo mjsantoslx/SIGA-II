@@ -78,6 +78,20 @@ abstract class Controller
     }
 
     /**
+     * Garante autenticação e que o utilizador é o próprio "Administrador"
+     * (conta de sistema); outros administradores são enviados para o painel.
+     */
+    protected function exigirSuperAdministrador(): void
+    {
+        $this->exigirAutenticacao();
+
+        if (!Sessao::ehSuperAdministrador()) {
+            Sessao::guardarMensagem('erro', 'Não tem permissões para aceder a essa página.');
+            $this->redirecionar('/');
+        }
+    }
+
+    /**
      * Regra 2: um utilizador não-administrador só pode ver/alterar
      * informação de associados da SUA companhia. Administradores têm
      * sempre acesso total. Se o utilizador não-administrador não tiver

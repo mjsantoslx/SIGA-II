@@ -14,8 +14,10 @@
         <strong>Anos escotistas (Censos)</strong>
         <span>Valores anuais do Censo: seguro escotista, quota UEP, quota WFIS.</span>
     </a>
+    <?php if (\App\Core\Sessao::ehSuperAdministrador()): ?>
     <a href="<?= \App\Core\Url::para() ?>/admin/registo-actividade" class="cartao-admin">
         <strong>Registo de actividade</strong>
         <span>Quem fez o quê e quando: inícios de sessão e todas as alterações de dados.</span>
     </a>
+    <?php endif; ?>
 </div>

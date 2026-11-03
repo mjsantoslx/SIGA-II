@@ -7,7 +7,7 @@ use App\Core\Controller;
 use App\Models\RegistoActividade;
 
 /**
- * Consulta do registo de actividade — acesso restrito a administradores.
+ * Consulta do registo de actividade — acesso restrito ao utilizador "Administrador".
  */
 class RegistoActividadeController extends Controller
 {
@@ -15,7 +15,7 @@ class RegistoActividadeController extends Controller
 
     public function index(): void
     {
-        $this->exigirAdministrador();
+        $this->exigirSuperAdministrador();
 
         $dataValida = static function (string $v): string {
             $d = \DateTime::createFromFormat('!Y-m-d', $v);

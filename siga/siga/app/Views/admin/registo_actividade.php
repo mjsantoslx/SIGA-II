@@ -7,7 +7,7 @@ $ligacaoPagina = static function (int $p) use ($parametrosFiltro): string {
 <div class="cabecalho-pagina">
     <div>
         <h1>Registo de actividade</h1>
-        <p class="subtitulo">Quem fez o quê e quando. Só administradores. O registo não pode ser alterado nem apagado. <a href="<?= \App\Core\Url::para() ?>/admin">← Voltar à administração</a></p>
+        <p class="subtitulo">Quem fez o quê e quando. Só o utilizador "Administrador". O registo não pode ser alterado nem apagado. <a href="<?= \App\Core\Url::para() ?>/admin">← Voltar à administração</a></p>
     </div>
 </div>
 
