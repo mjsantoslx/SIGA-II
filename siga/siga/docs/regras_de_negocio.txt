@@ -1601,3 +1601,19 @@ Pressupostos a confirmar:
 - "Companhia" e sempre a companhia local actual; a Chefia Nacional
   aparece na coluna propria do relatorio de dirigentes.
 - Exportacao de uma folha por ficheiro, sem graficos.
+
+60.1 Novo relatorio "Seguros" (fechada)
+
+Pedido: relatorio intitulado "Seguros" com o numero de associado, o nome
+e o NIF de cada associado efectivo.
+
+Implementado em /relatorios/seguros: associados activos e nao
+honorarios (a definicao de efectivo da regra 51 — os honorarios nao
+estao cobertos pelo seguro escotista), ordenados por nome, com resumo
+do total e de quantos nao tem NIF registado (util para detectar dados em
+falta antes de comunicar a lista). Mesmo acesso e exportacao para Excel
+dos restantes relatorios (regra 60): administradores filtram por
+companhia, os restantes veem so a sua. Sem alteracoes de BD.
+
+Pressuposto: "associados efectivos" = efectivo da regra 51 (activos,
+sem honorarios); inactivos nao constam.

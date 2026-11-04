@@ -235,7 +235,7 @@ Se a aplicação ficar na raiz do domínio, mantenha `'base_url' => '/'`.
 
 - **Histórico da ficha de saúde** (regra 49) — nova página "Gerir ficha de saúde" (`/associados/{id}/ficha-saude`), que passa a permitir editar a ficha de saúde depois do registo do associado (só era possível defini-la na criação). Toda a criação/alteração fica registada em `fichas_saude_historico` — quem, quando, e o estado antes/depois. A interface mostra a lista de alterações (não o detalhe, por serem dados de saúde); o detalhe fica na base de dados.
 
-- **Relatórios** (`/relatorios`, regra 60) — quatro relatórios com filtros, em ecrã e em Excel (.xlsx), respeitando a restrição por companhia.
+- **Relatórios** (`/relatorios`, regra 60) — cinco relatórios (listagem de associados, efectivo, Censos, dirigentes e Seguros) com filtros, em ecrã e em Excel (.xlsx), respeitando a restrição por companhia.
 - **Registo de actividade** (`/admin/registo-actividade`, regra 59) — registo imutável de inícios de sessão e alterações de dados (quem, o quê, quando, resultado, IP), consultável só pelo utilizador "Administrador", com filtros.
 - **Censos** (`/censos`, `/admin/anos-escotistas`, regra 51) — quota anual (seguro escotista + quota UEP + quota WFIS), definida por ano escotista (Outubro). Todos os associados pagam o mesmo valor, excepto **membros honorários** — novo atributo do associado (com data de início), que deixam de pagar Censo, deixam de estar cobertos pelo seguro escotista, e deixam de contar para o efectivo (painel principal ajustado em conformidade). Cada pagamento/anulação fica registado num histórico próprio (`censos_historico`), não só como estado actual. Acesso: qualquer utilizador para a sua própria companhia (regra 2); valores anuais só por administradores.
 
@@ -341,6 +341,9 @@ Lista viva do que ficou identificado como "por fazer", sem ordem específica —
 
 Esta secção é actualizada a cada nova versão entregue, com as alterações
 feitas desde a versão anterior. Mais recente primeiro.
+
+### v03.02
+- Novo relatório **Seguros** (`/relatorios/seguros`, regra 60.1): número de associado, nome e NIF dos associados efectivos (activos, sem honorários), com exportação para Excel. Sem alterações de BD.
 
 ### v03.01
 - **Relatórios** (`/relatorios`, regra 60): listagem de associados, efectivo por companhia e divisão, Censos pagos/em dívida e dirigentes/cargos/órgãos. Vistos no browser, com filtros, e exportáveis para **Excel (.xlsx)** pelo botão "Exportar para Excel". Respeitam a regra 2 (cada utilizador só vê a sua companhia; administradores veem tudo). Cada exportação fica no registo de actividade. Gerador de .xlsx próprio (sem Composer) — **requer a extensão PHP `zip`** no servidor. Sem alterações de BD.

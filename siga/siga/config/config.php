@@ -17,7 +17,7 @@ return [
         'base_url'  => '/siga',
         'timezone'  => 'Europe/Lisbon',
         // Actualizado a cada nova versão entregue — aparece no rodapé.
-        'versao'    => 'v03.01',
+        'versao'    => 'v03.02',
     ],
 
     'db' => [

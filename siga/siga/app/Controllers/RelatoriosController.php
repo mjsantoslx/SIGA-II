@@ -24,6 +24,7 @@ class RelatoriosController extends Controller
         'efectivo'   => ['Efectivo por companhia e divisão', 'Associados activos (sem honorários) por companhia e por divisão.'],
         'censos'     => ['Censos: pagos e em dívida', 'Estado de pagamento do Censo por ano escotista, com valores e totais.'],
         'dirigentes' => ['Dirigentes, cargos e órgãos', 'Quem ocupa que cargo ou órgão.'],
+        'seguros'    => ['Seguros', 'Número de associado, nome e NIF dos associados efectivos (cobertos pelo seguro escotista).'],
     ];
 
     public function index(): void
@@ -241,6 +242,33 @@ class RelatoriosController extends Controller
                 'Estado' => ['' => 'Todos', 'pago' => 'Pagos', 'divida' => 'Em dívida'][$estado],
             ]),
             'nota' => 'Só associados activos e não honorários (regra 51). O resumo refere-se a todos os abrangidos, independentemente do filtro de estado.',
+        ]);
+    }
+
+    public function seguros(): void
+    {
+        $this->exigirAutenticacao();
+        [$idCompanhia, $filtroCompanhia] = $this->companhiaDoPedido();
+
+        // Efectivo = activos e não honorários (regra 51): só estes estão
+        // cobertos pelo seguro escotista.
+        $dados = (new Relatorio())->associados($idCompanhia, ['estado' => '1', 'honorarios' => 'excluir']);
+
+        $linhas = array_map(fn($r) => [$r['NumeroAssociado'], $r['Nome'], $r['NIF']], $dados);
+        $semNif = count(array_filter($dados, fn($r) => trim((string) $r['NIF']) === ''));
+
+        $this->responder('seguros', [
+            'colunas' => [
+                ['rotulo' => 'Nº associado', 'tipo' => 'texto'],
+                ['rotulo' => 'Nome', 'tipo' => 'texto'],
+                ['rotulo' => 'NIF', 'tipo' => 'texto'],
+            ],
+            'linhas' => $linhas,
+            'totais' => null,
+            'resumo' => ['Associados efectivos' => count($linhas), 'Sem NIF registado' => $semNif],
+            'filtros' => $filtroCompanhia,
+            'descricaoFiltros' => $this->descreverFiltros($filtroCompanhia, []),
+            'nota' => 'Associados activos, sem membros honorários (não estão cobertos pelo seguro escotista — regra 51).',
         ]);
     }
 

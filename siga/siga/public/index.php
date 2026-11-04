@@ -109,6 +109,7 @@ $router->get('/relatorios/associados', [RelatoriosController::class, 'associados
 $router->get('/relatorios/efectivo', [RelatoriosController::class, 'efectivo']);
 $router->get('/relatorios/censos', [RelatoriosController::class, 'censos']);
 $router->get('/relatorios/dirigentes', [RelatoriosController::class, 'dirigentes']);
+$router->get('/relatorios/seguros', [RelatoriosController::class, 'seguros']);
 
 $router->get('/admin/referencias/{tabela}', [ReferenciasController::class, 'index']);
 $router->get('/admin/referencias/{tabela}/criar', [ReferenciasController::class, 'criar']);
